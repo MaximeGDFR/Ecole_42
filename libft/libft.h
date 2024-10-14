@@ -1,5 +1,8 @@
 #ifndef LIBFT_H
-#define LIBFT_H
+#	define LIBFT_H
+#	include <unistd.h>
+#	include <stdlib.h>
+#	include <stdio.h>
 
 //Contenu du fichier header (fonctions, macros, etc.)
 int	ft_isalpha(int c);
@@ -31,8 +34,8 @@ char *ft_strjoin(int size, char **strs, char *sep);
 char *ft_strtrim(char const *s1, char const *set);
 char **ft_split(char const *s, char c);
 char *ft_itoa(int value, char *str, int base);
-//ft_strmapi();
-//ft_striteri();
+char *ft_strmapi(char const *s, char (*f)(unsigned int, char));
+void ft_striteri(char *s, void (*f)(unsigned int, char *));
 void ft_putchar_fd(char c, int fd);
 void ft_putstr_fd(char *str, int fd);
 void ft_putendl_fd(char *s, int fd);
