@@ -3,11 +3,11 @@
 
 int	ft_isspace(int c)
 {
-    if (c == EOF)
-        return (0);
+	if (c == EOF)
+		return (0);
 	if ((unsigned char)c >= 9 && (unsigned char)c <= 13
-    || (unsigned char)c == 32)
-        return (1);
+		|| (unsigned char)c == 32)
+		return (1);
 	else
 		return (0);
 }

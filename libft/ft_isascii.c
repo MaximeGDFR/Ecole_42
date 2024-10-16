@@ -4,12 +4,12 @@
 int	ft_isascii(int c)
 {
 	if (c >= 0 && c <= 127)
-        return (1);
+		return (1);
 	else
 		return (0);
 }
 
-int	main(void)
+/*int	main(void)
 {
 	int c = ' ';
 	int	result;
@@ -17,4 +17,4 @@ int	main(void)
 	result = ft_isascii(c);
 	printf("%d\n", result);
 	return (0);
-}
+}*/

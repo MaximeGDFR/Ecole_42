@@ -1,25 +1,23 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-void *ft_calloc (size_t nmemb, size_t size)
+void	*ft_calloc(size_t nmemb, size_t size)
 {
-    void *ptr;
-    size_t i;
+	void	*ptr;
+	size_t	i;
 
-    if (nmemb == 0 || size == 0)
-        return (NULL);
-
-    ptr = malloc(nmemb * size);
-    if (ptr == NULL)
-        return (NULL);
-    
-    i = 0;
-    while (i < nmemb * size)
-    {
-        ((char *)ptr)[i] = 0;
-        i++;
-    }
-    return (ptr);
+	if (nmemb == 0 || size == 0)
+		return (NULL);
+	ptr = malloc(nmemb * size);
+	if (ptr == NULL)
+		return (NULL);
+	i = 0;
+	while (i < nmemb * size)
+	{
+		((char *)ptr)[i] = 0;
+		i++;
+	}
+	return (ptr);
 }
 
 /*int main()

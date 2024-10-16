@@ -2,93 +2,59 @@
 #include <stdlib.h>
 #include <string.h>
 
-int ft_strlen(char *str)
+int	ft_strlen(const char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i] != '\0')
-        i++;
-    return (i);
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
-int ft_total_len(int size, char **strs, char *sep)
+char	*ft_strjoin(char const *s1, char const *s2)
 {
-    int i;
-    int total_len;
-    int sep_len;
+	char	*empty_str;
+	int		total_len;
+	char	*result;
+	int		i;
+	int		j;
 
-    total_len = 0;
-    sep_len = ft_strlen(sep);
-    i = 0;
-    while (i < size)
-    {
-        total_len += ft_strlen(strs[i]);
-        i++;
-    }
-
-    total_len += sep_len * (size - 1);
-
-    return (total_len);
-}
-
-char *ft_strjoin(int size, char **strs, char *sep)
-{
-    char * empty_str;
-    int total_len;
-    char *result;
-    int i;
-    int j;
-    int k;
-
-    if (size == 0)
-    {
-        empty_str = (char *)malloc(1);
-        if(empty_str == NULL)
-            return (NULL);
-        empty_str[0] = '\0';
-        return (empty_str);
-    }
-
-    total_len = ft_total_len(size, strs, sep);
-    i = 0;
-    result = (char *)malloc((total_len + 1) * sizeof(char));
-    if (result == NULL)
-        return (NULL);
-
-    k = 0;
-    while (i < size)
-    {
-        j = 0;
-        while (strs[i][j] != '\0')
-        {
-            result[k] = strs[i][j];
-            k++;
-            j++;
-        }
-        if (i < size - 1)
-        {
-            j = 0;
-            while (sep[j] != '\0')
-            {
-                result[k] = sep[j];
-                k++;
-                j++;
-            }
-        }
-        i++;
-    }
-    result[k] = '\0';
-    return (result);
+	if (s1 == 0 || s2 == 0)
+	{
+		empty_str = (char *)malloc(1);
+		if (empty_str == NULL)
+			return (NULL);
+		empty_str[0] = '\0';
+		return (empty_str);
+	}
+	total_len = ft_strlen(s1) + ft_strlen(s2);
+	result = (char *)malloc((total_len + 1) * sizeof (char));
+	if (result == NULL)
+		return (NULL);
+	i = 0;
+	j = 0;
+	while (s1[i] != '\0')
+	{
+		result[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		result[i] = s2[j];
+		i++;
+		j++;
+	}
+	result[i] = '\0';
+	return (result);
 }
 
 /*int main()
 {
-    char *strs [] = {"Hello", "world", "!"};
-    char *sep = " ";
-    int size = 3;
+    const char *s1 = "Hello ";
+    const char *s2 = "world !";
 
-    char *result = ft_strjoin(size, strs, sep);
+    char *result = ft_strjoin(s1, s2);
     if (result != NULL)
     {
         printf("Result : %s\n", result);

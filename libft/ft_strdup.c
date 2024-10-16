@@ -2,39 +2,36 @@
 #include <stdio.h>
 #include <stdlib.h>
 
-int ft_strlen(char *str)
+int	ft_strlen(char *str)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i] != '\0')
-        i++;
-    return (i);
+	i = 0;
+	while (str[i] != '\0')
+		i++;
+	return (i);
 }
 
-char *ft_strdup(const char *s)
+char	*ft_strdup(const char *s)
 {
-    int i;
-    int size;
-    char *dup;
+	int		i;
+	int		size;
+	char	*dup;
 
-    i = 0;
-    size = ft_strlen((char *)s) + 1;
-    dup = (char *)malloc(size * sizeof(char));
-
-    if (dup == NULL)
-        return (NULL);
-
-    while (i < size)
-    {
-        dup[i] = s[i];
-        i++;
-    }
-
-    return (dup);
+	i = 0;
+	size = ft_strlen((char *)s) + 1;
+	dup = (char *)malloc(size * sizeof(char));
+	if (dup == NULL)
+		return (NULL);
+	while (i < size)
+	{
+		dup[i] = s[i];
+		i++;
+	}
+	return (dup);
 }
 
-int main()
+/*int main()
 {
     char s [] = "Hello world !";
     char *result;
@@ -44,4 +41,4 @@ int main()
     printf("Copy : %s\n", result);
     free(result);
     return (0);
-}
+}*/

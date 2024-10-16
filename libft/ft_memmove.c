@@ -1,39 +1,33 @@
 #include <stdio.h>
 #include <string.h>
 
-void *ft_memmove(void *dest, const void *src, size_t n)
+void	*ft_memmove(void *dest, const void *src, size_t n)
 {
-    size_t i;
-    unsigned char *d;
-    const unsigned char *s;
+	size_t				i;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-    i = 0;
-    d = (unsigned char *)dest;
-    s = (const unsigned char *)src;
-    //Cast en char* pour copier octet par octet directement dans la boucle
-
-    //Verifie chevauchement memoire
-    if (d < s || d >= s + n)
-    {
-        //Pas de chevauchement = copie en avant
-        while (i < n)
-        {
-            d[i] = s[i];
-            i++;
-        }
-    }
-    else
-    {
-        //Chevauchement = copie en arriere
-        i = n;
-        while (i > 0)
-        {
-            d[i - 1] = s[i - 1];
-            i--;
-        }
-    }
-
-    return (d);
+	i = 0;
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	if (d < s || d >= s + n)
+	{
+		while (i < n)
+		{
+			d[i] = s[i];
+			i++;
+		}
+	}
+	else
+	{
+		i = n;
+		while (i > 0)
+		{
+			d[i - 1] = s[i - 1];
+			i--;
+		}
+	}
+	return (d);
 }
 
 /*int main()

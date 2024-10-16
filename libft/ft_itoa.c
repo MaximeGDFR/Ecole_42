@@ -1,80 +1,88 @@
-#include <string.h>
+#include <stdlib.h>
 #include <stdio.h>
-#include <limits.h>
 
-char *ft_itoa(int value, char *str, int base)
+void	ft_swap(char *a, char *b)
 {
-    int i;
-    int is_negative;
-    int result;
-    int start;
-    int end;
-    char temp;
+	char	temp;
 
-    i = 0;
-    is_negative = 0;
-    result = 0;
-    start = 0;
-    temp = 0;
-    
-    if (value == 0)
-    {
-        str[i] = '0';
-        str[i + 1] = '\0';
-        return (str);
-    }
+	temp = *a;
+	*a = *b;
+	*b = temp;
+}
 
-    if (value < 0 && base == 10)
-    {
-        is_negative = 1;
-        if (value == INT_MIN)
-        {
-            value = INT_MAX;
-            value ++;
-        }
-        value = -value;
-    }
+int	get_num_length(long n)
+{
+	int	len;
 
-    while (value != 0)
-    {
-        result = value % base;
-        if (result < 0)
-            result = -result;
+	len = 0;
+	if (n == 0)
+		return (1);
+	if (n < 0)
+		n = -n;
+	while (n > 0)
+	{
+		n /= 10;
+		len++;
+	}
+	return (len);
+}
 
-        if (result > 9)
-            str[i] = result - 10 + 'a';
-        else
-            str[i] = result + '0';
-        value /= base;
-        i++;
-    }
+char	*handle_zero_case(void)
+{
+	char	*result;
 
-    if (is_negative)
-    {
-        str[i] = '-';
-        i++;
-    }
+	result = (char *)malloc(2 * sizeof(char));
+	if (!result)
+		return (NULL);
+	result[0] = '0';
+	result[1] = '\0';
+	return (result);
+}
 
-    str[i] = '\0';
+char	*ft_itoa(int n)
+{
+	int		i;
+	int		is_neg;
+	char	*result;
+	long	num;
 
-    end = i - 1;
-    while (start < end)
-    {
-        temp = str[start];
-        str[start] = str[end];
-        str[end] = temp;
-        start++;
-        end--;
-    }
-
-    return (str);
+	num = n;
+	if (num == 0)
+		return (handle_zero_case());
+	is_neg = (num < 0);
+	if (is_neg)
+		num = -num;
+	result = (char *)malloc((get_num_length(num) + is_neg + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	i = 0;
+	if (is_neg)
+		result[i++] = '-';
+	j = (get_num_length(num) + is_neg) - 1;
+	while (num > 0)
+	{
+		result[j--] = (num % 10) + '0';
+		num /= 10;
+	}
+	result[get_num_length(num) + is_neg] = '\0';
+	return (result);
 }
 
 /*int main()
 {
-    char buffer[20];
-    printf("1234 en base 10 : %s\n", ft_itoa(1234, buffer, 10));
-    printf("-1234 en base 10 : %s\n", ft_itoa(-1234, buffer, 10));
-    printf("1234 en base 16 : %s\n", ft_itoa(1234, buffer, 16));
+    char *str;
+
+    str = ft_itoa(1234);
+    printf("1234 : %s\n", str);
+    free(str);
+
+    str = ft_itoa(-42);
+    printf("-42 : %s\n", str);
+    free(str);
+
+    str = ft_itoa(2123456789);
+    printf("2123456789 : %s\n", str);
+    free(str);
+
     return (0);
 }*/

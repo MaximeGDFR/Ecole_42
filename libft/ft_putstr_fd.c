@@ -2,21 +2,21 @@
 #include <unistd.h>
 #include <string.h>
 
-void    ft_putstr_fd(char *str, int fd)
+void	ft_putstr_fd(char *s, int fd)
 {
-    int i;
+	int	i;
 
-    i = 0;
-    while (str[i] != '\0')
-    {
-        write(fd, &str[i], 1);
-        i++;
-    }
+	i = 0;
+	while (s[i] != '\0')
+	{
+		write(fd, &s[i], 1);
+		i++;
+	}
 }
 
 /*int main()
 {
-    char str [] = "Hello world !";
+    char s [] = "Hello world !";
 
-    ft_putstr_fd(str, 1);
+    ft_putstr_fd(s, 1);
 }*/
