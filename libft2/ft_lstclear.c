@@ -14,20 +14,21 @@
 #include <stdlib.h>
 #include "libft.h"
 
-void    ft_lstclear(t_list **lst, void(*del)(void*))
+void	ft_lstclear(t_list **lst, void(*del)(void*))
 {
-    if (*lst == NULL)
-        return ;
+	t_list	*current;
+	t_list	*temp;
 
-    t_list *current = *lst;
-    t_list *temp = current;
-    
-    while (current != NULL)
-    {
-        del(current->content);
-        temp = current->next;
-        free(current);
-        current = temp;
-    }
-    *lst = NULL;
+	current = *lst;
+	temp = current;
+	if (*lst == NULL)
+		return ;
+	while (current != NULL)
+	{
+		del(current->content);
+		temp = current->next;
+		free(current);
+		current = temp;
+	}
+	*lst = NULL;
 }
