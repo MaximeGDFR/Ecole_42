@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_itoa.c                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:28:27 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/19 12:28:28 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/21 18:58:32 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,24 +21,20 @@ void	ft_swap(char *a, char *b)
 	*a = *b;
 	*b = temp;
 }
-
 int	get_num_length(long n)
 {
 	int	len;
 
-	len = 0;
-	if (n == 0)
-		return (1);
+	len = 1;
 	if (n < 0)
 		n = -n;
-	while (n > 0)
+	while (n >= 10)
 	{
 		n /= 10;
 		len++;
 	}
 	return (len);
 }
-
 char	*handle_zero_case(void)
 {
 	char	*result;
@@ -53,11 +49,10 @@ char	*handle_zero_case(void)
 
 char	*ft_itoa(int n)
 {
-	int		i;
-	int		j;
-	int		is_neg;
 	char	*result;
 	long	num;
+	int		num_len;
+	int		is_neg;
 
 	num = n;
 	if (num == 0)
@@ -65,22 +60,20 @@ char	*ft_itoa(int n)
 	is_neg = (num < 0);
 	if (is_neg)
 		num = -num;
-	result = (char *)malloc((get_num_length(num) + is_neg + 1) * sizeof(char));
-	if (!result)
+	num_len = get_num_length(num);
+	result = (char *)malloc(num_len + is_neg + 1);
+	if (result == NULL)
 		return (NULL);
-	i = 0;
 	if (is_neg)
-		result[i++] = '-';
-	j = (get_num_length(num) + is_neg) - 1;
+		result[0] = '-';
+	result[num_len + is_neg] = '\0';
 	while (num > 0)
 	{
-		result[j--] = (num % 10) + '0';
+		result[--num_len + is_neg] = (num % 10) + '0';
 		num /= 10;
 	}
-	result[get_num_length(num) + is_neg] = '\0';
 	return (result);
 }
-
 /*int main()
 {
     char *str;
