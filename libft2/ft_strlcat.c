@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:30:21 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/19 15:09:45 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/21 11:24:19 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,8 @@ unsigned int	ft_strlcat(char *dest, char *src, unsigned int size)
 
 	dest_size = ft_strlen(dest);
 	src_size = ft_strlen(src);
+	if (size == 0)
+		return (src_size);
 	if (size <= dest_size)
 		return (src_size + dest_size);
 	i = dest_size;
