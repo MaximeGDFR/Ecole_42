@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:29:56 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/19 15:01:38 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:48:54 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,15 +60,13 @@ static char	*ft_strndup(const char *s, size_t n)
 char	**ft_split(char const *s, char c)
 {
 	char	**result;
-	int		substring_count;
 	int		i;
 	int		j;
 	int		start;
 
 	if (!s)
 		return (NULL);
-	substring_count = ft_count_substring(s, c);
-	result = malloc((substring_count + 1) * sizeof(char *));
+	result = malloc((ft_count_substring(s, c) + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
 	i = 0;

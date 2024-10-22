@@ -6,7 +6,7 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:28:27 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/21 18:58:32 by j                ###   ########.fr       */
+/*   Updated: 2024/10/22 15:32:21 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,7 @@ void	ft_swap(char *a, char *b)
 	*a = *b;
 	*b = temp;
 }
+
 int	get_num_length(long n)
 {
 	int	len;
@@ -35,6 +36,7 @@ int	get_num_length(long n)
 	}
 	return (len);
 }
+
 char	*handle_zero_case(void)
 {
 	char	*result;
@@ -74,6 +76,7 @@ char	*ft_itoa(int n)
 	}
 	return (result);
 }
+
 /*int main()
 {
     char *str;

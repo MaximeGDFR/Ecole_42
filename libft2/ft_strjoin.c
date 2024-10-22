@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strjoin.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:30:15 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/19 15:06:51 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/22 17:01:21 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,38 +17,19 @@
 
 char	*ft_strjoin(char const *s1, char const *s2)
 {
-	char	*empty_str;
-	int		total_len;
+	size_t	s1_len;
+	size_t	s2_len;
 	char	*result;
-	int		i;
-	int		j;
 
-	if (s1 == 0 || s2 == 0)
-	{
-		empty_str = (char *)malloc(1);
-		if (empty_str == NULL)
-			return (NULL);
-		empty_str[0] = '\0';
-		return (empty_str);
-	}
-	total_len = ft_strlen(s1) + ft_strlen(s2);
-	result = (char *)malloc((total_len + 1) * sizeof (char));
-	if (result == NULL)
+	if (!s1 || !s2)
 		return (NULL);
-	i = 0;
-	j = 0;
-	while (s1[i] != '\0')
-	{
-		result[i] = s1[i];
-		i++;
-	}
-	while (s2[j] != '\0')
-	{
-		result[i] = s2[j];
-		i++;
-		j++;
-	}
-	result[i] = '\0';
+	s1_len = ft_strlen(s1);
+	s2_len = ft_strlen(s2);
+	result = (char *)malloc((s1_len + s2_len + 1) * sizeof(char));
+	if (!result)
+		return (NULL);
+	ft_strlcpy(result, s1, s1_len + 1);
+	ft_strlcpy((result + s1_len), s2, s2_len + 1);
 	return (result);
 }
 
