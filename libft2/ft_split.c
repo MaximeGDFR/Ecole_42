@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_split.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:29:56 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/22 17:48:54 by j                ###   ########.fr       */
+/*   Updated: 2024/10/24 15:10:52 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,25 +14,25 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int	ft_count_substring(char const *s, char c)
+static int	ft_count_words(char const *s, char c)
 {
 	int	count;
-	int	in_substring;
+	int	words;
 	int	i;
 
 	count = 0;
-	in_substring = 0;
+	words = 0;
 	i = 0;
 	while (s[i] != '\0')
 	{
-		if (s[i] != c && !in_substring)
+		if (s[i] != c && !words)
 		{
-			in_substring = 1;
+			words++;
 			count++;
 		}
 		else if (s[i] == c)
 		{
-			in_substring = 0;
+			words = 0;
 		}
 		i++;
 	}
@@ -66,7 +66,7 @@ char	**ft_split(char const *s, char c)
 
 	if (!s)
 		return (NULL);
-	result = malloc((ft_count_substring(s, c) + 1) * sizeof(char *));
+	result = malloc((ft_count_words(s, c) + 1) * sizeof(char *));
 	if (!result)
 		return (NULL);
 	i = 0;
@@ -78,7 +78,7 @@ char	**ft_split(char const *s, char c)
 			start = i;
 			while (s[i] && s[i] != c)
 				i++;
-			result[j++] = ft_strndup(&s[start], i - start);
+			result[j++] = ft_strndup(&s[start], i-- - start);
 		}
 		i++;
 	}
@@ -88,8 +88,8 @@ char	**ft_split(char const *s, char c)
 
 /*int	main()
 {
-	char	*str = "Hello,world,this,is,a,test";
-	char	c = ',';
+	char	*str = "hello!";
+	char	c = ' ';
 	char	**result;
 	int		i;
 

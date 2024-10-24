@@ -6,11 +6,13 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:29:20 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/21 11:04:18 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/24 16:36:04 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+#include <string.h>
 #include <stdio.h>
+#include "libft.h"
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
@@ -33,14 +35,18 @@ void	*ft_memcpy(void *dest, const void *src, size_t n)
 	return (dest);
 }
 
-/*int main()
+int main()
 {
-    char dest [0];
-    char src [] = "Hello world !";
-    size_t n = 0;
+	char dest [10] = "xxxxxxxxx";
+    char src [] = "abcde";
+    ft_memcpy(dest, src, 5);
+	//size_t n = 0;
 
-    printf("%s\n", memcpy(dest, src, n));
-    printf("%s\n", ft_memcpy(dest, src, n));
+    //printf("%p\n", memcpy(dest, src, n));
+    //printf("%p\n", ft_memcpy(dest, src, n));
+	printf("%s\n", dest);
 
     return (0);
-}*/
+}
+
+/*Test 3 : manque un caractere*/
