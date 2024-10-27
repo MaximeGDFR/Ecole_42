@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   ft_memcpy.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:29:20 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/24 16:36:04 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/27 11:35:02 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,37 +16,29 @@
 
 void	*ft_memcpy(void *dest, const void *src, size_t n)
 {
-	size_t		i;
-	char		*d;
-	const char	*s;
+	unsigned char		*d;
+	const unsigned char	*s;
 
-	i = 0;
-	d = (char *)dest;
-	s = (const char *)src;
-	if (dest == NULL || src == NULL)
-		return (NULL);
-	if (n == 0)
+	if (dest == src)
 		return (dest);
-	while (i < n)
+	d = (unsigned char *)dest;
+	s = (const unsigned char *)src;
+	while (n--)
 	{
-		d[i] = s[i];
-		i++;
+		*d++ = *s++;
 	}
 	return (dest);
 }
 
-int main()
+/*int main()
 {
-	char dest [10] = "xxxxxxxxx";
-    char src [] = "abcde";
-    ft_memcpy(dest, src, 5);
-	//size_t n = 0;
-
-    //printf("%p\n", memcpy(dest, src, n));
-    //printf("%p\n", ft_memcpy(dest, src, n));
-	printf("%s\n", dest);
+    char dest[10] = "xxxxxxxxx";
+    char src[] = "A123456789";
+    
+    void *rtn = ft_memcpy(dest, src, 1);
+    printf("Test : %s\n", dest);
+    printf("Retour : %p\n", rtn);
+    printf("Expected: %p\n", dest);
 
     return (0);
-}
-
-/*Test 3 : manque un caractere*/
+}*/

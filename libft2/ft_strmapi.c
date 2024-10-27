@@ -3,30 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   ft_strmapi.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:30:47 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/19 15:10:11 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/10/27 11:02:08 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include <stdio.h>
 #include <stdlib.h>
 #include "libft.h"
-
-/*int	ft_toupper(int c)
-{
-	if (c >= 'a' && c <= 'z')
-		return (c - ('a' - 'A'));
-	else
-		return (c);
-}*/
-
-/*char	my_function(unsigned int i, char c)
-{
-	(void)i;
-	return (ft_toupper(c));
-}*/
 
 char	*ft_strmapi(char const *s, char (*f)(unsigned int, char))
 {
