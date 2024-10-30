@@ -1,0 +1,12 @@
+Hello, World!
+This is a test of the get_next_line function.
+
+Let's check different cases:
+- Lines with spaces
+- Lines with punctuation, like commas, periods, and exclamation marks!
+
+Here is a line that is quite long to ensure that the buffer needs to handle more than its default size and tests how get_next_line manages larger inputs without any line breaks in between until it reaches the end.
+
+1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ
+
+End of test.

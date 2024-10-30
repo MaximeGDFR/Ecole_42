@@ -46,6 +46,7 @@ char	*ft_strdup(const char *str)
 		dup[i] = str[i];
 		i++;
 	}
+	dup[i] = '\0';
 	return (dup);
 }
 
@@ -92,29 +93,14 @@ char	*ft_strjoin(char const *str1, char const *str2)
 	len_str2 = ft_strlen(str2);
 	result = (char *)malloc((len_str1 + len_str2 + 1) * sizeof (char));
 	if (!result)
-	{
-		printf("Erreur allocation.\n");
 		return (NULL);
-	}
-	ft_strlcpy(result, str1, len_str1 + 1);
-	ft_strlcpy(result + len_str1, str2, len_str2 + 1);
-	return (result);
-}
-
-size_t	ft_strlcpy(char *dest, const char *src, size_t size)
-{
-	size_t	i;
-	size_t	src_len;
-
 	i = 0;
-	src_len = ft_strlen(src);
-	if (size == 0)
-		return (src_len);
-	while (i < size - 1 && src[i] != '\0')
-	{
-		dest[i] = src[i];
-		i++;
-	}
-	dest[i] = '\0';
-	return (src_len);
+	j = 0;
+	while (i < len_str1)
+		result[i++] = str1[j++];
+	j = 0;
+	while (j < len_str2)
+		result[i++] = str2[j++];
+	result[i] = '\0';
+	return (result);
 }

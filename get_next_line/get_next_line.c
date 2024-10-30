@@ -6,11 +6,13 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/30 15:00:12 by j                 #+#    #+#             */
-/*   Updated: 2024/10/30 16:10:21 by j                ###   ########.fr       */
+/*   Updated: 2024/10/30 17:51:51 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
+#include <stdio.h>
+#include <fcntl.h>
 
 /* ft_add_to_stash sert a dupliquer le contenu du buffer de read() et le stocker */
 char	*ft_add_to_stash(char *stash, const char *readed)
@@ -22,8 +24,6 @@ char	*ft_add_to_stash(char *stash, const char *readed)
 	if (!stash)
 		return (ft_strdup(readed));
 	new_stash = ft_strjoin(stash, readed);
-	if (!new_stash)
-		return (NULL);
 	if (!new_stash)
 		return (NULL);
 	free(stash);
@@ -59,7 +59,7 @@ int	ft_line_finded(char *stash)
 	int	i;
 
 	if (!stash)
-		return (NULL);
+		return (-1);
 	i = 0;
 	while (stash[i])
 	{
@@ -70,24 +70,103 @@ int	ft_line_finded(char *stash)
 	return (-1);
 }
 
-char	*get_next_line(int fd)
+char	*ft_extract_line(char **stash)
 {
-	static char		*stash;
-	char			*readed;
-	int				position;
-	char			*line;
+	char	*line;
+	char	*temp;
+	size_t	len;
 
-	line = NULL;
-	if (fd < 0 || BUFFER_SIZE == 0)
+	if (!*stash || !**stash)
 		return (NULL);
-	stash = read(fd, readed, BUFFER_SIZE);
-	if (ft_line_finded(stash) == 0)
-		ft_add_to_stash(stash, readed);
+
+	len = 0;
+	while ((*stash)[len] && (*stash)[len] != '\n')
+		len++;
+	if ((*stash)[len] == '\n')
+		len++;
+	line = ft_substr(*stash, 0, len);
+	if (!line)
+		return (NULL);
+	if ((*stash)[len])
+	{
+		temp = ft_strdup(*stash + len);
+		free(*stash);
+		*stash = temp;
+	}
 	else
 	{
-		ft_add_to_stash(stash, readed);
-		line = stash;
-		ft_clear_stash(stash, position);
+		free(*stash);
+		*stash = NULL;
 	}
 	return (line);
+}
+
+char	*get_next_line(int fd)
+{
+	static char	*stash = NULL;
+	char		readed[BUFFER_SIZE + 1];
+	int			position;
+	char		*line;
+
+	if (fd < 0 || BUFFER_SIZE <= 0)
+		return (NULL);
+
+	printf("--- Start of get_next_line ---\n");
+	if (stash)
+		printf("Initial stash: %s\n", stash);
+	else
+		printf("NULL");
+
+	while (!stash || !ft_strchr(stash, '\n'))
+	{
+		position = read(fd, readed, BUFFER_SIZE);
+		printf("Read %d bytes\n", position);
+		if (position <= 0)
+			break ;
+		readed[position] = '\0';
+		printf("Read content: %s\n", readed);
+		stash = ft_add_to_stash(stash, readed);
+		printf("Stash after add: %s\n", stash);
+		if (!stash)
+			return (NULL);
+	}
+
+	if (position < 0 || (position == 0 && !stash))
+	{
+		printf("End of file or error\n");
+		return (NULL);
+	}
+
+	line = ft_extract_line(&stash);
+	printf("Extracted line: %s\n", line);
+	if (stash)
+		printf("Remaining stash: %s\n", stash);
+	else
+		printf("NULL");
+	printf("--- End of get_next_line ---\n\n");
+
+	return (line);
+}
+
+
+int	main(void)
+{
+	int		fd;
+	char	*line = NULL;
+
+	fd = open("test.txt", O_RDONLY);
+	if (fd == -1)
+	{
+		printf("Erreur lors de l'ouverture du fichier.\n");
+		return (1);
+	}
+
+	while ((line = get_next_line(fd)) != NULL)
+	{
+		printf("%s", line);
+		free(line);
+	}
+
+	close(fd);
+	return (0);
 }
