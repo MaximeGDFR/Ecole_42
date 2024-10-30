@@ -1,42 +1,93 @@
-/* get_next_line 
--- Permet de lire une ligne a la fois --
--- Renvoie la ligne qui vient d'etre lue + \n (sauf derniere ligne) --
--- Si plus rien a lire ou erreur, renvoie NULL --
--- Comportement indetermine si changement de fichier entre deux appels --
--- Comportement indetermine pour un fichier en binaire --
--- Variables globales interdites, lseek interdit et libft interdit */
-
-/* bonus 
--- Faire get_next_line avec une seule variable --
--- Permettre a la fonction de gerer plusieurs fd sans perdre le contenu */
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/30 15:00:12 by j                 #+#    #+#             */
+/*   Updated: 2024/10/30 16:10:21 by j                ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
 
 #include "get_next_line.h"
 
-//BUFFER = morceaux du fichier dans lequel on essaie de lire la ligne
-//Peut etre utiliser comme autre variable mais sans etre redefini
+/* ft_add_to_stash sert a dupliquer le contenu du buffer de read() et le stocker */
+char	*ft_add_to_stash(char *stash, const char *readed)
+{
+	char	*new_stash;
+
+	if (!readed)
+		return (stash);
+	if (!stash)
+		return (ft_strdup(readed));
+	new_stash = ft_strjoin(stash, readed);
+	if (!new_stash)
+		return (NULL);
+	if (!new_stash)
+		return (NULL);
+	free(stash);
+	return (new_stash);
+}
+
+/* ft_clear_stash sert a effacer ce qui a deja ete retourner depuis la reserve de read() et ne garder que le restant */
+char	*ft_clear_stash(char *stash, int i)
+{
+	int	j;
+	int	len_stash;
+
+	if (!stash)
+		return (NULL);
+	len_stash = ft_strlen(stash);
+	if (i >= len_stash)
+	{
+		free(stash);
+		return (NULL);
+	}
+	j = 0;
+	while (stash[i + j])
+	{
+		stash[j] = stash[i + j];
+		j++;
+	}
+	stash[j] = '\0';
+	return (stash);
+}
+
+int	ft_line_finded(char *stash)
+{
+	int	i;
+
+	if (!stash)
+		return (NULL);
+	i = 0;
+	while (stash[i])
+	{
+		if (stash[i] == '\n')
+			return (i);
+		i++;
+	}
+	return (-1);
+}
 
 char	*get_next_line(int fd)
 {
-	int	i;
-	char	buffer[BUFFER_SIZE];
-	ssize_t to_read;
+	static char		*stash;
+	char			*readed;
+	int				position;
+	char			*line;
 
-	to_read = read(fd, buffer, BUFFER_SIZE);
-	while (to_read[i])
+	line = NULL;
+	if (fd < 0 || BUFFER_SIZE == 0)
+		return (NULL);
+	stash = read(fd, readed, BUFFER_SIZE);
+	if (ft_line_finded(stash) == 0)
+		ft_add_to_stash(stash, readed);
+	else
 	{
-		i = 0;
-		if (to_read > 0)
-		{
-			return ();
-		}
-		else if (to_read == 0)
-		{
-
-		}
-		else
-		{
-
-		}
+		ft_add_to_stash(stash, readed);
+		line = stash;
+		ft_clear_stash(stash, position);
 	}
-	return (0);
+	return (line);
 }

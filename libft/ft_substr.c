@@ -6,7 +6,7 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/19 12:31:18 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/10/22 17:21:04 by j                ###   ########.fr       */
+/*   Updated: 2024/10/30 11:12:32 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
 	return (sub);
 }
 
-/*int main()
+int main()
 {
     char const s [] = "Hello world !";
     unsigned int start = 2;
@@ -51,4 +51,4 @@ char	*ft_substr(char const *s, unsigned int start, size_t len)
     printf("Src : %s\nSub : %s\n", s, result);
     free(result);
     return (0);
-}*/
+}
