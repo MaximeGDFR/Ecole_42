@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   get_next_line_utils.c                              :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/10/31 10:54:05 by j                 #+#    #+#             */
+/*   Updated: 2024/10/31 10:55:05 by j                ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -10,7 +22,7 @@ size_t	ft_strlen(const char *str)
 		i++;
 	return (i);
 }
-/* ft_strchr sert a trouver '\n' ou '\0' dans la reserve de read() */
+
 char	*ft_strchr(const char *str, int c)
 {
 	int	i;
@@ -26,7 +38,7 @@ char	*ft_strchr(const char *str, int c)
 		return ((char *)(str + i));
 	return (0);
 }
-/* ft_strdup sert a creer un duplicata du buffer de read() */
+
 char	*ft_strdup(const char *str)
 {
 	int		i;
