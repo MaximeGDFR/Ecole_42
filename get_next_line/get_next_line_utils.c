@@ -6,7 +6,7 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/31 10:54:05 by j                 #+#    #+#             */
-/*   Updated: 2024/10/31 10:55:05 by j                ###   ########.fr       */
+/*   Updated: 2024/11/05 17:20:41 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,8 @@ char	*ft_strchr(const char *str, int c)
 {
 	int	i;
 
+	if (!str)
+		return (NULL);
 	i = 0;
 	while (str[i])
 	{
@@ -36,7 +38,7 @@ char	*ft_strchr(const char *str, int c)
 	}
 	if (str[i] == (unsigned char)c)
 		return ((char *)(str + i));
-	return (0);
+	return (NULL);
 }
 
 char	*ft_strdup(const char *str)
@@ -45,7 +47,8 @@ char	*ft_strdup(const char *str)
 	int		size;
 	char	*dup;
 
-	i = 0;
+	if (!str)
+		return (NULL);
 	size = ft_strlen(str);
 	dup = (char *)malloc((size + 1) * sizeof(char));
 	if (!dup)
@@ -53,6 +56,7 @@ char	*ft_strdup(const char *str)
 		printf("Error allocation.\n");
 		return (NULL);
 	}
+	i = 0;
 	while (i < size)
 	{
 		dup[i] = str[i];

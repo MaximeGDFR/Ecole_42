@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/10/30 15:00:12 by j                 #+#    #+#             */
-/*   Updated: 2024/10/31 11:08:17 by j                ###   ########.fr       */
+/*   Created: 2024/11/05 18:51:17 by j                 #+#    #+#             */
+/*   Updated: 2024/11/05 19:44:09 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,6 @@
 #include <fcntl.h>
 #include <string.h>
 
-/* ft_add_to_stash : dupliquer le contenu du buffer de read() et le stocker */
 char	*ft_add_to_stash(char *stash, const char *readed)
 {
 	char	*new_stash;
@@ -26,33 +25,12 @@ char	*ft_add_to_stash(char *stash, const char *readed)
 		return (ft_strdup(readed));
 	new_stash = ft_strjoin(stash, readed);
 	if (!new_stash)
-		return (NULL);
-	free(stash);
-	return (new_stash);
-}
-
-/* ft_clear_stash : effacer ce qui a deja ete retourner */
-char	*ft_clear_stash(char *stash, int i)
-{
-	int	j;
-	int	len_stash;
-
-	if (!stash)
-		return (NULL);
-	len_stash = ft_strlen(stash);
-	if (i >= len_stash)
 	{
 		free(stash);
 		return (NULL);
 	}
-	j = 0;
-	while (stash[i + j])
-	{
-		stash[j] = stash[i + j];
-		j++;
-	}
-	stash[j] = '\0';
-	return (stash);
+	free(stash);
+	return (new_stash);
 }
 
 int	ft_line_finded(char *stash)
@@ -73,19 +51,17 @@ int	ft_line_finded(char *stash)
 
 char	*ft_extract_line(char **stash)
 {
+	int		newline_pos;
 	char	*line;
 	char	*temp;
-	char	*newline_pos;
 
 	if (!*stash || !**stash)
 		return (NULL);
-	newline_pos = ft_strchr(*stash, '\n');
-	if (newline_pos)
+	newline_pos = ft_line_finded(*stash);
+	if (newline_pos >= 0)
 	{
-		*newline_pos = '\0';
-		line = ft_strdup(*stash);
-		*newline_pos = '\n';
-		temp = ft_strdup(newline_pos + 1);
+		line = ft_substr(*stash, 0, newline_pos + 1);
+		temp = ft_strdup(*stash + newline_pos + 1);
 	}
 	else
 	{
@@ -97,64 +73,48 @@ char	*ft_extract_line(char **stash)
 	return (line);
 }
 
+char	*ft_read_and_stash(int fd, char **stash)
+{
+	char	readed[BUFFER_SIZE + 1];
+	int		position;
+
+	position = 0;
+	while (1)
+	{
+		if (!ft_strchr(stash, '\n'))  // Si pas de \n trouvé
+		{
+			position = read(fd, readed, BUFFER_SIZE);
+			if (position < 0)  // En cas d'erreur de lecture
+			{
+				free(*stash);
+				*stash = NULL;  // Réinitialisez stash
+				return (NULL);
+			}
+			if (position == 0)  // Fin de fichier
+			{
+				if (*stash && **stash)  // Si stash n'est pas vide
+					return (ft_extract_line(stash));
+				free(*stash);  // Libérer stash à la fin
+				*stash = NULL;  // Réinitialiser stash
+				return (NULL);  // Renvoie NULL pour EOF
+			}
+			readed[position] = '\0';  // Assurez-vous que buffer est terminé
+			*stash = ft_add_to_stash(*stash, readed);
+			if (!*stash)  // Vérifiez les erreurs d'allocation
+				return (NULL);
+		}
+		else
+			break;  // Si un \n est trouvé, sortir de la boucle
+	}
+	return (ft_extract_line(stash));
+}
 char	*get_next_line(int fd)
 {
 	static char	*stash = NULL;
-	char		readed[BUFFER_SIZE + 1];
-	int			position;
 
 	if (fd < 0 || BUFFER_SIZE <= 0)
 		return (NULL);
-	if (stash && ft_strchr(stash, '\n'))
-		return (ft_extract_line(&stash));
-	while (1)
-	{
-		position = read(fd, readed, BUFFER_SIZE);
-		if (position <= 0)
-			break ;
-		readed[position] = '\0';
-		stash = ft_add_to_stash(stash, readed);
-		if (!stash)
-			return (NULL);
-		if (ft_strchr(readed, '\n'))
-			break ;
-	}
-	if (stash)
-		return (ft_extract_line(&stash));
-	return (NULL);
+	if (!ft_read_and_stash(fd, &stash))
+		return (NULL);
+	return (ft_extract_line(&stash));
 }
-
-/*int main(void)
-{
-	int		fd;
-	char	*line;
-	char	input[2];
-
-	fd = open("test.txt", O_RDONLY);
-	if (fd == -1)
-	{
-		printf("Erreur lors de l'ouverture du fichier.\n");
-		return (1);
-	}
-	while (1)
-	{
-		line = get_next_line(fd);
-		if (line)
-		{
-			printf("%s", line);
-			free(line);
-			printf("\nEntrée pour continuer");
-			printf("\n'q' pour quitter.\n");
-			fgets(input, sizeof(input), stdin);
-			if (input[0] == 'q')
-				break ;
-		}
-		else
-		{
-			printf("Fin du fichier ou erreur de lecture.\n");
-			break ;
-		}
-	}
-	close(fd);
-	return (0);
-}*/
