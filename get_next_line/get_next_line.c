@@ -108,6 +108,7 @@ char	*ft_read_and_stash(int fd, char **stash)
 	}
 	return (ft_extract_line(stash));
 }
+
 char	*get_next_line(int fd)
 {
 	static char	*stash = NULL;
