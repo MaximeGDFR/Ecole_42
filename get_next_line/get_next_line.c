@@ -6,7 +6,7 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:09:46 by j                 #+#    #+#             */
-/*   Updated: 2024/11/08 18:09:04 by j                ###   ########.fr       */
+/*   Updated: 2024/11/08 17:57:41 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -76,7 +76,7 @@ char *get_next_line(int fd)
 
     if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
         return (NULL);
-    
+
     if (!temp)
     {
         temp = ft_strdup("");  // Ensure temp is correctly allocated
@@ -104,6 +104,3 @@ char *get_next_line(int fd)
     temp = keep_rest(temp, start_next);
     return (line);
 }
-
-
-
