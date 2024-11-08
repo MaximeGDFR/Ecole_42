@@ -66,6 +66,13 @@ char	*new_line(int fd, char *buffer, char *temp)
 	}
 	return (temp);
 }
+<<<<<<< HEAD
+=======
+
+char	*get_next_line(int fd)
+{
+	static char	*stash = NULL;
+>>>>>>> 2c372c1c2e452c735a0f658585bee4e984f459a8
 
 char *get_next_line(int fd)
 {

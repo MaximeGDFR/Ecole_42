@@ -76,33 +76,26 @@ char *get_next_line(int fd)
 {
     static char *stash = NULL;
     char buffer[BUFFER_SIZE + 1];
-    int read_bytes;
+    ssize_t read_bytes;
 
     if (fd < 0 || BUFFER_SIZE <= 0)
         return (NULL);
-
     while (1)
     {
         if (!ft_strchr(stash, '\n'))  // Si pas de \n trouvé
         {
             read_bytes = read(fd, buffer, BUFFER_SIZE);
-            if (read_bytes < 0)  // En cas d'erreur de lecture
+            if (read_bytes <= 0)  // En cas d'erreur de lecture
             {
+            	if (stash && *stash)
+            	{
+            		char *line = ft_extract_line(&stash);
+            		if (line)
+            			return (line);
+            	}
                 free(stash);
                 stash = NULL;  // Réinitialisez stash
                 return (NULL);
-            }
-            if (read_bytes == 0)  // Fin de fichier
-            {
-                if (stash && *stash)  // Si stash n'est pas vide
-                {
-                    char *line = ft_extract_line(&stash);
-                    if (line)
-                        return (line);
-                }
-                free(stash);  // Libérer stash à la fin
-                stash = NULL;  // Réinitialiser stash
-                return (NULL);  // Renvoie NULL pour EOF
             }
             buffer[read_bytes] = '\0';  // Assurez-vous que buffer est terminé
             stash = ft_add_to_stash(stash, buffer);
@@ -112,6 +105,249 @@ char *get_next_line(int fd)
         else
             break;  // Si un \n est trouvé, sortir de la boucle
     }
-
     return (ft_extract_line(&stash));  // Extraire la ligne une fois la boucle terminée
 }
+
+
+
+
+[BUFFER_SIZE = 10000000]: 
+Invalid fd: ==1508607== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508607== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508607== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508607==   no stack segment
+==1508607== 
+==1508607== Process terminating with default action of signal 11 (SIGSEGV)
+==1508607==  Access not within mapped region at address 0x1FFE801058
+==1508607== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508607==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508607==  If you believe this happened as a result of a stack
+==1508607==  overflow in your program's main thread (unlikely but
+==1508607==  possible), you can try to increase the size of the
+==1508607==  main thread stack using the --main-stacksize= flag.
+==1508607==  The main thread stack size used in this run was 8388608.
+files/empty: ==1508615== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508615== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508615== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508615==   no stack segment
+==1508615== 
+==1508615== Process terminating with default action of signal 11 (SIGSEGV)
+==1508615==  Access not within mapped region at address 0x1FFE801058
+==1508615== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508615==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508615==  If you believe this happened as a result of a stack
+==1508615==  overflow in your program's main thread (unlikely but
+==1508615==  possible), you can try to increase the size of the
+==1508615==  main thread stack using the --main-stacksize= flag.
+==1508615==  The main thread stack size used in this run was 8388608.
+files/nl: ==1508617== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508617== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508617== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508617==   no stack segment
+==1508617== 
+==1508617== Process terminating with default action of signal 11 (SIGSEGV)
+==1508617==  Access not within mapped region at address 0x1FFE801058
+==1508617== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508617==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508617==  If you believe this happened as a result of a stack
+==1508617==  overflow in your program's main thread (unlikely but
+==1508617==  possible), you can try to increase the size of the
+==1508617==  main thread stack using the --main-stacksize= flag.
+==1508617==  The main thread stack size used in this run was 8388608.
+files/41_no_nl: ==1508620== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508620== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508620== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508620==   no stack segment
+==1508620== 
+==1508620== Process terminating with default action of signal 11 (SIGSEGV)
+==1508620==  Access not within mapped region at address 0x1FFE801058
+==1508620== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508620==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508620==  If you believe this happened as a result of a stack
+==1508620==  overflow in your program's main thread (unlikely but
+==1508620==  possible), you can try to increase the size of the
+==1508620==  main thread stack using the --main-stacksize= flag.
+==1508620==  The main thread stack size used in this run was 8388608.
+files/41_with_nl: ==1508622== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508622== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508622== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508622==   no stack segment
+==1508622== 
+==1508622== Process terminating with default action of signal 11 (SIGSEGV)
+==1508622==  Access not within mapped region at address 0x1FFE801058
+==1508622== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508622==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508622==  If you believe this happened as a result of a stack
+==1508622==  overflow in your program's main thread (unlikely but
+==1508622==  possible), you can try to increase the size of the
+==1508622==  main thread stack using the --main-stacksize= flag.
+==1508622==  The main thread stack size used in this run was 8388608.
+files/42_no_nl: ==1508624== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508624== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508624== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508624==   no stack segment
+==1508624== 
+==1508624== Process terminating with default action of signal 11 (SIGSEGV)
+==1508624==  Access not within mapped region at address 0x1FFE801058
+==1508624== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508624==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508624==  If you believe this happened as a result of a stack
+==1508624==  overflow in your program's main thread (unlikely but
+==1508624==  possible), you can try to increase the size of the
+==1508624==  main thread stack using the --main-stacksize= flag.
+==1508624==  The main thread stack size used in this run was 8388608.
+files/42_with_nl: ==1508626== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508626== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508626== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508626==   no stack segment
+==1508626== 
+==1508626== Process terminating with default action of signal 11 (SIGSEGV)
+==1508626==  Access not within mapped region at address 0x1FFE801058
+==1508626== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508626==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508626==  If you believe this happened as a result of a stack
+==1508626==  overflow in your program's main thread (unlikely but
+==1508626==  possible), you can try to increase the size of the
+==1508626==  main thread stack using the --main-stacksize= flag.
+==1508626==  The main thread stack size used in this run was 8388608.
+files/43_no_nl: ==1508628== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508628== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508628== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508628==   no stack segment
+==1508628== 
+==1508628== Process terminating with default action of signal 11 (SIGSEGV)
+==1508628==  Access not within mapped region at address 0x1FFE801058
+==1508628== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508628==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508628==  If you believe this happened as a result of a stack
+==1508628==  overflow in your program's main thread (unlikely but
+==1508628==  possible), you can try to increase the size of the
+==1508628==  main thread stack using the --main-stacksize= flag.
+==1508628==  The main thread stack size used in this run was 8388608.
+files/43_with_nl: ==1508630== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508630== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508630== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508630==   no stack segment
+==1508630== 
+==1508630== Process terminating with default action of signal 11 (SIGSEGV)
+==1508630==  Access not within mapped region at address 0x1FFE801058
+==1508630== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508630==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508630==  If you believe this happened as a result of a stack
+==1508630==  overflow in your program's main thread (unlikely but
+==1508630==  possible), you can try to increase the size of the
+==1508630==  main thread stack using the --main-stacksize= flag.
+==1508630==  The main thread stack size used in this run was 8388608.
+files/multiple_nlx5: ==1508632== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508632== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508632== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508632==   no stack segment
+==1508632== 
+==1508632== Process terminating with default action of signal 11 (SIGSEGV)
+==1508632==  Access not within mapped region at address 0x1FFE801058
+==1508632== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508632==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508632==  If you believe this happened as a result of a stack
+==1508632==  overflow in your program's main thread (unlikely but
+==1508632==  possible), you can try to increase the size of the
+==1508632==  main thread stack using the --main-stacksize= flag.
+==1508632==  The main thread stack size used in this run was 8388608.
+files/multiple_line_no_nl: ==1508634== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508634== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508634== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508634==   no stack segment
+==1508634== 
+==1508634== Process terminating with default action of signal 11 (SIGSEGV)
+==1508634==  Access not within mapped region at address 0x1FFE801058
+==1508634== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508634==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508634==  If you believe this happened as a result of a stack
+==1508634==  overflow in your program's main thread (unlikely but
+==1508634==  possible), you can try to increase the size of the
+==1508634==  main thread stack using the --main-stacksize= flag.
+==1508634==  The main thread stack size used in this run was 8388608.
+files/multiple_line_with_nl: ==1508636== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508636== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508636== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508636==   no stack segment
+==1508636== 
+==1508636== Process terminating with default action of signal 11 (SIGSEGV)
+==1508636==  Access not within mapped region at address 0x1FFE801058
+==1508636== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508636==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508636==  If you believe this happened as a result of a stack
+==1508636==  overflow in your program's main thread (unlikely but
+==1508636==  possible), you can try to increase the size of the
+==1508636==  main thread stack using the --main-stacksize= flag.
+==1508636==  The main thread stack size used in this run was 8388608.
+files/alternate_line_nl_no_nl: ==1508638== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508638== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508638== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508638==   no stack segment
+==1508638== 
+==1508638== Process terminating with default action of signal 11 (SIGSEGV)
+==1508638==  Access not within mapped region at address 0x1FFE801058
+==1508638== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508638==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508638==  If you believe this happened as a result of a stack
+==1508638==  overflow in your program's main thread (unlikely but
+==1508638==  possible), you can try to increase the size of the
+==1508638==  main thread stack using the --main-stacksize= flag.
+==1508638==  The main thread stack size used in this run was 8388608.
+files/alternate_line_nl_with_nl: ==1508640== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508640== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508640== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508640==   no stack segment
+==1508640== 
+==1508640== Process terminating with default action of signal 11 (SIGSEGV)
+==1508640==  Access not within mapped region at address 0x1FFE801058
+==1508640== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508640==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508640==  If you believe this happened as a result of a stack
+==1508640==  overflow in your program's main thread (unlikely but
+==1508640==  possible), you can try to increase the size of the
+==1508640==  main thread stack using the --main-stacksize= flag.
+==1508640==  The main thread stack size used in this run was 8388608.
+files/big_line_no_nl: ==1508642== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508642== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508642== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508642==   no stack segment
+==1508642== 
+==1508642== Process terminating with default action of signal 11 (SIGSEGV)
+==1508642==  Access not within mapped region at address 0x1FFE801058
+==1508642== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508642==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508642==  If you believe this happened as a result of a stack
+==1508642==  overflow in your program's main thread (unlikely but
+==1508642==  possible), you can try to increase the size of the
+==1508642==  main thread stack using the --main-stacksize= flag.
+==1508642==  The main thread stack size used in this run was 8388608.
+files/big_line_with_nl: ==1508644== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508644== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508644== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508644==   no stack segment
+==1508644== 
+==1508644== Process terminating with default action of signal 11 (SIGSEGV)
+==1508644==  Access not within mapped region at address 0x1FFE801058
+==1508644== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508644==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508644==  If you believe this happened as a result of a stack
+==1508644==  overflow in your program's main thread (unlikely but
+==1508644==  possible), you can try to increase the size of the
+==1508644==  main thread stack using the --main-stacksize= flag.
+==1508644==  The main thread stack size used in this run was 8388608.
+stdin: ==1508646== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508646== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508646== Can't extend stack to 0x1ffe801058 during signal delivery for thread 1:
+==1508646==   no stack segment
+==1508646== 
+==1508646== Process terminating with default action of signal 11 (SIGSEGV)
+==1508646==  Access not within mapped region at address 0x1FFE801058
+==1508646== Stack overflow in thread #1: can't grow stack to 0x1ffe801000
+==1508646==    at 0x408299: get_next_line (get_next_line.c:76)
+==1508646==  If you believe this happened as a result of a stack
+==1508646==  overflow in your program's main thread (unlikely but
+==1508646==  possible), you can try to increase the size of the
+==1508646==  main thread stack using the --main-stacksize= flag.
+==1508646==  The main thread stack size used in this run was 8388608.
+
