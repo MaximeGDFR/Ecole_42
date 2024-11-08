@@ -6,7 +6,7 @@
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:09:46 by j                 #+#    #+#             */
-/*   Updated: 2024/11/08 17:57:41 by j                ###   ########.fr       */
+/*   Updated: 2024/11/08 18:09:04 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -66,13 +66,6 @@ char	*new_line(int fd, char *buffer, char *temp)
 	}
 	return (temp);
 }
-<<<<<<< HEAD
-=======
-
-char	*get_next_line(int fd)
-{
-	static char	*stash = NULL;
->>>>>>> 2c372c1c2e452c735a0f658585bee4e984f459a8
 
 char *get_next_line(int fd)
 {
