@@ -5,116 +5,105 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/05 18:51:17 by j                 #+#    #+#             */
-/*   Updated: 2024/11/05 19:44:09 by j                ###   ########.fr       */
+/*   Created: 2024/11/08 16:09:46 by j                 #+#    #+#             */
+/*   Updated: 2024/11/08 17:57:41 by j                ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
-#include <stdio.h>
-#include <fcntl.h>
-#include <string.h>
 
-char	*ft_add_to_stash(char *stash, const char *readed)
+static char	*keep_rest(char *temp, int start_next)
 {
-	char	*new_stash;
+	char	*rest;
 
-	if (!readed)
-		return (stash);
-	if (!stash)
-		return (ft_strdup(readed));
-	new_stash = ft_strjoin(stash, readed);
-	if (!new_stash)
-	{
-		free(stash);
-		return (NULL);
-	}
-	free(stash);
-	return (new_stash);
+	rest = ft_strdup(temp + start_next);
+	free(temp);
+	return (rest);
 }
 
-int	ft_line_finded(char *stash)
+static char	*extract_line(char *temp, int *start_next)
 {
-	int	i;
-
-	if (!stash)
-		return (-1);
-	i = 0;
-	while (stash[i])
-	{
-		if (stash[i] == '\n')
-			return (i);
-		i++;
-	}
-	return (-1);
-}
-
-char	*ft_extract_line(char **stash)
-{
-	int		newline_pos;
 	char	*line;
-	char	*temp;
+	int		i;
 
-	if (!*stash || !**stash)
-		return (NULL);
-	newline_pos = ft_line_finded(*stash);
-	if (newline_pos >= 0)
-	{
-		line = ft_substr(*stash, 0, newline_pos + 1);
-		temp = ft_strdup(*stash + newline_pos + 1);
-	}
-	else
-	{
-		line = ft_strdup(*stash);
-		temp = NULL;
-	}
-	free(*stash);
-	*stash = temp;
+	i = 0;
+	while (temp[i] && temp[i] != '\n')
+		i++;
+	if (temp[i] == '\n')
+		i++;
+	line = ft_substr(temp, 0, i);
+	*start_next = i;
 	return (line);
 }
 
-char	*ft_read_and_stash(int fd, char **stash)
-{
-	char	readed[BUFFER_SIZE + 1];
-	int		position;
 
-	position = 0;
-	while (1)
+
+
+char	*new_line(int fd, char *buffer, char *temp)
+{
+	int		read_bytes;
+	char	*new_temp;
+
+	while (temp && !ft_strchr(temp, '\n'))
 	{
-		if (!ft_strchr(stash, '\n'))  // Si pas de \n trouvé
+		read_bytes = read(fd, buffer, BUFFER_SIZE);
+		if (read_bytes == -1)
 		{
-			position = read(fd, readed, BUFFER_SIZE);
-			if (position < 0)  // En cas d'erreur de lecture
-			{
-				free(*stash);
-				*stash = NULL;  // Réinitialisez stash
-				return (NULL);
-			}
-			if (position == 0)  // Fin de fichier
-			{
-				if (*stash && **stash)  // Si stash n'est pas vide
-					return (ft_extract_line(stash));
-				free(*stash);  // Libérer stash à la fin
-				*stash = NULL;  // Réinitialiser stash
-				return (NULL);  // Renvoie NULL pour EOF
-			}
-			readed[position] = '\0';  // Assurez-vous que buffer est terminé
-			*stash = ft_add_to_stash(*stash, readed);
-			if (!*stash)  // Vérifiez les erreurs d'allocation
-				return (NULL);
+			free(temp);  // Libération en cas d'erreur
+			return (NULL);
 		}
-		else
-			break;  // Si un \n est trouvé, sortir de la boucle
+		if (read_bytes == 0)
+			break ;
+		buffer[read_bytes] = '\0';
+		new_temp = ft_strjoin(temp, buffer);
+		if (!new_temp)
+		{
+			free(temp);  // Libérer `temp` si `ft_strjoin` échoue
+			return (NULL);
+		}
+		free(temp);
+		temp = new_temp;
 	}
-	return (ft_extract_line(stash));
+	return (temp);
 }
-char	*get_next_line(int fd)
-{
-	static char	*stash = NULL;
 
-	if (fd < 0 || BUFFER_SIZE <= 0)
-		return (NULL);
-	if (!ft_read_and_stash(fd, &stash))
-		return (NULL);
-	return (ft_extract_line(&stash));
+char *get_next_line(int fd)
+{
+    char *buffer;
+    char *line;
+    static char *temp;
+    int start_next;
+
+    if (fd < 0 || BUFFER_SIZE <= 0 || read(fd, 0, 0) < 0)
+        return (NULL);
+    
+    if (!temp)
+    {
+        temp = ft_strdup("");  // Ensure temp is correctly allocated
+        if (!temp)
+            return (NULL);
+    }
+
+    buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+    if (!buffer)
+        return (NULL);
+
+    temp = new_line(fd, buffer, temp);
+    free(buffer);  // Free buffer after use
+
+    if (!temp || temp[0] == '\0')
+        return (NULL);  // Return NULL if temp is empty (empty file)
+
+    line = extract_line(temp, &start_next);
+    if (!line)
+    {
+        free(temp);  // Free temp if line extraction fails
+        return (NULL);
+    }
+
+    temp = keep_rest(temp, start_next);
+    return (line);
 }
+
+
+
