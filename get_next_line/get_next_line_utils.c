@@ -3,100 +3,126 @@
 /*                                                        :::      ::::::::   */
 /*   get_next_line_utils.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: j <j@student.42.fr>                        +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/08 16:05:35 by j                 #+#    #+#             */
-/*   Updated: 2024/11/08 17:57:43 by j                ###   ########.fr       */
+/*   Updated: 2024/11/09 12:31:35 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-size_t	ft_strlen(const char *s)
+char	*ft_strdup(const char *s)
 {
-	size_t	i;
+    char *dup;
+    size_t len;
+    size_t i;
 
-	i = 0;
-	while (s[i])
-		i++;
-	return (i);
+    if (!s) return NULL;
+
+    len = 0;
+    while (s[len])
+        len++;
+    dup = (char *)malloc(len + 1);
+    if (!dup)
+    {
+        printf("Erreur d'allocation de mémoire dans ft_strdup\n");
+        return (NULL);
+    }
+    i = 0;
+    while (s[i])
+    {
+        dup[i] = s[i];
+        i++;
+    }
+    dup[i] = '\0';
+    return (dup);
 }
+
 
 char	*ft_strjoin(const char *s1, const char *s2)
 {
-	char	*start;
-	char	*str;
+    size_t len1, len2, i;
+    char *joined;
 
-	if (!s1 && !s2)
-		return (NULL);
-	if (!s1)
-		return (ft_strdup(s2));
-	if (!s2)
-		return (ft_strdup(s1));
-	str = (char *)malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
-	if (!str)
-		return (NULL);
-	start = str;
-	while (*s1)
-		*str++ = *s1++;
-	while (*s2)
-		*str++ = *s2++;
-	*str = '\0';
-	return (start);
+    if (!s1 && !s2)
+        return NULL;
+    if (!s1)
+        return ft_strdup(s2);
+    if (!s2)
+        return ft_strdup(s1);
+
+    len1 = 0;
+    while (s1[len1])
+        len1++;
+    len2 = 0;
+    while (s2[len2])
+        len2++;
+
+    joined = (char *)malloc(len1 + len2 + 1);
+    if (!joined)
+    {
+        printf("Erreur d'allocation de mémoire dans ft_strjoin\n");
+        return (NULL);
+    }
+    i = 0;
+    while (i < len1)
+    {
+        joined[i] = s1[i];
+        i++;
+    }
+    while (i < len1 + len2)
+    {
+        joined[i] = s2[i - len1];
+        i++;
+    }
+    joined[i] = '\0';
+    return (joined);
 }
 
-char	*ft_strchr(const char *s, int c)
+char *ft_substr(const char *s, unsigned int start, size_t len)
 {
-	int	i;
+    char *substr;
+    size_t i;
 
-	c = (unsigned char)c;
-	i = -1;
-	while (s[++i])
-	{
-		if (s[i] == c)
-			return ((char *)&s[i]);
-	}
-	if (c == '\0')
-		return ((char *)&s[i]);
-	return (NULL);
+    if (!s)
+        return (NULL);
+    if (start >= ft_strlen(s))
+        return (ft_strdup(""));
+    substr = (char *)malloc(len + 1);
+    if (!substr)
+        return (NULL);
+    i = 0;
+    while (i < len && s[start + i])
+    {
+        substr[i] = s[start + i];
+        i++;
+    }
+    substr[i] = '\0';
+    return (substr);
 }
 
-char	*ft_substr(char const *s, unsigned int start, size_t len)
+char *ft_strchr(const char *s, int c)
 {
-	char	*str;
-	size_t	size;
-	size_t	i;
+    if (!s)
+        return NULL;
 
-	if (!s)
-		return (NULL);
-	size = ft_strlen(s);
-	if (start > size)
-		len = 0;
-	if (len > size - start)
-		len = size - start;
-	str = (char *)malloc((len + 1) * sizeof (char));
-	if (!str)
-		return (NULL);
-	i = -1;
-	while (++i < len)
-		str[i] = s[start + i];
-	str[i] = '\0';
-	return (str);
+    while (*s)
+    {
+        if (*s == (char)c)
+            return (char *)s;
+        s++;
+    }
+    if (c == '\0')
+        return (char *)s;
+    return NULL;
 }
 
-char	*ft_strdup(const char *str)
+size_t ft_strlen(const char *str)
 {
-	char	*dup;
-	int		i;
+    size_t len = 0;
 
-	if (!str)
-		return (NULL);
-	dup = (char *)malloc((ft_strlen(str) + 1) * sizeof (char));
-	if (!dup)
-		return (NULL);
-	i = -1;
-	while (str[++i])
-		dup[i] = str[i];
-	dup[i] = '\0';
-	return (dup);
+    while (str[len])
+        len++;
+    return (len);
 }
