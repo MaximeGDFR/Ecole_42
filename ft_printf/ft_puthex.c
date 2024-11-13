@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:12:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 18:20:31 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 21:51:39 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -69,9 +69,9 @@ int	ft_puthex(void *ptr, t_flags *flags)
 	count += write_addr_x(addr, buffer, len, flags);
 	spaces = flags->width - count;
 	if (spaces > 0 && !flags->zero)
-		count = put_padding(count, spaces, 0);
+		count = handle_padding(count, spaces, 0);
 	count += write(1, buffer, count - 2);
 	if (spaces > 0 && flags->zero)
-		count = put_padding(count, spaces, 1);
+		count = handle_padding(count, spaces, 1);
 	return (count);
 }

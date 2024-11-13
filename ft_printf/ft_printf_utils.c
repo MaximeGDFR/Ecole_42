@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:44:40 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 15:51:55 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 21:49:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,4 +56,14 @@ int	check_width(const char *input, int *index, t_flags *flags)
 		}
 	}
 	return (1);
+}
+
+int	handle_padding(int count, int padding, int fill_char)
+{
+	while (padding > 0)
+	{
+		count += write(1, &fill_char, 1);
+		padding--;
+	}
+	return (count);
 }

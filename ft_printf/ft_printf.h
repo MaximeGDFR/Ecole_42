@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:29:54 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 19:14:31 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 21:52:04 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,7 +46,7 @@ int		check_flags(const char *input, int *index, t_flags *flags);
 int		check_width(const char *input, int *index, t_flags *flags);
 int		check_precision(const char *input, int *index, t_flags *flags);
 int		handle_numeric_types(char type, va_list args, t_flags *flags);
-int		put_padding(int count, int spaces, int is_zero);
+int		handle_padding(int count, int padding, int fill_char);
 int		get_num_lenght(int nb, int is_unsigned);
 int		is_negative(int count, int n, int is_unsigned);
 int		print_number(int n, t_flags *flags, int is_unsigned);

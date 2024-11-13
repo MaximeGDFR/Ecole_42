@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 18:02:57 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 19:07:30 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 21:51:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,11 +53,11 @@ int	ft_putaddr(void *ptr, t_flags *flags)
 		len = write_addr_p(addr, buffer, 2);
 	spaces = flags->width - len;
 	if (spaces > 0 && !flags->minus && !flags->zero)
-		count += put_padding(count, spaces, 0);
+		count += handle_padding(count, spaces, 0);
 	if (spaces > 0 && flags->zero && !flags->minus)
-		count += put_padding(count, spaces, 1);
+		count += handle_padding(count, spaces, 1);
 	count += write(1, buffer, len);
 	if (spaces > 0 && flags->minus)
-		count += put_padding(count, spaces, 0);
+		count += handle_padding(count, spaces, 0);
 	return (count);
 }
