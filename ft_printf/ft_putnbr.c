@@ -6,66 +6,79 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 18:40:49 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/12 19:08:27 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 11:09:31 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	putnbr_unsigned(int n, t_flags *flags)
+int	put_padding(int count, int spaces, int is_zero)
 {
-	char	c;
-	int		count;
+	char	fill_char;
 
-	count = 0;
-	if (n >= 10)
+	fill_char = ' ';
+	if (is_zero)
+		fill_char = '0';
+	while (spaces > 0)
 	{
-		count += putnbr_unsigned(n / 10, flags);
-		count += putnbr_unsigned(n % 10, flags);
-	}
-	else
-	{
-		c = n + '0';
-		write(1, &c, 1);
-		count++;
+		count += write(1, &fill_char, 1);
+		spaces--;
 	}
 	return (count);
 }
 
-
-int	putnbr_signed(int n, t_flags *flags)
+int	get_num_lenght(int nb)
 {
-	char	c;
-	int		count;
+	int	i;
+
+	i = 1;
+	if (nb < 0)
+		nb = -nb;
+	while ((nb / 10) > 0)
+	{
+		nb = nb / 10;
+		i++;
+	}
+	return (i);
+}
+
+int	is_negative(int count, int n, int is_unsigned)
+{
+	if (n < 0 && !is_unsigned)
+	{
+		count += write(1, "-", 1);
+		n = -n;
+	}
+	return (count);
+}
+
+int	print_number(int n, t_flags *flags, int is_unsigned)
+{
+	int	count;
+	int	num_len;
+	int	spaces;
+	int	zeros;
 
 	count = 0;
-	if (n == -2147483648)
-	{
-		write(1, "-2147483648", 11);
-		count = 11;
-	}
-	if (n < 0)
-	{
-		write(1, "-", 1);
-		n = -n;
-		count++;
-	}
+	num_len = get_num_lenght(n);
+	spaces = flags->width - num_len;
+	zeros = flags->dot - num_len;
+	count += is_negative(count, n, is_unsigned);
+	if (flags->dot > num_len)
+		spaces = flags->width - flags->dot;
+	if (spaces > 0 && flags->zero == 0)
+		count = put_padding(count, spaces, ' ');
+	if (zeros > 0)
+		count = put_padding(count, zeros, '0');
+	if (spaces > 0 && flags->zero == 1)
+		count = put_padding(count, spaces, '0');
 	if (n >= 10)
-		count += putnbr_signed(n / 10, flags);
-	c = n % 10 + '0';
-	write(1, &c, 1);
-	count++;
+		count += print_number(n / 10, flags, is_unsigned);
+	count += ft_putchar((n % 10) + '0');
 	return (count);
 }
 
 int	ft_putnbr(int n, int is_unsigned, t_flags *flags)
 {
-	int	count;
-
-	count = 0;
-	if (is_unsigned == 0)
-		count += putnbr_signed(n, flags);
-	else
-		count += putnbr_unsigned(n, flags);
-	return (count);
+	return (print_number(n, flags, is_unsigned));
 }

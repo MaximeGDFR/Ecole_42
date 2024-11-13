@@ -6,23 +6,11 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:32:47 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/12 20:12:57 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 16:31:40 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
-
-void	init_flags(t_flags *flags)
-{
-	flags->plus = 0;
-	flags->space = 0;
-	flags->hash = 0;
-	flags->minus = 0;
-	flags->zero = 0;
-	flags->dot = 0;
-	flags->width = 0;
-	flags->precision = 0;
-}
 
 static int	check_type(const char *input, va_list args, t_flags *flags)
 {
@@ -39,15 +27,12 @@ static int	check_type(const char *input, va_list args, t_flags *flags)
 			check_flags(input, &i, flags);
 			if (input[i] == '%')
 				count += ft_putchar('%');
-			else if (input[i] == 'd' || input[i] == 'i' || input[i] == 'u'
-				|| input[i] == 'x' || input[i] == 'X' || input[i] == 'f')
-				count += handle_numeric_types(input[i], args, flags);
-			else if (input[i] == 'p')
-				count += ft_putaddr(va_arg(args, void *));
 			else if (input[i] == 'c')
 				count += ft_putchar(va_arg(args, int));
 			else if (input[i] == 's')
 				count += ft_putstr(va_arg(args, const char *));
+			else
+				count += handle_numeric_types(input[i], args, flags);
 		}
 		else
 			count += ft_putchar(input[i]);
@@ -58,48 +43,23 @@ static int	check_type(const char *input, va_list args, t_flags *flags)
 
 static int	handle_numeric_types(char type, va_list args, t_flags *flags)
 {
-	if (type == 'd' || type == 'i' || type == 'u')
-		return (ft_putnbr(va_arg(args, int), flags));
+	if (type == 'd' || type == 'i')
+		return (ft_putnbr(va_arg(args, int), 0, flags));
+	else if (type == 'u')
+		return (ft_putnbr(va_arg(args, unsigned int), 1, flags));
 	else if (type == 'x' || type == 'X')
+	{
+		if (type == 'X')
+			flags->is_upper = 1;
+		else
+			flags->is_upper = 0;
 		return (ft_puthex(va_arg(args, unsigned int), type, flags));
+	}
+	else if (type == 'p')
+		return (ft_puthex(va_arg(args, void *), type, flags));
 	else if (type == 'f')
 		return (ft_putfloat(va_arg(args, double), flags));
 	return (0);
-}
-
-static int	check_precision(const char *input, int *index, t_flags *flags)
-{
-	if (input[*index] == '.')
-	{
-		(*index)++;
-		flags->dot = 1;
-		flags->precision = 0;
-		if (input[*index] >= '0' && input[*index] <= '9')
-		{
-			while (input[*index] >= '0' && input[*index] <= '9')
-			{
-				flags->precision = flags->precision * 10
-					+ (input[*index] - '0');
-				(*index)++;
-			}
-		}
-	}
-	return (1);
-}
-
-static int	check_width(const char *input, int *index, t_flags *flags)
-{
-	if (input[*index] >= '0' && input[*index] <= '9')
-	{
-		flags->width = 0;
-		while (input[*index] >= '0' && input[*index] <= '9')
-		{
-			flags->width = flags->width * 10
-				+ (input[*index] - '0');
-			(*index)++;
-		}
-	}
-	return (1);
 }
 
 static int	check_flags(const char *input, int *index, t_flags *flags)
