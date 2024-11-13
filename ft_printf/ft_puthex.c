@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 11:12:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 15:45:44 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 18:20:31 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,41 +31,45 @@ char	*reorder_addr(char *addr, int len)
 	return (addr);
 }
 
-int	write_addr(unsigned long addr, char *hex_digits, char *buffer)
+int	write_addr_x(unsigned long addr, char *buf, int len, t_flags *flags)
 {
-	int	i;
+	char	*hex_digits;
 
-	i = 2;
 	if (addr == 0)
-		buffer[i++] = '0';
-	while (addr > 0)
-	{
-		buffer[i++] = hex_digits[addr % 16];
-		addr /= 16;
-	}
-	buffer[i] = '\0';
-	reorder_addr(buffer, i);
-	return (i);
-}
-
-int	ft_puthex(void *ptr, int type, t_flags *flags)
-{
-	unsigned long	addr;
-	char			*hex_digits;
-	int				count;
-	int				spaces;
-	char			buffer[20];
-
-	addr = (unsigned long)ptr;
+		buf[len++] = '0';
 	if (flags->is_upper == 1)
 		hex_digits = "0123456789ABCDEF";
 	else
 		hex_digits = "0123456789abcdef";
-	count = write_addr(addr, hex_digits, buffer);
+	while (addr > 0)
+	{
+		buf[len++] = hex_digits[addr & 0xF];
+		addr >>= 4;
+	}
+	buf[len] = '\0';
+	reorder_addr(buf, len);
+	return (len);
+}
+
+int	ft_puthex(void *ptr, t_flags *flags)
+{
+	unsigned long	addr;
+	int				count;
+	int				len;
+	int				spaces;
+	char			buffer[19];
+
+	if (ptr == NULL)
+		return (write(1, "0x0", 3), 3);
+	addr = (unsigned long)ptr;
+	count = 0;
+	buffer[0] = '0';
+	buffer[1] = 'x';
+	len = 2;
+	count += write_addr_x(addr, buffer, len, flags);
 	spaces = flags->width - count;
 	if (spaces > 0 && !flags->zero)
 		count = put_padding(count, spaces, 0);
-	count += write(1, "0x", 2);
 	count += write(1, buffer, count - 2);
 	if (spaces > 0 && flags->zero)
 		count = put_padding(count, spaces, 1);

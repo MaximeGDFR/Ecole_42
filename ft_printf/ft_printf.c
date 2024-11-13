@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:32:47 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 16:31:40 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 19:02:42 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ static int	check_type(const char *input, va_list args, t_flags *flags)
 	return (count);
 }
 
-static int	handle_numeric_types(char type, va_list args, t_flags *flags)
+int	handle_numeric_types(char type, va_list args, t_flags *flags)
 {
 	if (type == 'd' || type == 'i')
 		return (ft_putnbr(va_arg(args, int), 0, flags));
@@ -53,16 +53,16 @@ static int	handle_numeric_types(char type, va_list args, t_flags *flags)
 			flags->is_upper = 1;
 		else
 			flags->is_upper = 0;
-		return (ft_puthex(va_arg(args, unsigned int), type, flags));
+		return (ft_puthex((void *)va_arg(args, unsigned long), flags));
 	}
 	else if (type == 'p')
-		return (ft_puthex(va_arg(args, void *), type, flags));
+		return (ft_putaddr(va_arg(args, void *), flags));
 	else if (type == 'f')
 		return (ft_putfloat(va_arg(args, double), flags));
 	return (0);
 }
 
-static int	check_flags(const char *input, int *index, t_flags *flags)
+int	check_flags(const char *input, int *index, t_flags *flags)
 {
 	while (input[*index] == '+' || input[*index] == '#'
 		|| input[*index] == ' ' || input[*index] == '-'
@@ -88,11 +88,9 @@ static int	check_flags(const char *input, int *index, t_flags *flags)
 int	ft_printf(const char *input, ...)
 {
 	va_list	args;
-	int		i;
 	int		count;
 	t_flags	flags;
 
-	i = 0;
 	count = 0;
 	if (input == NULL)
 		return (0);

@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 18:40:49 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 11:09:31 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 19:18:22 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,16 +27,19 @@ int	put_padding(int count, int spaces, int is_zero)
 	return (count);
 }
 
-int	get_num_lenght(int nb)
+int	get_num_lenght(int nb, int is_unsigned)
 {
-	int	i;
+	int					i;
+	unsigned long long	un;
 
 	i = 1;
-	if (nb < 0)
-		nb = -nb;
-	while ((nb / 10) > 0)
+	if (nb < 0 && !is_unsigned)
+		un = -((unsigned long long)nb);
+	else
+		un = (unsigned long long)nb;
+	while ((un / 10) > 0)
 	{
-		nb = nb / 10;
+		un /= 10;
 		i++;
 	}
 	return (i);
@@ -52,7 +55,7 @@ int	is_negative(int count, int n, int is_unsigned)
 	return (count);
 }
 
-int	print_number(int n, t_flags *flags, int is_unsigned)
+int	print_number(long long n, t_flags *flags, int is_unsigned)
 {
 	int	count;
 	int	num_len;

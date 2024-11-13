@@ -3,12 +3,16 @@ CFLAGS = -Wall -Wextra -Werror
 AR = ar
 ARFLAGS = -rcs
 
-SRC = 
-
-SRC_BONUS = 
+SRC =	ft_printf.c \
+	ft_printf_utils.c \
+	ft_putchar.c \
+	ft_putfloat.c \
+	ft_puthex.c \
+	ft_putnbr.c \
+	ft_putstr.c \
+	ft_putaddr.c
 
 OBJ = $(SRC:.c=.o)
-OBJ_BONUS = $(SRC_BONUS:.c=.o)
 NAME = libftprintf.a
 
 all: $(NAME)
@@ -19,11 +23,8 @@ all: $(NAME)
 $(NAME): $(OBJ)
 	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
 
-bonus:	$(OBJ) $(OBJ_BONUS)
-	 $(AR) $(ARFLAGS) $(NAME) $(OBJ) $(OBJ_BONUS)
-
 clean:
-	rm -f $(OBJ) $(OBJ_BONUS)
+	rm -f $(OBJ)
 
 fclean: clean
 	rm -f $(NAME)

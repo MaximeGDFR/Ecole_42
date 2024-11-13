@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:53:29 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/13 16:25:41 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/13 16:55:14 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int	len_before_dot(double nb)
 {
-	int	*len;
+	int	len;
 	int	int_part;
 
 	int_part = (int)nb;
@@ -37,7 +37,7 @@ int	before_dot(int int_part, t_flags *flags)
 	return (count);
 }
 
-int	after_dot(double nb, int precision, t_flags *flags)
+int	after_dot(double nb, int precision)
 {
 	int	i;
 	int	count;
@@ -47,7 +47,7 @@ int	after_dot(double nb, int precision, t_flags *flags)
 	if (precision == 0)
 		return (count);
 	count += ft_putchar('.');
-	nb -+ (int)nb;
+	nb -= (int)nb;
 	while (i < precision)
 	{
 		nb *= 10;
@@ -78,6 +78,6 @@ int	ft_putfloat(double nb, t_flags *flags)
 		count = put_padding(count, spaces, '0');
 	int_part = (int)nb;
 	count += before_dot(int_part, flags);
-	count += after_dot(nb, flags->dot, flags);
+	count += after_dot(nb, flags->dot);
 	return (count);
 }
