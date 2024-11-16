@@ -1,34 +1,33 @@
-CC = gcc
-CFLAGS = -Wall -Wextra -Werror
-AR = ar
-ARFLAGS = -rcs
-
-SRC =	ft_printf.c \
-	ft_printf_utils.c \
-	ft_putchar.c \
-	ft_putfloat.c \
-	ft_puthex.c \
-	ft_putnbr.c \
-	ft_putstr.c \
-	ft_putaddr.c
-
-OBJ = $(SRC:.c=.o)
+SRCS =	ft_printf.c \
+		ft_printf_utils.c \
+		ft_print_char.c \
+		ft_print_str.c \
+		ft_print_ptr.c \
+		ft_print_num.c \
+		ft_print_u_num.c \
+		ft_print_hex.c
+OBJS = ${SRCS:.c=.o}
 NAME = libftprintf.a
+CC = gcc -Wall -Wextra -Werror
+AR = ar rcs
 
-all: $(NAME)
+%.o: %.c ft_printf.h
+		${CC} -I. -c $< -o ${<:.c=.o}
 
-%.o: %.c
-	$(CC) $(CFLAGS) -c $< -o $@
+all:		${NAME}
 
-$(NAME): $(OBJ)
-	$(AR) $(ARFLAGS) $(NAME) $(OBJ)
+$(NAME):	${OBJS} ft_printf.h
+			ar rcs ${NAME} ${OBJS}
+
+bonus:		${OBJS} ft_printf.h
+			ar rcs ${NAME} ${OBJS}
 
 clean:
-	rm -f $(OBJ)
+			rm -f ${OBJS}
 
-fclean: clean
-	rm -f $(NAME)
+fclean:		clean
+			rm -f ${NAME}
 
-re: fclean all
+re:			fclean
 
-.PHONY: all clean fclean re bonus
+.PHONY:		all clean fclean re bonus
