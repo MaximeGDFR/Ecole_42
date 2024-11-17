@@ -6,67 +6,60 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:09:00 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 23:20:47 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/17 12:46:04 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	print_long_as_hex(long unsigned addr)
+int	print_long_as_hex(unsigned long addr)
 {
-	char	c;
 	int		count;
+	char	c;
 
 	count = 0;
 	if (addr >= 16)
 		count += print_long_as_hex(addr / 16);
-	c = (addr % 16) + '0';
-	if ((addr % 16) > 9)
-		c = ((addr % 16) + 87);
+	c = "0123456789abcdef"[addr % 16];
 	write(1, &c, 1);
 	return (count + 1);
 }
 
-static int	get_hex_size(long unsigned addr)
+/*static int	get_hex_size(long unsigned addr)
 {
 	int	count;
 
-	count = 0;
 	if (addr == 0)
 		return (1);
-	if (addr >= 16)
+	count = 0;
+	while (addr)
 	{
-		count += get_hex_size(addr / 16) + 1;
-	}
-	else
+		addr /= 16;
 		count++;
+	}
 	return (count);
-}
+}*/
 
 int	ft_print_ptr(void *ptr, t_flags *flags)
 {
-	long	addr;
-	int		count;
-	int		len;
+	int				count;
+	unsigned long	addr;
 
 	count = 0;
+	addr = (unsigned long)ptr;
 	if (ptr == NULL)
+		count += print_str("(nil)");
+	else
 	{
-		len = 5;
-		while (len + count < flags->min_width)
-			count += print_char(' ');
-		count += print_str("0x0");
-		while (count < flags->offset)
-			count += print_char(' ');
-		return (count);
+		count += print_str("0x");
+		count += print_long_as_hex(addr);
 	}
-	addr = (long unsigned)ptr;
-	len = get_hex_size(addr) + 2;
-	while (len + count < flags->min_width)
-		count += print_char(' ');
-	count += print_str("0x");
-	count += print_long_as_hex(addr);
-	while (count < flags->offset)
-		count += print_char(' ');
+	while (count < flags->min_width)
+	{
+		if (flags->zero)
+			count += print_char('0');
+		else
+			count += print_char(' ');
+	}
 	return (count);
 }

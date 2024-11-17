@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 21:43:16 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 23:20:54 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/17 13:04:49 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,8 @@ int	print_str(char *str)
 {
 	int	cur;
 
+	if (str == NULL)
+		str = "(null)";
 	cur = 0;
 	while (str[cur])
 		write(1, &str[cur++], 1);

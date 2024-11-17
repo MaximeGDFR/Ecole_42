@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:44:40 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 22:19:16 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/17 13:04:44 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,7 @@ void	init_flags(t_flags *flags)
 	flags->min_width = 0;
 	flags->minus = 0;
 	flags->dot = 0;
-	flags->precision = 0;
+	flags->precision = -1;
 	flags->offset = 0;
 	flags->zero = 0;
 	flags->zero_offset = 0;

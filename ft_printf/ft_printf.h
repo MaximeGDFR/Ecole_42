@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/12 16:29:54 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 22:30:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/17 12:07:17 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,5 +52,6 @@ int		print_str(char *str);
 int		print_char(char c);
 int		in_set(char c, char *set);
 int		print_number(long nl);
+int		print_long_as_hex(unsigned long addr);
 
 #endif

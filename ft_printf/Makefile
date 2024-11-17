@@ -8,19 +8,22 @@ SRCS =	ft_printf.c \
 		ft_print_hex.c
 OBJS = ${SRCS:.c=.o}
 NAME = libftprintf.a
-CC = gcc -Wall -Wextra -Werror
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror
 AR = ar rcs
+TEST_SRC = test.c
+TEST_NAME = test_printf
 
 %.o: %.c ft_printf.h
-		${CC} -I. -c $< -o ${<:.c=.o}
+			${CC} ${CFLAGS} -I. -c $< -o ${<:.c=.o}
 
 all:		${NAME}
 
 $(NAME):	${OBJS} ft_printf.h
-			ar rcs ${NAME} ${OBJS}
+			${AR} ${NAME} ${OBJS}
 
 bonus:		${OBJS} ft_printf.h
-			ar rcs ${NAME} ${OBJS}
+			${AR} ${NAME} ${OBJS}
 
 clean:
 			rm -f ${OBJS}
@@ -30,4 +33,8 @@ fclean:		clean
 
 re:			fclean
 
-.PHONY:		all clean fclean re bonus
+test:		${NAME} ${TEST_SRC}
+			${CC} ${CFLAGS} -o ${TEST_NAME} ${TEST_SRC} -L. -lftprintf
+			./${TEST_NAME}
+
+.PHONY:		all clean fclean re bonus test
