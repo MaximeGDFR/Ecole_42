@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 22:11:39 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 22:30:18 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/19 18:27:42 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	print_number_base(int nbr, char *base)
+/*static int	print_number_base(int nbr, char *base)
 {
 	unsigned int	base_len;
 	unsigned int	nb_l;
@@ -31,7 +31,7 @@ static int	print_number_base(int nbr, char *base)
 		count += print_char(base[nb_l]);
 	}
 	return (count);
-}
+}*/
 
 static int	get_hex_size(int nbr)
 {
@@ -50,7 +50,7 @@ static int	get_hex_size(int nbr)
 	return (count);
 }
 
-static int	get_values(char	*prefix, int *len_prec, t_flags *flags, int nbr)
+/*static int	get_values(char	*prefix, int *len_prec, t_flags *flags, int nbr)
 {
 	int		len;
 
@@ -88,30 +88,33 @@ static int	print_x(int is_maj, int len, int nbr, t_flags *flags)
 			count += print_number_base(nbr, "0123456789abcdef");
 	}
 	return (count);
-}
+}*/
 
-int	ft_print_hex(int nbr, int is_maj, t_flags *flags)
+int ft_print_hex(unsigned int nbr, int is_maj, t_flags *flags)
 {
-	int		count;
-	int		len;
-	char	prefix;
-	int		len_prec;
+    int count = 0;
+    int len = get_hex_size(nbr);
+    int total_len = (flags->precision > len) ? flags->precision : len;
+    
+    if (flags->sharp && nbr != 0)
+        total_len += 2;
 
-	count = 0;
-	len = get_values(&prefix, &len_prec, flags, nbr);
-	while (len_prec + count < flags->min_width)
-		count += print_char(prefix);
-	while (len + count < flags->min_width)
-		count += print_char('0');
-	if (flags->sharp && nbr != 0)
-	{
-		if (is_maj)
-			count += print_str("0X");
-		else
-			count += print_str("0x");
-	}
-	count += print_x(is_maj, len, nbr, flags);
-	while (count < flags->offset)
-		count += print_char(' ');
-	return (count);
+    if (!flags->minus && (!flags->zero || flags->dot))
+        count += print_padding(count, flags->min_width - total_len, ' ');
+
+    if (flags->sharp && nbr != 0)
+        count += print_str(is_maj ? "0X" : "0x");
+
+    if (flags->zero && !flags->dot)
+        count += print_padding(count, flags->min_width - total_len, '0');
+
+    count += print_padding(count, flags->precision - len, '0');
+
+    if (!(nbr == 0 && flags->dot && flags->precision == 0))
+        count += print_hex_number(nbr, is_maj);
+
+    if (flags->minus)
+        count += print_padding(count, flags->min_width - count, ' ');
+
+    return count;
 }

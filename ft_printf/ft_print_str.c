@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 21:43:16 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/17 13:04:49 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/19 18:20:34 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,25 +36,26 @@ static int	print_str_size(char *str, int size)
 	return (cur);
 }
 
-int	ft_print_str(char *str, t_flags *flags)
+int ft_print_str(char *str, t_flags *flags)
 {
-	int	cur;
-	int	len;
+    int count = 0;
+    int len;
 
-	cur = 0;
-	if (!str)
-	{
-		str = "(null)";
-		len = 6;
-	}
-	else
-		len = ft_strlen(str);
-	while (cur + len < flags->min_width)
-		cur += print_char(' ');
-	if (!flags->dot)
-		flags->precision = -1;
-	cur += print_str_size(str, flags->precision);
-	while (cur < flags->offset)
-		cur += print_char(' ');
-	return (cur);
+    if (!str)
+        str = "(null)";
+
+    len = ft_strlen(str);
+    if (flags->dot && flags->precision < len)
+        len = flags->precision;
+
+    if (!flags->minus)
+        count += print_padding(count, flags->min_width - len, ' ');
+
+    count += print_str_size(str, len);
+
+    if (flags->minus)
+        count += print_padding(count, flags->min_width - count, ' ');
+
+    return count;
 }
+

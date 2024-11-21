@@ -6,25 +6,25 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 21:23:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 22:25:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/19 18:22:39 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static int	print_minus(long *nl, int *len, t_flags *flags)
+/*static int print_minus(long *nl, int *len, t_flags *flags)
 {
-	print_char('-');
-	(*nl) = (*nl) * -1;
-	(*len)--;
-	if (flags->dot)
-		(*len)--;
-	return (1);
-}
+    print_char('-');
+    (*nl) = (*nl) * -1;
+    (*len)--;  // Réduire la longueur du nombre pour tenir compte du signe '-'
+    if (flags->dot)
+        (*len)--;  // Réduire encore la longueur si la précision est définie
+    return (1);
+}*/
 
 static int	num_lenght(long num)
 {
-	int		cur;
+	int	cur;
 
 	cur = 0;
 	if (num == 0)
@@ -39,66 +39,103 @@ static int	num_lenght(long num)
 	return (cur);
 }
 
-static int	get_values(char *prefix, int *len_prec, t_flags *flags, long nl)
+/*static int print_sign_and_padding(long nl, t_flags *flags, int *count, int total_len)
 {
-	int		len;
+    if (!flags->minus && !flags->zero)
+        *count = print_padding(*count, flags->min_width - total_len, ' ');
+    if (nl < 0)
+        *count += print_char('-');
+    else if (flags->plus)
+        *count += print_char('+');
+    else if (flags->spaces)
+        *count += print_char(' ');
+    return *count;
+}*/
 
-	len = num_lenght(nl);
-	*len_prec = len;
-	if (flags->precision > len)
-		*len_prec = flags->precision;
-	if (nl < 0 && flags->zero_offset > len && flags->precision > len)
-		(*len_prec)++;
-	if (nl < 0 && flags->dot && flags->zero_offset > flags->precision)
-		len++;
-	*prefix = '0';
-	if (flags->zero && flags->dot && flags->zero_offset > flags->precision)
-		*prefix = ' ';
-	if (!flags->zero)
-		*prefix = ' ';
-	if (flags->zero)
-		flags->min_width = flags->zero_offset;
-	if (flags->precision > flags->min_width)
-		flags->min_width = flags->precision;
-	return (len);
+int ft_print_num(long nl, t_flags *flags)
+{
+    int count;
+    int len;
+    int total_len;
+    int is_negative;
+
+    count = 0;
+    is_negative = (nl < 0);
+    nl = (nl < 0) ? -nl : nl;
+    len = num_lenght(nl);
+    total_len = (flags->precision > len) ? flags->precision : len;
+    if (is_negative || flags->plus || flags->spaces)
+        total_len++;
+
+    if (!flags->minus && (!flags->zero || flags->dot))
+        count += print_padding(count, flags->min_width - total_len, ' ');
+
+    if (is_negative)
+        count += print_char('-');
+    else if (flags->plus)
+        count += print_char('+');
+    else if (flags->spaces)
+        count += print_char(' ');
+
+    if (flags->zero && !flags->dot)
+        count += print_padding(count, flags->min_width - total_len, '0');
+
+    count += print_padding(count, flags->precision - len, '0');
+
+    if (!(nl == 0 && flags->dot && flags->precision == 0))
+        count += print_number(nl);
+
+    if (flags->minus)
+        count += print_padding(count, flags->min_width - count, ' ');
+
+    return count;
 }
 
-static int	print_d_and_i(int len, long nl, t_flags *flags)
+
+
+/*int ft_print_num(long nl, t_flags *flags)
 {
-	int		count;
+    int count = 0;
+    int len = num_lenght(nl);
+    int padding = 0;
+    int is_negative = (nl < 0);
 
-	count = 0;
-	if (nl == 0 && flags->min_width && flags->min_width < len)
-		count += print_char(' ');
-	else if (nl == 0 && flags->dot && !flags->precision
-		&& flags->min_width >= len)
-		count += print_char(' ');
-	else if (!(nl == 0 && flags->dot && !flags->precision))
-		count += print_number(nl);
-	return (count);
-}
+    // Calculer la longueur totale
+    int total_len = (flags->precision > len) ? flags->precision : len;
+    if (is_negative || flags->plus || flags->spaces)
+        total_len++;
 
-int	ft_print_num(long nl, t_flags *flags)
-{
-	int		count;
-	int		len;
-	char	prefix;
-	int		len_prec;
+    // Padding gauche si nécessaire
+    if (!flags->minus && !flags->zero)
+        while (count < flags->min_width - total_len)
+            count += print_char(' ');
 
-	count = 0;
-	len = get_values(&prefix, &len_prec, flags, nl);
-	while (prefix == ' ' && len_prec + count < flags->min_width)
-		count += print_char(' ');
-	if (nl < 0)
-		count += print_minus(&nl, &len, flags);
-	else if (flags->spaces && nl >= 0 && !flags->plus && !flags->dot)
-		count += print_char(' ');
-	else if (flags->plus && nl >= 0 && !flags->dot)
-		count += print_char('+');
-	while (len + count < flags->min_width)
-		count += print_char('0');
-	count += print_d_and_i(len, nl, flags);
-	while (count < flags->offset)
-		count += print_char(' ');
-	return (count);
-}
+    // Signe ou espace
+    if (is_negative)
+        count += print_char('-');
+    else if (flags->plus)
+        count += print_char('+');
+    else if (flags->spaces)
+        count += print_char(' ');
+
+    // Zéros de padding
+    if (flags->zero && !flags->minus && !flags->dot)
+        padding = flags->min_width - total_len;
+    else if (flags->precision > len)
+        padding = flags->precision - len;
+
+    while (padding-- > 0)
+        count += print_char('0');
+
+    // Nombre
+    if (!(nl == 0 && flags->dot && flags->precision == 0))
+        count += print_number(is_negative ? -nl : nl);
+
+    // Padding droit si nécessaire
+    if (flags->minus)
+        while (count < flags->min_width)
+            count += print_char(' ');
+
+    return count;
+}*/
+

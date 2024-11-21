@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/16 21:57:47 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/16 22:25:57 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/19 18:24:22 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,7 +29,7 @@ int	print_u_num(unsigned long nl)
 	return (count);
 }
 
-static int	num_lenght(unsigned long num)
+/*static int	num_lenght(unsigned long num)
 {
 	int	cur;
 
@@ -42,9 +42,9 @@ static int	num_lenght(unsigned long num)
 		cur++;
 	}
 	return (cur);
-}
+}*/
 
-static int	get_values(char *pre, int *lp, t_flags *flags, unsigned long num)
+/*static int	get_values(char *pre, int *lp, t_flags *flags, unsigned long num)
 {
 	int		len;
 
@@ -77,23 +77,31 @@ static int	print_u(int len, unsigned long num, t_flags *flags)
 	else if (!(num == 0 && flags->dot && !flags->precision))
 		count += print_number(num);
 	return (count);
-}
+}*/
 
-int	ft_print_u_num(unsigned long num, t_flags *flags)
+int ft_print_u_num(unsigned long nl, t_flags *flags)
 {
-	int		count;
-	int		len;
-	int		len_prec;
-	char	prefix;
+    int count;
+    int len;
+    int total_len;
 
-	count = 0;
-	len = get_values(&prefix, &len_prec, flags, num);
-	while (len_prec + count < flags->min_width)
-		count += print_char(prefix);
-	while (len + count < flags->min_width)
-		count += print_char('0');
-	count += print_u(len, num, flags);
-	while (count < flags->offset)
-		count += print_char(' ');
-	return (count);
+    count = 0;
+    len = num_lenght_u(nl);
+    total_len = (flags->precision > len) ? flags->precision : len;
+
+    if (!flags->minus && (!flags->zero || flags->dot))
+        count += print_padding(count, flags->min_width - total_len, ' ');
+
+    if (flags->zero && !flags->dot)
+        count += print_padding(count, flags->min_width - total_len, '0');
+
+    count += print_padding(count, flags->precision - len, '0');
+
+    if (!(nl == 0 && flags->dot && flags->precision == 0))
+        count += print_u_number(nl);
+
+    if (flags->minus)
+        count += print_padding(count, flags->min_width - count, ' ');
+
+    return count;
 }

@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/13 15:44:40 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/17 13:04:44 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/19 17:29:24 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -71,18 +71,15 @@ int	print_number(long nl)
 	long	num;
 
 	count = 0;
-	num = nl;
 	if (nl < 0)
 	{
 		count += print_char('-');
 		num = -nl;
 	}
-	if (num > 100)
+	else
+		num = nl;
+	if (num >= 10)
 		count += print_number(num / 10);
-	else if (num == 100)
-		count += print_str("10");
-	else if ((num / 10) > 0)
-		count += print_char((num / 10) + '0');
 	count += print_char((num % 10) + '0');
 	return (count);
 }
