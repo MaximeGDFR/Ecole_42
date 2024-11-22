@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 18:32:33 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 10:22:17 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:37:41 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,9 +22,9 @@ int	ft_print_argument(char type, va_list args, t_flags flags)
 	else if (type == 'c')
 		count += ft_print_char(va_arg(args, int), flags);
 	else if (type == 's')
-		count += ft_print_str(va_arg(args, const char *), flags);
+		count += ft_print_string(va_arg(args, const char *), flags);
 	else if (type == 'd' || type == 'i')
-		count += ft_print_int(va_arg(args, int), flags);
+		count += ft_print_number(va_arg(args, int), flags);
 	else if (type == 'x')
 		count += ft_print_hex(va_arg(args, unsigned int), 0, flags);
 	else if (type == 'X')
@@ -83,7 +83,7 @@ int	ft_parsing(char *str, va_list args)
 			if (flags.spec > 0)
 				i = x;
 			if (str[i] != '\0' && flags.spec > 0 && ft_istype(str[i]))
-				count += ft_print_arg(str[i], args, flags);
+				count += ft_print_argument(str[i], args, flags);
 			else if (str[i] != '\0')
 				count += ft_print_c(str[i]);
 		}
@@ -106,7 +106,7 @@ int	ft_printf(const char *format, ...)
 		return (0);
 	count = 0;
 	va_start(args, format);
-	count = ft_parse(str, args);
+	count = ft_parsing(str, args);
 	va_end(args);
 	free(str);
 	return (count);

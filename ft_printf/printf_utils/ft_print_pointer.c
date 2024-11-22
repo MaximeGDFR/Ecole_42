@@ -6,18 +6,18 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:38:46 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 09:00:16 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:59:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-void	ft_print_adr(unsigned long int n)
+void	ft_print_address(unsigned long int n)
 {
 	if (n >= 16)
 	{
-		ft_print_adr(n / 16);
-		ft_print_adr(n % 16);
+		ft_print_address(n / 16);
+		ft_print_address(n % 16);
 	}
 	else
 	{
@@ -28,19 +28,19 @@ void	ft_print_adr(unsigned long int n)
 	}
 }
 
-int	ft_print_p(unsigned long int n)
+int	ft_print_ptr_with_format(unsigned long int n)
 {
 	int	count;
 
 	count = 0;
 	if (n == 0)
 	{
-		count += ft_print_s(PTRNULL);
+		count += ft_print_full_str(PTRNULL);
 		return (count);
 	}
-	count += ft_print_s("0x");
-	ft_print_adr(n);
-	count += ft_ptr_len(n);
+	count += ft_print_full_str("0x");
+	ft_print_address(n);
+	count += ft_pointer_length(n);
 	return (count);
 }
 
@@ -54,9 +54,9 @@ int	ft_print_ptr(unsigned long int n, t_flags flags)
 	else
 		flags.width -= 2;
 	if (flags.left == 1)
-		count += ft_print_p(n);
-	count += ft_pad_width(flags.width, ft_ptr_len(n), 0);
+		count += ft_print_ptr_with_format(n);
+	count += ft_add_padding(flags.width, ft_pointer_length(n), 0);
 	if (flags.left == 0)
-		count += ft_print_p(n);
+		count += ft_print_ptr_with_format(n);
 	return (count);
 }

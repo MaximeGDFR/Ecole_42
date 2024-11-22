@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 18:31:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 10:28:23 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:59:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,34 +33,43 @@ typedef struct s_flags
 	int		plus;
 }	t_flags;
 
-/* ---------- ft_printf -------------------- */
+/* -------------------- ft_printf -------------------- */
 int		ft_printf(const char *format, ...);
+int		ft_parse_flags(const char *str, int i, va_list args, t_flags *flags);
 int		ft_print_argument(char type, va_list args, t_flags flags);
 
 /* ---------- Print %c ---------- */
 int		ft_print_char(char c, t_flags flags);
 int		ft_print_c(char c);
+
 /* ---------- Print %s ---------- */
-int		ft_print_str(const char *str, t_flags flags);
-int		ft_print_s(const char *str);
-int		ft_print_s_pre(const char *str, int precision);
-int		ft_print_sign_pre(int n, t_flags *flags);
+int		ft_print_string(const char *str, t_flags flags);
+int		ft_print_full_str(const char *str);
+int		ft_print_partial_str(const char *str, int precision);
+int		ft_print_sign_or_space(int n, t_flags *flags);
+
 /* ---------- Print %d / %i ---------- */
-int		ft_print_int(int n, t_flags flags);
-int		ft_print_integer(char *nbstr, int n, t_flags flags);
-int		ft_print_i(char *nbstr, int n, t_flags flags);
+int		ft_print_number(int n, t_flags flags);
+int		ft_print_sign_or_space(int n, t_flags *flags);
+int		ft_print_int_with_format(char *nbstr, int n, t_flags flags);
+int		ft_print_full_int(char *nbstr, int n, t_flags flags);
+
 /* ---------- Print %u ---------- */
 int		ft_print_unsigned(unsigned int n, t_flags flags);
-int		ft_print_u(char *nbstr, t_flags flags);
-int		ft_print_unint(char *nbstr, t_flags flags);
+int		ft_print_unsigned_int_with_pre(char *nbstr, t_flags flags);
+int		ft_print_unsigned_int_with_format(char *nbstr, t_flags flags);
+
 /* ---------- Print %x / %X ---------- */
 int		ft_print_hex(unsigned int n, int is_upper, t_flags flags);
-int		ft_print_x(char *nbstr, int n, int is_upper, t_flags flags);
-int		ft_print_hexadec(char *nbstr, int n, int is_upper, t_flags flags);
+int		ft_print_hex_prefix(int is_upper);
+int		ft_print_hex_with_pre(char *nbstr, int n, int is_upper, t_flags flags);
+int		ft_print_hex_with_format(char *nbstr, int n, int is_upper,
+			t_flags flags);
+
 /* ---------- Print %p ---------- */
 int		ft_print_ptr(unsigned long int n, t_flags flags);
-int		ft_print_p(unsigned long int n);
-void	ft_print_adr(unsigned long int n);
+int		ft_print_ptr_with_format(unsigned long int n);
+void	ft_print_address(unsigned long int n);
 
 /* ---------- Helper Functions ---------- */
 char	*ft_printf_itoa(long nb);
@@ -76,7 +85,7 @@ size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
 size_t	ft_strlen(const char *str);
 
 /* ---------- Flags Functions ------------ */
-int		ft_print_pad_width(int total_width, int size, int zero);
+int		ft_add_padding(int total_width, int size, int zero);
 int		ft_istype(int c);
 int		ft_isspec(int c);
 int		ft_isflag(int c);

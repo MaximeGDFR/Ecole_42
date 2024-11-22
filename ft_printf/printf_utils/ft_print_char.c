@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:02:22 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 08:58:32 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:49:23 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,7 @@ int	ft_print_char(char c, t_flags flags)
 	count = 0;
 	if (flags.left == 1)
 		count += ft_print_c(c);
-	count += ft_pad_width(flags.width, 1, flags.zero);
+	count += ft_add_padding(flags.width, 1, flags.zero);
 	if (flags.left == 0)
 		count += ft_print_c(c);
 	return (count);

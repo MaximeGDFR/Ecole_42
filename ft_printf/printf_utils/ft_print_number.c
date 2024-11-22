@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:25:28 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 08:59:51 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:59:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_i(char *nbstr, int n, t_flags flags)
+int	ft_print_full_int(char *nbstr, int n, t_flags flags)
 {
 	int	count;
 
@@ -27,13 +27,13 @@ int	ft_print_i(char *nbstr, int n, t_flags flags)
 	else if (flags.space == 1 && flags.zero == 0)
 		count += ft_print_c(' ');
 	if (flags.precision >= 0)
-		count += ft_pad_width(flags.precision - 1,
+		count += ft_add_padding(flags.precision - 1,
 				ft_strlen(nbstr) - 1, 1);
-	count += ft_print_s(nbstr);
+	count += ft_print_full_str(nbstr);
 	return (count);
 }
 
-int	ft_print_sign_pre(int n, t_flags *flags)
+int	ft_print_sign_or_space(int n, t_flags *flags)
 {
 	int	count;
 
@@ -53,15 +53,15 @@ int	ft_print_sign_pre(int n, t_flags *flags)
 	return (count);
 }
 
-int	ft_print_integer(char *nbstr, int n, t_flags flags)
+int	ft_print_int_with_format(char *nbstr, int n, t_flags flags)
 {
 	int	count;
 
 	count = 0;
 	if (flags.zero == 1)
-		count += ft_print_sign_pre(n, &flags);
+		count += ft_print_sign_or_space(n, &flags);
 	if (flags.left == 1)
-		count += ft_print_i(nbstr, n, flags);
+		count += ft_print_full_int(nbstr, n, flags);
 	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nbstr))
 		flags.precision = ft_strlen(nbstr);
 	if (flags.precision >= 0)
@@ -69,17 +69,17 @@ int	ft_print_integer(char *nbstr, int n, t_flags flags)
 		flags.width -= flags.precision;
 		if (n < 0 && flags.left == 0)
 			flags.width -= 1;
-		count += ft_pad_width(flags.width, 0, 0);
+		count += ft_add_padding(flags.width, 0, 0);
 	}
 	else
-		count += ft_pad_width(flags.width - flags.plus - flags.space,
+		count += ft_add_padding(flags.width - flags.plus - flags.space,
 				ft_strlen(nbstr), flags.zero);
 	if (flags.left == 0)
-		count += ft_print_i(nbstr, n, flags);
+		count += ft_print_full_int(nbstr, n, flags);
 	return (count);
 }
 
-int	ft_print_int(int n, t_flags flags)
+int	ft_print_number(int n, t_flags flags)
 {
 	char	*nbstr;
 	long	nb;
@@ -95,13 +95,13 @@ int	ft_print_int(int n, t_flags flags)
 	}
 	if (flags.precision == 0 && n == 0)
 	{
-		count += ft_pad_width(flags.width, 0, 0);
+		count += ft_add_padding(flags.width, 0, 0);
 		return (count);
 	}
 	nbstr = ft_printf_itoa(nb);
 	if (!nbstr)
 		return (0);
-	count += ft_print_integer(nbstr, n, flags);
+	count += ft_print_int_with_format(nbstr, n, flags);
 	free(nbstr);
 	return (count);
 }

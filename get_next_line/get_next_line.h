@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/10/21 13:28:01 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/11/09 13:14:41 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 11:07:18 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,10 +28,10 @@
 #  define BUFFER_SIZE 0
 # endif
 
-/* ---------- GNL ------------ */
+/* ---------- get_next_line ------------ */
 char	*get_next_line(int fd);
 
-/* ---------- UTILS ---------- */
+/* ---------- Helper Functions ---------- */
 char	*ft_strdup(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_substr(const char *s, unsigned int start, size_t len);

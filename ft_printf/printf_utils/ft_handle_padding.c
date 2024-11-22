@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:07:00 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 10:25:38 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 15:49:03 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	ft_print_pad_width(int total_width, int size, int zero)
+int	ft_add_padding(int total_width, int size, int zero)
 {
 	int	count;
 
