@@ -14,76 +14,117 @@
 #include <stdlib.h>
 #include <string.h>
 
-static int	ft_count_words(char const *s, char c)
+static int	ft_count_words(const char *s, char c)
 {
-	int	count;
 	int	words;
 	int	i;
 
-	count = 0;
 	words = 0;
 	i = 0;
-	while (s[i] != '\0')
+	while (s[i])
 	{
-		if (s[i] != c && !words)
-		{
+		if (i == 0 && s[i] != c)
 			words++;
-			count++;
-		}
-		else if (s[i] == c)
-		{
-			words = 0;
-		}
+		if (i > 0 && s[i] != c && s[i - 1] == c)
+			words++;
 		i++;
 	}
-	return (count);
+	return (words);
 }
 
-static char	*ft_strndup(const char *s, size_t n)
+static char	**ft_malloc_strs(char **strs, const char *s, char c)
 {
-	char	*dup;
-	size_t	i;
+	int	count;
+	int	i;
+	int	x;
 
-	dup = malloc(n + 1);
-	if (dup == NULL)
-		return (NULL);
+	count = 0;
 	i = 0;
-	while (i < n && s[i] != '\0')
+	x = 0;
+	while (s[i])
 	{
-		dup[i] = s[i];
+		if (s[i] != c)
+			count++;
+		if ((s[i] == c && i > 0 && s[i - 1] != c)
+			|| (s[i] != c && s[i + 1] == '\0'))
+		{
+			strs[x] = malloc(sizeof(char) * (count + 1));
+			if (!strs[x])
+				return (NULL);
+			count = 0;
+			x++;
+		}
 		i++;
 	}
-	dup[i] = '\0';
-	return (dup);
+	return (strs);
+}
+
+static char	**ft_cpy_strs(char **strs, const char *s, char c)
+{
+	int	i;
+	int	x;
+	int	y;
+
+	i = 0;
+	x = 0;
+	y = 0;
+	while (s[i])
+	{
+		if (s[i] != c)
+			strs[x][y++] = s[i];
+		if (s[i] != c && s[i + 1] == '\0')
+			strs[x][y] = '\0';
+		if (s[i] == c && i > 0 && s[i - 1] != c)
+		{
+			strs[x][y] = '\0';
+			x++;
+			y = 0;
+		}
+		i++;
+	}
+	return (strs);
+}
+
+static char	**ft_merror(char **strs)
+{
+	int	i;
+
+	i = 0;
+	while (strs[i])
+	{
+		free(strs[i]);
+		strs[i] = NULL;
+		i++;
+	}
+	free(strs);
+	return (NULL);
 }
 
 char	**ft_split(char const *s, char c)
 {
-	char	**result;
-	int		i;
-	int		j;
-	int		start;
+	char	**strs;
+	int		wordcount;
 
 	if (!s)
-		return (NULL);
-	result = malloc((ft_count_words(s, c) + 1) * sizeof(char *));
-	if (!result)
-		return (NULL);
-	i = 0;
-	j = 0;
-	while (s[i])
 	{
-		if (s[i] != c)
-		{
-			start = i;
-			while (s[i] && s[i] != c)
-				i++;
-			result[j++] = ft_strndup(&s[start], i-- - start);
-		}
-		i++;
+		strs = malloc(sizeof(char) * 1);
+		if (!strs)
+			return (NULL);
+		*strs = NULL;
+		return (strs);
 	}
-	result[j] = NULL;
-	return (result);
+	wordcount = ft_count_words(s, c);
+	strs = malloc(sizeof(*strs) * (wordcount + 1));
+	if (!strs)
+		return (NULL);
+	if (ft_malloc_strs(strs, s, c))
+	{
+		ft_cpy_strs(strs, s, c);
+		strs[wordcount] = NULL;
+	}
+	else
+		strs = ft_merror(strs);
+	return (strs);
 }
 
 /*int	main()
