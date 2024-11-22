@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:07:00 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 16:08:43 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 10:25:38 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	pad_width(int total_width, int size, int zero)
+int	ft_print_pad_width(int total_width, int size, int zero)
 {
 	int	count;
 
@@ -20,9 +20,9 @@ int	pad_width(int total_width, int size, int zero)
 	while (total_width - size > 0)
 	{
 		if (zero)
-			count += print_char('0');
+			count += ft_print_c('0');
 		else
-			count += print_char(' ');
+			count += ft_print_c(' ');
 		total_width--;
 	}
 	return (count);

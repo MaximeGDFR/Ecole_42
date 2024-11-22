@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:25:28 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 19:14:18 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 08:59:51 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_num(char *nb_str, int n, t_flags flags)
+int	ft_print_i(char *nbstr, int n, t_flags flags)
 {
 	int	count;
 
@@ -20,67 +20,68 @@ int	print_num(char *nb_str, int n, t_flags flags)
 	if (n < 0)
 	{
 		if (flags.zero == 0 || flags.precision >= 0)
-			count += print_char('-');
+			count += ft_print_c('-');
 	}
 	else if (flags.plus == 1 && flags.zero == 0)
-		count += print_char('+');
+		count += ft_print_c('+');
 	else if (flags.space == 1 && flags.zero == 0)
-		count += print_char(' ');
+		count += ft_print_c(' ');
 	if (flags.precision >= 0)
-		count += pad_width(flags.precision - 1, ft_strlen(nb_str) - 1, 1);
-	count += print_string(nb_str);
+		count += ft_pad_width(flags.precision - 1,
+				ft_strlen(nbstr) - 1, 1);
+	count += ft_print_s(nbstr);
 	return (count);
 }
 
-int	print_sign(int n, t_flags *flags)
+int	ft_print_sign_pre(int n, t_flags *flags)
 {
 	int	count;
 
 	count = 0;
 	if (n < 0 && flags->precision == -1)
 	{
-		count += print_char('-');
+		count += ft_print_c('-');
 		flags->width--;
 	}
 	else if (flags->plus == 1)
-		count += print_char('+');
+		count += ft_print_c('+');
 	else if (flags->space == 1)
 	{
-		count += print_char(' ');
+		count += ft_print_c(' ');
 		flags->width--;
 	}
 	return (count);
 }
 
-int	print_int(char *nb_str, int n, t_flags flags)
+int	ft_print_integer(char *nbstr, int n, t_flags flags)
 {
 	int	count;
 
 	count = 0;
 	if (flags.zero == 1)
-		count += print_sign(n, &flags);
-	if (flags.minus == 1)
-		count += print_num(nb_str, n, flags);
-	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nb_str))
-		flags.precision = ft_strlen(nb_str);
+		count += ft_print_sign_pre(n, &flags);
+	if (flags.left == 1)
+		count += ft_print_i(nbstr, n, flags);
+	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nbstr))
+		flags.precision = ft_strlen(nbstr);
 	if (flags.precision >= 0)
 	{
-		flags.width = flags.precision;
-		if (n < 0 && flags.minus == 0)
+		flags.width -= flags.precision;
+		if (n < 0 && flags.left == 0)
 			flags.width -= 1;
-		count += pad_width(flags.width, 0, 0);
+		count += ft_pad_width(flags.width, 0, 0);
 	}
 	else
-		count += pad_width(flags.width - flags.plus - flags.space,
-				ft_strlen(nb_str), flags.zero);
-	if (flags.minus == 0)
-		count += print_num(nb_str, n, flags);
+		count += ft_pad_width(flags.width - flags.plus - flags.space,
+				ft_strlen(nbstr), flags.zero);
+	if (flags.left == 0)
+		count += ft_print_i(nbstr, n, flags);
 	return (count);
 }
 
-int	ft_print_number(int n, t_flags flags)
+int	ft_print_int(int n, t_flags flags)
 {
-	char	*nb_str;
+	char	*nbstr;
 	long	nb;
 	int		count;
 
@@ -88,19 +89,19 @@ int	ft_print_number(int n, t_flags flags)
 	count = 0;
 	if (nb < 0)
 	{
-		nb *= 1;
+		nb *= -1;
 		if (flags.zero == 0)
 			flags.width--;
 	}
 	if (flags.precision == 0 && n == 0)
 	{
-		count += pad_width(flags.width, 0, 0);
+		count += ft_pad_width(flags.width, 0, 0);
 		return (count);
 	}
-	nb_str = print_itoa(nb);
-	if (!nb_str)
+	nbstr = ft_printf_itoa(nb);
+	if (!nbstr)
 		return (0);
-	count += print_int(nb_str, n, flags);
-	free(nb_str);
+	count += ft_print_integer(nbstr, n, flags);
+	free(nbstr);
 	return (count);
 }

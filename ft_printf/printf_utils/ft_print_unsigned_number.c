@@ -6,59 +6,60 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:58:40 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 19:00:49 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 09:01:27 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_u(char *nb_str, t_flags flags)
+int	ft_print_u(char *nbstr, t_flags flags)
 {
 	int	count;
 
 	count = 0;
 	if (flags.precision >= 0)
-		count += pad_width(flags.precision - 1, ft_strlen(nb_str) - 1, 1);
-	count += print_string(nb_str);
+		count += ft_pad_width(flags.precision - 1,
+				ft_strlen(nbstr) - 1, 1);
+	count += ft_print_s(nbstr);
 	return (count);
 }
 
-int	print_unsigned_int(char *nb_str, t_flags flags)
+int	ft_print_unint(char *nbstr, t_flags flags)
 {
 	int	count;
 
 	count = 0;
-	if (flags.minus == 1)
-		count += print_u(nb_str, flags);
-	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nb_str))
-		flags.precision = ft_strlen(nb_str);
+	if (flags.left == 1)
+		count += ft_print_u(nbstr, flags);
+	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nbstr))
+		flags.precision = ft_strlen(nbstr);
 	if (flags.precision >= 0)
 	{
 		flags.width -= flags.precision;
-		count += pad_width(flags.width, 0, 0);
+		count += ft_pad_width(flags.width, 0, 0);
 	}
 	else
-		count += pad_width(flags.width, ft_strlen(nb_str), flags.zero);
-	if (flags.minus == 0)
-		count += print_u(nb_str, flags);
+		count += ft_pad_width(flags.width, ft_strlen(nbstr), flags.zero);
+	if (flags.left == 0)
+		count += ft_print_u(nbstr, flags);
 	return (count);
 }
 
-int	ft_print_unsigned_number(unsigned n, t_flags flags)
+int	ft_print_unsigned(unsigned n, t_flags flags)
 {
-	char	*nb_str;
+	char	*nbstr;
 	int		count;
 
 	count = 0;
 	if (flags.precision == 0 && n == 0)
 	{
-		count += pad_width(flags.width, 0, 0);
+		count += ft_pad_width(flags.width, 0, 0);
 		return (count);
 	}
-	nb_str = print_utoa(n);
-	if (!nb_str)
+	nbstr = ft_printf_utoa(n);
+	if (!nbstr)
 		return (0);
-	count += print_unsigned_int(nb_str, flags);
-	free(nb_str);
+	count += ft_print_unint(nbstr, flags);
+	free(nbstr);
 	return (count);
 }

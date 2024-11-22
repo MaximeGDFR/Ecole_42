@@ -6,73 +6,74 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:09:12 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 18:46:52 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 08:58:57 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_prefix_hex(int is_upper)
+int	ft_print_x_prefix(int is_upper)
 {
-	if (is_upper)
-		print_string("0X");
+	if (is_upper == 1)
+		ft_print_s("0X");
 	else
-		print_string("0x");
+		ft_print_s("0x");
 	return (2);
 }
 
-int	print_x(char *nb_str, int n, int is_upper, t_flags flags)
+int	ft_print_x(char *nbstr, int n, int is_upper, t_flags flags)
 {
 	int	count;
 
 	count = 0;
 	if (flags.zero == 0 && flags.hash == 1 && n != 0)
-		count += print_prefix_hex(is_upper);
+		count += ft_print_x_prefix(is_upper);
 	if (flags.precision >= 0)
-		count += pad_width(flags.precision - 1, ft_strlen(nb_str) - 1, 1);
-	count += print_string(nb_str);
+		count += ft_pad_width(flags.precision - 1,
+				ft_strlen(nbstr) - 1, 1);
+	count += ft_print_s(nbstr);
 	return (count);
 }
 
-int	print_hex(char *nb_str, int n, int is_upper, t_flags flags)
+int	ft_print_hexadec(char *nbstr, int n, int is_upper, t_flags flags)
 {
 	int	count;
 
 	count = 0;
 	if (flags.zero == 1 && flags.hash == 1 && n != 0)
-		count += print_prefix_hex(is_upper);
-	if (flags.minus == 1)
-		count += print_x(nb_str, n, is_upper, flags);
-	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nb_str))
-		flags.precision = ft_strlen(nb_str);
+		count += ft_print_x_prefix(is_upper);
+	if (flags.left == 1)
+		count += ft_print_x(nbstr, n, is_upper, flags);
+	if (flags.precision >= 0 && (size_t)flags.precision < ft_strlen(nbstr))
+		flags.precision = ft_strlen(nbstr);
 	if (flags.precision >= 0)
 	{
-		flags.width = flags.precision;
-		count += pad_width(flags.width, 0, 0);
+		flags.width -= flags.precision;
+		count += ft_pad_width(flags.width, 0, 0);
 	}
 	else
-		count += pad_width(flags.width, ft_strlen(nb_str) + (flags.hash * 2),
-				flags.zero);
-	if (flags.minus == 0)
-		count += print_x(nb_str, n, is_upper, flags);
+		count += ft_pad_width(flags.width,
+				ft_strlen(nbstr) + (flags.hash * 2), flags.zero);
+	if (flags.left == 0)
+		count += ft_print_x(nbstr, n, is_upper, flags);
 	return (count);
 }
 
 int	ft_print_hex(unsigned int n, int is_upper, t_flags flags)
 {
-	char	*nb_str;
+	char	*nbstr;
 	int		count;
 
 	count = 0;
 	if (flags.precision == 0 && n == 0)
 	{
-		count += pad_width(flags.width, 0, 0);
+		count += ft_pad_width(flags.width, 0, 0);
 		return (count);
 	}
-	nb_str = print_xtoa(n, is_upper);
-	if (!nb_str)
+	nbstr = ft_printf_xtoa(n, is_upper);
+	if (!nbstr)
 		return (0);
-	count += print_hex(nb_str, n, is_upper, flags);
-	free(nb_str);
+	count += ft_print_hexadec(nbstr, n, is_upper, flags);
+	free(nbstr);
 	return (count);
 }

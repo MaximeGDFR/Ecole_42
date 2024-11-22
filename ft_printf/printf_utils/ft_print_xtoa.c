@@ -6,58 +6,58 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 17:52:23 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 17:57:14 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 09:02:10 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static size_t	xtoa_length(long num)
+static size_t	ft_xtoa_len(long num)
 {
-	size_t	length;
+	size_t	len;
 
-	length = 0;
+	len = 0;
 	if (num == 0)
 		return (1);
 	while (num >= 1)
 	{
+		len++;
 		num /= 16;
-		length++;
 	}
-	return (length);
+	return (len);
 }
 
-static char	*hex_to_str(unsigned long num, char *str, size_t length)
+static char	*ft_hex_to_str(unsigned long int num, char *str, size_t len)
 {
 	int	mod;
 
-	str = ft_calloc(length + 1, sizeof(char));
+	str = ft_calloc(len + 1, sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	length--;
-	while (length != (size_t)-1)
+	len--;
+	while (len != (size_t)-1)
 	{
 		mod = num % 16;
 		if (mod < 10)
-			str[length] = mod + '0';
+			str[len] = mod + '0';
 		else if (mod >= 10)
-			str[length] = (mod - 10) + 'a';
-		num /= 16;
-		length--;
+			str[len] = (mod - 10) + 'a';
+		num = num / 16;
+		len--;
 	}
 	return (str);
 }
 
-char	*print_xtoa(unsigned long num, int is_upper)
+char	*ft_printf_xtoa(unsigned long int num, int is_upper)
 {
-	size_t	length;
+	size_t	len;
 	char	*str;
 	int		i;
 
-	length = xtoa_length(num);
+	len = ft_xtoa_len(num);
 	str = 0;
-	str = hex_to_str(num, str, length);
-	if (str == NULL)
+	str = ft_hex_to_str(num, str, len);
+	if (!str)
 		return (NULL);
 	if (is_upper == 1)
 	{

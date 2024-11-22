@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/12 16:29:54 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/19 18:25:37 by maximegdfr       ###   ########.fr       */
+/*   Created: 2024/11/19 18:31:48 by maximegdfr        #+#    #+#             */
+/*   Updated: 2024/11/22 10:28:23 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,48 +15,77 @@
 
 # include <stdarg.h>
 # include <unistd.h>
-# include <stdlib.h>
 # include <stdio.h>
+# include <stdlib.h>
+
+# define PTRNULL "(nil)"
 
 typedef struct s_flags
 {
-	int		sharp;
-	int		spaces;
-	int		plus;
-	int		min_width;
-	int		minus;
-	int		dot;
-	int		precision;
-	int		offset;
+	int		spec;
+	int		width;
+	int		left;
 	int		zero;
-	int		zero_offset;
+	int		star;
+	int		precision;
+	int		hash;
+	int		space;
+	int		plus;
 }	t_flags;
 
-/********************** FT_PRINTF **********************/
+/* ---------- ft_printf -------------------- */
 int		ft_printf(const char *format, ...);
-int		ft_print_char(char c, t_flags *flags);
-int		ft_print_str(char *str, t_flags *flags);
-int		ft_print_ptr(void *ptr, t_flags *flags);
-int		ft_print_num(long nl, t_flags *flags);
-int		ft_print_u_num(unsigned long nl, t_flags *flags);
-int		ft_print_hex(unsigned int nbr, int is_maj, t_flags *flags);
+int		ft_print_argument(char type, va_list args, t_flags flags);
 
+/* ---------- Print %c ---------- */
+int		ft_print_char(char c, t_flags flags);
+int		ft_print_c(char c);
+/* ---------- Print %s ---------- */
+int		ft_print_str(const char *str, t_flags flags);
+int		ft_print_s(const char *str);
+int		ft_print_s_pre(const char *str, int precision);
+int		ft_print_sign_pre(int n, t_flags *flags);
+/* ---------- Print %d / %i ---------- */
+int		ft_print_int(int n, t_flags flags);
+int		ft_print_integer(char *nbstr, int n, t_flags flags);
+int		ft_print_i(char *nbstr, int n, t_flags flags);
+/* ---------- Print %u ---------- */
+int		ft_print_unsigned(unsigned int n, t_flags flags);
+int		ft_print_u(char *nbstr, t_flags flags);
+int		ft_print_unint(char *nbstr, t_flags flags);
+/* ---------- Print %x / %X ---------- */
+int		ft_print_hex(unsigned int n, int is_upper, t_flags flags);
+int		ft_print_x(char *nbstr, int n, int is_upper, t_flags flags);
+int		ft_print_hexadec(char *nbstr, int n, int is_upper, t_flags flags);
+/* ---------- Print %p ---------- */
+int		ft_print_ptr(unsigned long int n, t_flags flags);
+int		ft_print_p(unsigned long int n);
+void	ft_print_adr(unsigned long int n);
 
-/********************** UTILS **********************/
-void	init_flags(t_flags *flags);
-int		check_type(const char *input, va_list params, t_flags *flags);
-void	check_flags(const char *input, int *cur, t_flags *flags);
-int		check(const char *input, va_list params, int *cur);
-int		ft_strlen(char *str);
-int		ft_atoi(const char *str, int *o_cur);
-int		print_str(char *str);
-int		print_char(char c);
-int		in_set(char c, char *set);
-int		print_number(long nl);
-int		print_long_as_hex(unsigned long addr);
-int		num_lenght_u(unsigned long num);
-int		print_u_number(unsigned long nl);
-int		print_padding(int count, int width, char pad_char);
-int		print_hex_number(unsigned long num, int is_upper);
+/* ---------- Helper Functions ---------- */
+char	*ft_printf_itoa(long nb);
+char	*ft_printf_utoa(unsigned int nb);
+char	*ft_printf_xtoa(unsigned long int nb, int is_upper);
+int		ft_unsigned_int_length(unsigned int n);
+int		ft_hex_length(unsigned int n);
+int		ft_pointer_length(unsigned long int n);
+void	ft_bzero(void *s, size_t n);
+void	*ft_calloc(size_t count, size_t size);
+char	*ft_strdup(const char *s1);
+size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
+size_t	ft_strlen(const char *str);
+
+/* ---------- Flags Functions ------------ */
+int		ft_print_pad_width(int total_width, int size, int zero);
+int		ft_istype(int c);
+int		ft_isspec(int c);
+int		ft_isflag(int c);
+int		ft_isdigit(int c);
+t_flags	ft_flags_init(void);
+t_flags	ft_flag_left(t_flags flags);
+t_flags	ft_flag_digit(char c, t_flags flags);
+t_flags	ft_flag_width(va_list args, t_flags flags);
+int		ft_flag_precision(const char *str, int pos,
+			va_list args, t_flags *flags);
 
 #endif

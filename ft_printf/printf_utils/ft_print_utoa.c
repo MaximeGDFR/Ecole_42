@@ -1,68 +1,57 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_print_itoa.c                                    :+:      :+:    :+:   */
+/*   ft_print_utoa.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/11/21 17:39:29 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 17:51:40 by maximegdfr       ###   ########.fr       */
+/*   Created: 2024/11/21 17:46:52 by maximegdfr        #+#    #+#             */
+/*   Updated: 2024/11/22 09:01:45 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-static size_t	itoa_length(long num)
+static size_t	ft_utoa_len(long num)
 {
-	size_t	length;
+	size_t	len;
 
-	length = 0;
+	len = 0;
 	if (num == 0)
 		return (1);
-	if (num < 0)
-	{
-		num = -num;
-		length++;
-	}
 	while (num >= 1)
 	{
+		len++;
 		num /= 10;
-		length++;
 	}
-	return (length);
+	return (len);
 }
 
-static char	*num_to_str(long num, char*str, size_t length)
+static char	*ft_u_to_str(unsigned int num, char *str, size_t len)
 {
-	str = ft_calloc(length + 1, sizeof(char));
+	str = ft_calloc(len + 1, sizeof(char));
 	if (str == NULL)
 		return (NULL);
-	if (num < 0)
+	len--;
+	while (len)
 	{
-		str[0] = '-';
-		num = -num;
-	}
-	length--;
-	while (length)
-	{
-		str[length] = (num % 10) + '0';
+		str[len] = (num % 10) + '0';
 		num /= 10;
-		length--;
+		len--;
 	}
-	if (str[0] != '-')
-		str[0] = (num % 10) + '0';
+	str[0] = (num % 10) + '0';
 	return (str);
 }
 
-char	*print_itoa(long num)
+char	*ft_printf_utoa(unsigned int num)
 {
-	size_t	length;
+	size_t	len;
 	char	*str;
 
-	length = itoa_length(num);
+	len = ft_utoa_len(num);
 	str = 0;
-	str = num_to_str(num, str, length);
-	if (str == NULL)
+	str = ft_u_to_str(num, str, len);
+	if (!str)
 		return (NULL);
 	return (str);
 }

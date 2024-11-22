@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 16:02:22 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 18:50:33 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 08:58:32 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-int	print_char(char c)
+int	ft_print_c(char c)
 {
 	write(1, &c, 1);
 	return (1);
@@ -23,10 +23,10 @@ int	ft_print_char(char c, t_flags flags)
 	int	count;
 
 	count = 0;
-	if (flags.minus == 1)
-		count += print_char(c);
-	count += pad_width(flags.width, 1, flags.zero);
-	if (flags.minus == 0)
-		count += print_char(c);
+	if (flags.left == 1)
+		count += ft_print_c(c);
+	count += ft_pad_width(flags.width, 1, flags.zero);
+	if (flags.left == 0)
+		count += ft_print_c(c);
 	return (count);
 }

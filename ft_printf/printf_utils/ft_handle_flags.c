@@ -6,34 +6,36 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:42:55 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/21 18:48:42 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/11/22 08:56:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "ft_printf.h"
 
-t_flags	init_flags(t_flags *flags)
+t_flags	ft_flags_init(void)
 {
-	flags->spe = 0;
-	flags->width = 0;
-	flags->minus = 0;
-	flags->zero = 0;
-	flags->star = 0;
-	flags->precision = -1;
-	flags->hash = 0;
-	flags->space = 0;
-	flags->plus = 0;
-	return (*flags);
+	t_flags	flags;
+
+	flags.spec = 0;
+	flags.width = 0;
+	flags.left = 0;
+	flags.zero = 0;
+	flags.star = 0;
+	flags.precision = -1;
+	flags.hash = 0;
+	flags.space = 0;
+	flags.plus = 0;
+	return (flags);
 }
 
-t_flags	handle_minus(t_flags flags)
+t_flags	ft_flag_left(t_flags flags)
 {
-	flags.minus = 1;
+	flags.left = 1;
 	flags.zero = 0;
 	return (flags);
 }
 
-t_flags	handle_digits(char c, t_flags flags)
+t_flags	ft_flag_digit(char c, t_flags flags)
 {
 	if (flags.star == 1)
 		flags.width = 0;
@@ -41,19 +43,19 @@ t_flags	handle_digits(char c, t_flags flags)
 	return (flags);
 }
 
-t_flags	handle_width(va_list args, t_flags flags)
+t_flags	ft_flag_width(va_list args, t_flags flags)
 {
 	flags.star = 1;
 	flags.width = va_arg(args, int);
 	if (flags.width < 0)
 	{
-		flags.minus = 1;
+		flags.left = 1;
 		flags.width *= -1;
 	}
 	return (flags);
 }
 
-int	handle_precision(const char *str, int pos, va_list args, t_flags *flags)
+int	ft_flag_precision(const char *str, int pos, va_list args, t_flags *flags)
 {
 	int	i;
 
@@ -64,7 +66,7 @@ int	handle_precision(const char *str, int pos, va_list args, t_flags *flags)
 		return (i++);
 	}
 	flags->precision = 0;
-	while (is_digit(str[i]))
+	while (ft_isdigit(str[i]))
 	{
 		flags->precision = (flags->precision * 10) + (str[i] - '0');
 		i++;
