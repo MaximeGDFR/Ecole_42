@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/09 13:42:51 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/09 13:42:54 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/02 16:00:53 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,6 +19,7 @@
 # include <stdlib.h>
 # include <stdio.h>
 # include <limits.h>
+# include "libft.h"
 
 # ifndef BUFFER_SIZE
 #  define BUFFER_SIZE 42
@@ -35,11 +36,11 @@
 
 char	*get_next_line(int fd);
 
-/* Utility functions */
+/* Utility functions
 char	*ft_strdup(const char *s);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_substr(const char *s, unsigned int start, size_t len);
 char	*ft_strchr(const char *s, int c);
-size_t	ft_strlen(const char *str);
+size_t	ft_strlen(const char *str);*/
 
 #endif

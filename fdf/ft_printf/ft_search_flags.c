@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/21 15:34:42 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 08:57:31 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/02 16:02:58 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,13 +29,6 @@ int	ft_istype(int c)
 {
 	if (c == 'c' || c == 's' || c == 'd' || c == 'i' || c == 'u'
 		|| c == 'x' || c == 'X' || c == 'p' || c == '%')
-		return (1);
-	return (0);
-}
-
-int	ft_isdigit(int c)
-{
-	if (c >= '0' && c <= '9')
 		return (1);
 	return (0);
 }

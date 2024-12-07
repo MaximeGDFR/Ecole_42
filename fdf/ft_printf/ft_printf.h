@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/19 18:31:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/11/22 15:59:13 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/02 16:31:19 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@
 # include <unistd.h>
 # include <stdio.h>
 # include <stdlib.h>
+# include "libft.h"
 
 # define PTRNULL "(nil)"
 
@@ -80,9 +81,6 @@ int		ft_hex_length(unsigned int n);
 int		ft_pointer_length(unsigned long int n);
 void	ft_bzero(void *s, size_t n);
 void	*ft_calloc(size_t count, size_t size);
-char	*ft_strdup(const char *s1);
-size_t	ft_strlcpy(char *dst, const char *src, size_t dstsize);
-size_t	ft_strlen(const char *str);
 
 /* ---------- Flags Functions ------------ */
 int		ft_add_padding(int total_width, int size, int zero);
