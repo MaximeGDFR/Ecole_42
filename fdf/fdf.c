@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 09:59:58 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/08 17:15:13 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/08 18:32:16 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,10 +27,6 @@ int	main(int argc, char **argv)
 	if (!data.win)
 		handle_error("Error: mlx_new_window failed.\n", 1);
 	calculate_scale(data.map);
-	print_map_info(data.map);
-
-	print_bounds(data.map);
-	print_map_info(data.map);
 	apply_projection(data.map);
 	center_map(data.map);
 	apply_center(data.map);
@@ -282,3 +278,283 @@ void	calculate_scale(t_map *map)
 		map->tile_size = 1;
 }
 
+
+
+void	change_projection(t_point *point, t_map *map)
+{
+	if (map->current_view < 1 || map->current_view > 11)
+		map->current_view = 1;
+	if (map->current_view == 1)
+		project_front(point, map);
+	else if (map->current_view == 2)
+		projection_back(point, map);
+	else if (map->current_view == 3)
+		projection_top(point, map);
+	else if (map->current_view == 4)
+		projection_under(point, map);
+	else if (map->current_view == 5)
+		project_right(point, map);
+	else if (map->current_view == 6)
+		project_left(point, map);
+	else if (map->current_view == 7)
+		projection_iso(point, map);
+	else if (map->current_view == 8)
+		projection_perspective(point, 1000);
+	else if (map->current_view == 9)
+		projection_oblique(point, 30.0, OBLIQUE_REDUCTION);
+	else if (map->current_view == 10)
+		projection_dimetric(point);
+	else if (map->current_view == 11)
+		projection_trimetric(point, 30.0, 45.0, 60.0);
+}
+
+void	change_view(t_map *map)
+{
+
+	if (map->current_view == 1)
+		map->current_view = FRONT_VIEW;
+	else if (map->current_view == 2)
+		map->current_view = BACK_VIEW;
+	else if (map->current_view == 3)
+		map->current_view = TOP_VIEW;
+	else if (map->current_view == 4)
+		map->current_view = UNDER_VIEW;
+	else if (map->current_view == 5)
+		map->current_view = RIGHT_VIEW;
+	else if (map->current_view == 6)
+		map->current_view = LEFT_VIEW;
+	else if (map->current_view == 7)
+		map->current_view = ISO_VIEW;
+	else if (map->current_view == 8)
+		map->current_view = PERSPECTIVE_VIEW;
+	else if (map->current_view == 9)
+		map->current_view = OBLIQUE_VIEW;
+	else if (map->current_view == 10)
+		map->current_view = DIMETRIC_VIEW;
+	else if (map->current_view == 11)
+		map->current_view = TRIMETRIC_VIEW;
+}
+
+void	center_map(t_map *map)
+{
+	double	scale_x;
+	double	scale_y;
+
+	scale_x = (WIDTH * SCALE) / (map->x_max - map->x_min);
+	scale_y = (HEIGHT * SCALE) / (map->y_max - map->y_min);
+	map->scale = fmin(scale_x, scale_y);
+
+	map->x_center = (map->x_min + map->x_max) / 2.0;
+	map->y_center = (map->y_min + map->y_max) / 2.0;
+
+	map->x_center_offset = WIDTH / 2 - map->x_center * map->scale;
+	map->y_center_offset = HEIGHT / 2 - map->y_center * map->scale;
+}
+
+void	apply_center(t_map *map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			map->points[y][x].x = (map->points[y][x].x - map->x_center)
+				* map->scale + WIDTH / 2 + map->x_offset;
+			map->points[y][x].y = (map->points[y][x].y - map->y_center)
+				* map->scale + HEIGHT / 2 + map->y_offset;
+			x++;
+		}
+		y++;
+	}
+}
+
+void	apply_projection(t_map *map)
+{
+	int	y;
+	int	x;
+	int	original_z;
+
+	map->x_min = map->x_max = 0;
+	map->y_min = map->y_max = 0;
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			original_z = map->points[y][x].z;
+			map->points[y][x].x = x * map->tile_size;
+			map->points[y][x].y = y * map->tile_size;
+			change_projection(&map->points[y][x], map);
+			map->points[y][x].z = original_z;
+			update_map_limits(map, x, y);
+			x++;
+		}
+		y++;
+	}
+}
+
+void	update_map_limits(t_map *map, int x, int y)
+{
+	if (map->points[y][x].x < map->x_min)
+		map->x_min = map->points[y][x].x;
+	if (map->points[y][x].x > map->x_max)
+		map->x_max = map->points[y][x].x;
+	if (map->points[y][x].y < map->y_min)
+		map->y_min = map->points[y][x].y;
+	if (map->points[y][x].y > map->y_max)
+		map->y_max = map->points[y][x].y;
+}
+
+void	redraw_map(t_data *data, int menu_opened)
+{
+	mlx_clear_window(data->mlx, data->win);
+	if (menu_opened == 1)
+	{
+		menu_background(data->mlx, data->win);
+		open_menu(data->mlx, data->win, data->menu);
+	}
+	apply_projection(data->map);
+	center_map(data->map);
+	apply_center(data->map);
+	draw_map(data, data->map);
+}
+
+int	get_sign(int value)
+{
+	if (value < 0)
+		return (-1);
+	else
+		return (1);
+}
+
+void	update_coordinates(t_bresenham *bresenham, int *x, int *y)
+{
+	int	err_2;
+
+	err_2 = bresenham->err * 2;
+	if (err_2 > -bresenham->dy)
+	{
+		bresenham->err -= bresenham->dy;
+		*x += bresenham->sx;
+	}
+	if (err_2 < bresenham->dx)
+	{
+		bresenham->err += bresenham->dx;
+		*y += bresenham->sy;
+	}
+}
+
+void	draw_line_bresenham(t_data *data, t_point p1, t_point p2)
+{
+	t_bresenham	bresenham;
+
+	bresenham.dx = ft_abs(p2.x - p1.x);
+	bresenham.dy = ft_abs(p2.y - p1.y);
+	bresenham.sx = get_sign(p2.x - p1.x);
+	bresenham.sy = get_sign(p2.y - p1.y);
+	bresenham.err = bresenham.dx - bresenham.dy;
+	while (1)
+	{
+		if (p1.x >= 0 && p1.x < WIDTH && p1.y >= 0 && p1.y < HEIGHT)
+		{
+			mlx_pixel_put(data->mlx, data->win, p1.x, p1.y, 0xFFFFFF);
+		}
+		if (p1.x == p2.x && p1.y == p2.y)
+			break ;
+		update_coordinates(&bresenham, &p1.x, &p1.y);
+	}
+}
+
+void	draw_lines(t_data *data, t_map *map, int x, int y)
+{
+	t_point	p1;
+	t_point	p2;
+
+	if (x + 1 < map->width)
+	{
+		p1 = map->points[y][x];
+		p2 = map->points[y][x + 1];
+		draw_line_bresenham(data, p1, p2);
+	}
+	if (y + 1 < map->height)
+	{
+		p1 = map->points[y][x];
+		p2 = map->points[y + 1][x];
+		draw_line_bresenham(data, p1, p2);
+	}
+}
+
+void	draw_map(t_data *data, t_map *map)
+{
+	int	y;
+	int	x;
+
+	y = 0;
+	while (y < map->height)
+	{
+		x = 0;
+		while (x < map->width)
+		{
+			draw_lines(data, map, x, y);
+			x++;
+		}
+		y++;
+	}
+}
+
+t_colors	*init_colors(void)
+{
+	t_colors	*colors;
+
+	colors = malloc(sizeof(t_colors));
+	if (!colors)
+		handle_error("Allocation error.\n", 1);
+	colors->color_1 = 0xFFFFFF;
+	colors->color_2 = 0x0000FF;
+	colors->cycle = 0;
+	colors->use_gradient = 1;
+	return (colors);
+}
+
+t_menu	*init_menu(void)
+{
+	t_menu	*menu;
+
+	menu = malloc(sizeof(t_menu));
+	if (!menu)
+		handle_error("Allocation error.\n", 1);
+
+	menu->title = "FDF COMMANDS";
+	menu->command_b = "UP : Move up";
+	menu->command_c = "DOWN : Move down";
+	menu->command_d = "LEFT : Move left";
+	menu->command_e = "RIGHT : Move right";
+	menu->command_f = "P : Zoom in";
+	menu->command_g = "M : Zoom out";
+	menu->command_h = NULL;
+	return (menu);
+}
+
+
+void	reset_map(t_data *data, int menu_opened)
+{
+	mlx_clear_window(data->mlx, data->win);
+	data->map->current_view = 1;
+	data->map->x_offset = 0;
+	data->map->y_offset = 0;
+	if (menu_opened == 1)
+	{
+		menu_background(data->mlx, data->win);
+		open_menu(data->mlx, data->win, data->menu);
+	}
+	calculate_scale(data->map);
+	apply_projection(data->map);
+	center_map(data->map);
+	apply_center(data->map);
+	draw_map(data, data->map);
+}

@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/08 17:10:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/08 18:08:57 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -242,7 +242,10 @@ void print_bounds(t_map *map);
 		void	fill_matrix(char *filename, t_map *map);
 
 void	allocate_matrix(t_map *map);
-		void print_map_info(t_map *map);
+
+
+
+void	update_map_limits(t_map *map, int x, int y);
 
 void	init_data(t_data *data, char *filename);
 
@@ -255,7 +258,7 @@ void apply_projection(t_map *map);
 void	free_map(t_map *map);
 int		close_window(t_data *data);
 
-void	reset_map(t_data *data);
+void	reset_map(t_data *data, int menu_opened);
 
 /* Map Functions */
 void	menu_background(void *mlx, void *win);

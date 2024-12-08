@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 18:02:00 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/08 16:53:13 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/08 18:28:27 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,12 +27,12 @@ int	handle_controls(int keycode, void *param)
 	}
 	if (keycode == P_KEY)
 	{
-		data->map->tile_size += 1;
+		data->map->scale *= 1.5;
 		redraw_map(data, data->menu_opened);
 	}
 	if (keycode == M_KEY)
 	{
-		data->map->tile_size -= 1;
+		data->map->scale *= 0.5;
 		redraw_map(data, data->menu_opened);
 	}
 	else if (keycode == H_KEY)
@@ -77,8 +77,7 @@ int	handle_controls(int keycode, void *param)
 	}
 	if (keycode == BACKSPACE)
 	{
-		reset_map(data);
-		redraw_map(data, data->menu_opened);
+		reset_map(data, data->menu_opened);
 	}
 	if (keycode == C_KEY)
     {
