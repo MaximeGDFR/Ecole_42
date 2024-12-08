@@ -1,16 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   others_views.c                                     :+:      :+:    :+:   */
+/*   projection_bis.c                                   :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/03 18:26:42 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/07 15:10:03 by maximegdfr       ###   ########.fr       */
+/*   Created: 2024/12/08 10:35:40 by maximegdfr        #+#    #+#             */
+/*   Updated: 2024/12/08 10:36:55 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
+
+void	projection_back(t_point *point, t_map *map)
+{
+
+	if (point == NULL || map == NULL)
+		handle_error("Error: point or map is NULL in project_back.\n", 1);
+	point->x = (map->width - 1 - point->x);
+	point->y = point->y + point->z;
+}
 
 void	projection_iso(t_point *point, t_map *map)
 {

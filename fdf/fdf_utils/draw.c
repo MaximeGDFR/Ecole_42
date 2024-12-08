@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   draw_map.c                                         :+:      :+:    :+:   */
+/*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2024/12/01 13:46:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/07 15:38:29 by maximegdfr       ###   ########.fr       */
+/*   Created: 2024/12/08 10:25:21 by maximegdfr        #+#    #+#             */
+/*   Updated: 2024/12/08 16:44:13 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,7 +37,7 @@ void	update_coordinates(t_bresenham *bresenham, int *x, int *y)
 	}
 }
 
-void	draw_line_bresenham(t_data *data, t_point p1, t_point p2, int color)
+void	draw_line_bresenham(t_data *data, t_point p1, t_point p2)
 {
 	t_bresenham	bresenham;
 
@@ -49,31 +49,51 @@ void	draw_line_bresenham(t_data *data, t_point p1, t_point p2, int color)
 	while (1)
 	{
 		if (p1.x >= 0 && p1.x < WIDTH && p1.y >= 0 && p1.y < HEIGHT)
-			mlx_pixel_put(data->mlx, data->win, p1.x, p1.y, color);
+		{
+			mlx_pixel_put(data->mlx, data->win, p1.x, p1.y, 0xFFFFFF);
+		}
 		if (p1.x == p2.x && p1.y == p2.y)
 			break ;
 		update_coordinates(&bresenham, &p1.x, &p1.y);
 	}
 }
 
-void	center_map(t_map *map)
+void draw_lines(t_data *data, t_map *map, int x, int y)
 {
-	int	center_x;
-	int	center_y;
+    t_point p1;
+    t_point p2;
 
-	geometric_center(map);
-	center_x = map->geometric_center.x;
-	center_y = map->geometric_center.y;
-	map->x_offset = (WIDTH / 2) - center_x;
-	map->y_offset = (HEIGHT / 2) - center_y;
+    // Horizontal line to the right
+    if (x + 1 < map->width)
+    {
+        p1 = map->points[y][x];
+        p2 = map->points[y][x + 1];
+        draw_line_bresenham(data, p1, p2);
+    }
+
+    // Vertical line downwards
+    if (y + 1 < map->height)
+    {
+        p1 = map->points[y][x];
+        p2 = map->points[y + 1][x];
+        draw_line_bresenham(data, p1, p2);
+    }
 }
 
-void	reset_map(t_data *data)
+
+
+void draw_map(t_data *data, t_map *map)
 {
-	data->map->tile_size = 5;
-	data->map->x_offset = WIDTH / 2;
-	data->map->y_offset = HEIGHT / 2;
-	data->map->current_view = 1;
-	center_map(data->map);
-	redraw_map(data);
+    printf("Drawing map...\n");
+    for (int y = 0; y < map->height; y++)
+    {
+        for (int x = 0; x < map->width; x++)
+        {
+            if (x == 0 && y == 0)
+                printf("First point: (%d, %d)\n", map->points[y][x].x, map->points[y][x].y);
+            if (x == map->width-1 && y == map->height-1)
+                printf("Last point: (%d, %d)\n", map->points[y][x].x, map->points[y][x].y);
+            draw_lines(data, map, x, y);
+        }
+    }
 }
