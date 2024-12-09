@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/08 18:08:57 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/09 17:27:43 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@
 # define J_KEY 106
 # define K_KEY 107
 # define L_KEY 108
-# define M_KEY 59 // Dezoom
+# define M_KEY 109 // Dezoom
 # define W_KEY 122
 # define X_KEY 120
 # define C_KEY 99
@@ -299,6 +299,13 @@ void	projection_dimetric(t_point *point);
 void	projection_trimetric(t_point *point, float alpha, float beta,
 			float gamma);
 
+
+int	handle_moves(int keycode, void *param);
+int	handle_map(int keycode, void *param);
+int	handle_scale(int keycode, void *param);
+int	handle_bonus(int keycode, void *param);
+int	handle_controls(int keycode, void *param);
+
 /* Colors Functions */
 int		calculate_color(int z, t_map *map);
 int		interpolate_color(int start, int end, double percentage);
@@ -308,10 +315,8 @@ void change_gradients(t_data *data, int keycode);
 void change_colors(t_data *data, int keycode);
 void apply_single_color_to_drawing(t_data *data);
 
+void	change_map(t_data *data, int menu_opened);
 
-
-/* Control Functions */
-int		handle_controls(int keycode, void *param);
 
 /* Others Functions */
 

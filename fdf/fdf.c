@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/30 09:59:58 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/08 18:32:16 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/09 17:35:11 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -419,6 +419,19 @@ void	redraw_map(t_data *data, int menu_opened)
 		open_menu(data->mlx, data->win, data->menu);
 	}
 	apply_projection(data->map);
+	apply_center(data->map);
+	draw_map(data, data->map);
+}
+
+void	change_map(t_data *data, int menu_opened)
+{
+	mlx_clear_window(data->mlx, data->win);
+	if (menu_opened == 1)
+	{
+		menu_background(data->mlx, data->win);
+		open_menu(data->mlx, data->win, data->menu);
+	}
+	apply_projection(data->map);
 	center_map(data->map);
 	apply_center(data->map);
 	draw_map(data, data->map);
@@ -558,3 +571,4 @@ void	reset_map(t_data *data, int menu_opened)
 	apply_center(data->map);
 	draw_map(data, data->map);
 }
+
