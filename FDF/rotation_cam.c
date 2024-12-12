@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   rotation_cam.c                                     :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:51:07 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/11 23:11:47 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/12 11:30:59 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -45,10 +45,6 @@ t_point	projection(int x, int y, t_env *env)
 	t_point	point;
 
 	point.z = env->map->matrix[y][x][0];
-	if (env->map->matrix[y][x][1] == 0)
-		point.color = env->map->matrix[y][x][1];
-	else
-		point.color = default_color(env->map->matrix[y][x][0], env->map);
 	point.x = x * env->cam->zoom;
 	point.y = y * env->cam->zoom;
 	point.z = env->cam->zoom / env->cam->z_height;
@@ -61,5 +57,6 @@ t_point	projection(int x, int y, t_env *env)
 	point.y += (HEIGHT + env->map->height / 2 * env->cam->zoom) / 2
 		+ env->cam->y_offset;
 	point.reverse = 0;
+	apply_color_mode(&point, env);
 	return (point);
 }

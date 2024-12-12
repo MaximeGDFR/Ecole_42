@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/12 00:46:06 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/12 13:32:50 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,13 @@
 /* Window */
 # define WIDTH 1920
 # define HEIGHT 1080
+
+/* Menu */
+# define LINE_HEIGHT 20
+# define TITLE_OFFSET 10
+# define SECTION_SPACING 40
+# define INFO_INDENT 20
+# define AVG_CHAR_WIDTH 8
 
 /* Hook */
 # define UP 65362 // Mouve up
@@ -51,7 +58,7 @@
 #  define M_PI 3.14159265358979323846
 # endif
 
-/* Colors */
+/* Colors 
 # define RED	0xFF0000
 # define ORANGE	0xFFA500
 # define YELLOW	0xFFFF00
@@ -60,25 +67,7 @@
 # define INDIGO	0x4B0082
 # define PURPLE	0x8A2BE2
 # define WHITE	0xFFFFFF
-# define BLACK	0x000000
-
-/* Gradients */
-# define SUNSET_START			0xFF4500
-# define SUNSET_END				0x8B0000
-# define OCEAN_START			0x000080
-# define OCEAN_END				0x00BFFF
-# define FOREST_START			0x228B22
-# define FOREST_END				0x006400
-# define FIRE_START				0xFF4500
-# define FIRE_END				0xFF6347
-# define MORNINGSKY_START		0x87CEEB
-# define MORNINGSKY_END			0x1E90FF
-# define PURPLEHORIZON_START	0x8A2BE2
-# define PURPLEHORIZON_END		0x4B0082
-# define PINKOCEAN_START		0xFF69B4
-# define PINKOCEAN_END			0xBA55D3
-# define GREYHORIZON_START		0xA9A9A9
-# define GREYHORIZON_END		0x696969
+# define BLACK	0x000000*/
 
 /* Library */
 # include <unistd.h>
@@ -106,24 +95,24 @@ typedef enum e_view
 	OBLIQUE_VIEW
 }	t_view;
 
-typedef enum e_colors
+typedef enum e_uni_colors
 {
-	SOLID_WHITE = 1,
-	SOLID_RED,
-	SOLID_ORANGE,
-	SOLID_YELLOW,
-	SOLID_GREEN,
-	SOLID_BLUE,
-	SOLID_INDIGO,
-	SOLID_PURPLE,
-	SUNSET_GRADIENT,
-	OCEAN_GRADIENT,
-	FOREST_GRADIENT,
-	FIRE_GRADIENT,
-	MORNINGSKY_GRADIENT,
-	PURPLEHORIZON_GRADIENT,
-	PINKOCEAN_GRADIENT,
-	GREYHORIZON_GRADIENT
+	WHITE = 0xFFFFFF,
+	RED = 0xFF0000,
+	ORANGE = 0xFFA500,
+	YELLOW = 0xFFFF00,
+	GREEN = 0x008000,
+	BLUE = 0x0000FF,
+	INDIGO = 0x4B0082,
+	PURPLE = 0x8A2BE2
+}	t_uni_colors;
+
+typedef enum e_colors // Inutile maintenant ?
+{
+	EARTH_MODE = 1,
+	NEON_MODE,
+	BOREAL_MODE,
+	GREY_SHADE_MODE
 }	t_colors;
 
 typedef struct s_point
@@ -153,6 +142,7 @@ typedef struct s_map
 	int	z_max;
 	int	x_max;
 	int	y_max;
+	int	color_mode;
 }	t_map;
 
 typedef struct s_cam
@@ -176,6 +166,24 @@ typedef struct s_mouse
 	int	prev_y;
 }	t_mouse;
 
+typedef struct s_menu
+{
+	void	*mlx;
+	void	*win;
+	void	*img;
+	char	*data_addr;
+	int		bpp;
+	int		line_len;
+	int		endian;
+	int		width;
+	int		height;
+	int		pad_x;
+	int		pad_y;
+	int		x_center;
+	int		x_left;
+	int		color_background;
+}	t_menu;
+
 typedef struct s_env
 {
 	void	*mlx;
@@ -185,10 +193,12 @@ typedef struct s_env
 	int		bpp;
 	int		line_len;
 	int		endian;
-	int		steep; // ???
+	int		steep;
 	t_map	*map;
 	t_cam	*cam;
 	t_mouse	*mouse;
+	t_point	**points;
+	t_menu	*menu;
 }	t_env;
 
 
@@ -210,78 +220,6 @@ typedef struct s_env
 
 
 /* Functions */
-/* ajust_map.c */
-void	calculate_scale(t_env *env);
-void	center_map(t_env *env);
-void	apply_center(t_env *env);
-void	update_map_limits(t_env *env, int x, int y);
-/* change_map.c */
-void	redraw_map(t_env *env);
-void	change_map(t_env *env);
-void	reset_map(t_env *env);
-void	clear_image(t_env *env);
-/* controls.c */
-int		handle_bonus(int keycode, t_env *env);
-int		handle_moves(int keycode, t_env *env);
-int		handle_map(int keycode, t_env *env);
-int		handle_scale(int keycode, t_env *env);
-int		key_controls(int keycode, t_env *env);
-/* draw_map.c */
-void	update_coordinates(t_bresenham *bresenham, int *x, int *y);
-void	put_pixel(t_point points, t_env *env);
-void	draw_line_bresenham(t_env *env, t_point p1, t_point p2);
-void	draw_lines(t_env *env, int x, int y);
-void	draw_map(t_env *env);
-/* exit_program.c */
-int		close_window(t_env *env);
-void	handle_error(char *msg_err, int syst_funct);
-/* initialize_program.c */
-void	init_program(t_env *env, char *filename);
-void	init_point_bresenham(t_point *point, t_bresenham *bresenham);
-void	init_image(t_image *image);
-void	init_env_first(t_env *env, char *filename);
-void	init_env_second(t_env *env);
-/* load_map.c */
-void	allocate_matrix(t_env *env);
-void	fill_matrix(char *filename, t_env *env);
-void	fill_row(t_env *env, char *line, int y);
-/* menu.c */
-/* mouse.c */
-/* projection_2d.c*/
-void	project_front(t_point *point, t_env *env);
-void	projection_back(t_point *point, t_env *env);
-void	projection_top(t_point *point, t_env *env);
-void	projection_under(t_point *point, t_env *env);
-void	project_right(t_point *point, t_env *env);
-/* projection_3d.c */
-void	projection_iso(t_point *point, t_env *env);
-void	projection_perspective(t_point *point, float d);
-void	projection_oblique(t_point *point, float angle, float reduction);
-void	projection_dimetric(t_point *point);
-void	projection_trimetric(t_point *point, float alpha,
-			float beta, float gamma);
-/* projection_utils.c */
-void	clip_point(t_point *point);
-void	change_projection(t_point *point, t_env *env);
-void	change_view(t_env *env);
-void	apply_projection(t_env *env);
-void	project_left(t_point *point, t_env *env);
-/* read_map.c */
-int		check_file_format(char *filename);
-int		get_height(char *filename);
-int		get_width(char *filename);
-void	get_z_min_max(char *line, t_env *env);
-/* utils.c */
-int		get_sign(int value);
-int		ft_abs(int value);
-void	free_points(t_env *env);
-void	*free_lines(int fd);
-void	free_values(char **values);
-/*
-int		interpolate_color(int start_color, int end_color, float ratio);
-int		calculate_color(int z, t_env *env, t_colors color_mode);
-void	get_gradient_colors(t_env *env, int *start_color, int *end_color);
-*/
-int calculate_color(int z, t_env *env, int color_mode);
+
 
 #endif

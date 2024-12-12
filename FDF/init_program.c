@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   init_program.c                                     :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 09:43:53 by mgodefro          #+#    #+#             */
+/*   Updated: 2024/12/12 09:43:54 by mgodefro         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 t_env	*init_env(char *filename)
@@ -37,7 +49,7 @@ t_cam	*init_cam(t_env *env)
 	if (!cam)
 		handle_error("Error initializing camera.\n", 1);
 	cam->zoom = ft_min(WIDTH / env->map->width / 2,
-			HEIGHT / env->map->height / 2); // Regarder implémentation
+			HEIGHT / env->map->height / 2);
 	cam->x_angle = -0.615472907;
 	cam->y_angle = -0.523599;
 	cam->z_angle = 0.615472907;

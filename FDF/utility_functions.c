@@ -18,3 +18,8 @@ void	check_open_file(int fd, char *filename)
 	if (fd < 0)
 		handle_error("Error opening file.\n", 1);
 }
+
+int	get_position(t_menu *menu, int line_num)
+{
+	return (menu->pad_y + (line_num * LINE_HEIGHT));
+}
