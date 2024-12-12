@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:19:44 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/12 11:49:02 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/12 13:50:43 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,14 +21,6 @@ void draw_pixel(t_point point, t_env *env)
     }
     else
         printf("Warning: Coordinates out of bounds for put_pixel: (%d, %d)\n", point.x, point.y);
-}
-
-int	get_sign(int value)
-{
-	if (value < 0)
-		return (-1);
-	else
-		return (1);
 }
 
 void	update_coordinates(t_algorithm *bresenham, int *x, int *y)
@@ -117,5 +109,5 @@ void	draw_map(t_env *env)
 		y += -2 * (env->cam->x_angle > 0) + 1;
 	}
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
-	draw_menu(); // A re-implementer
+	init_menu(env->menu);
 }

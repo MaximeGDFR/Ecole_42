@@ -19,6 +19,14 @@ void	check_open_file(int fd, char *filename)
 		handle_error("Error opening file.\n", 1);
 }
 
+int	get_sign(int value)
+{
+	if (value < 0)
+		return (-1);
+	else
+		return (1);
+}
+
 int	get_position(t_menu *menu, int line_num)
 {
 	return (menu->pad_y + (line_num * LINE_HEIGHT));
