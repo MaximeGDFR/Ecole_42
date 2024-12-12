@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/12 14:06:40 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/12 15:52:06 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -220,6 +220,12 @@ void	display_projection_infos(t_menu *menu, int *current_line);
 void	display_map_infos(t_menu *menu, int *current_line);
 void	display_fdf_keyboards(t_menu *menu, int *current_line);
 void	display_fdf_mouse(t_menu *menu, int *current_line);
+/* mouse.c */
+int		mouse_down(int button, int x, int y, void *param);
+int		mouse_move(int x, int y, void *param);
+void	mouse_up(int button, int x, int y, void *param);
+void	mouse_zoom(int button, t_env *env);
+void	handle_mouse(t_env *env);
 /* rotation_cam.c */
 void	rotate_x(int *y, int *z, double x_angle);
 void	rotate_y(int *x, int *z, double y_angle);
