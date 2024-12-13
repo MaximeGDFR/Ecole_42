@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:06:09 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/12 00:31:35 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/13 17:14:53 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,17 +18,23 @@ int	get_height(char *filename)
 	int		height;
 	char	*line;
 
-	check_open_file(fd, filename);
-	height = 0;
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		handle_error("open error", 1);
+	height = -1;
 	line = get_next_line(fd);
-	while (line != NULL)
+	printf("IN WHILE OF GET_HEIGHT\n");
+	while (line != NULL && *line != '\0')
 	{
 		height++;
 		free(line);
 		line = get_next_line(fd);
+		if (line == NULL || *line == '\0')
+			break ;
+		printf("height = %d\n", height);
 	}
-	free(line);
-	close(fd);
+	if (close(fd) == -1)
+		handle_error("close error", 1);
 	return (height);
 }
 
@@ -39,89 +45,98 @@ int	get_width(char *filename)
 	char	*line;
 	int		i;
 
-	i = -1;
-	check_open_file(fd, filename);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		handle_error("open error", 1);
 	width = 0;
 	line = get_next_line(fd);
-	if (!line)
-		handle_error("Invalid map (empty).\n", 1);
+	if (*line == '\0')
+		handle_error("invalid map (empty)", 0);
+	i = -1;
 	while (line[++i])
 		if (line[i] != ' ' && (line[i + 1] == ' ' || line[i + 1] == '\0'))
 			width++;
 	free(line);
-	close(fd);
+	printf("width = %d\n", width);
+	if (close(fd) == -1)
+		handle_error("close error", 1);
 	return (width);
 }
 
-void	get_z_min_max(char *line, t_map *map)
+void	fill_matrix(t_env *env, char *line, int y)
 {
 	char	**values;
-	int		i;
-	int		z;
+	int		x;
 
-	values = ft_split(line, ' ');
-	i = 0;
-	if (!values)
-		handle_error("Error: map is not valid.\n", 1);
-	while (values[i])
-	{
-		z = ft_atoi(values[i]);
-		if (z < map->z_min)
-			map->z_min = z;
-		if (z > map->z_max)
-			map->z_max = z;
-		i++;
-	}
-	free(values);
-}
-
-void	fill_matrix(int **row, char *line, int width)
-{
-	char	**values;
-	int		i;
-
+	if (!env->cam)
+		handle_error("Error: Camera is not initialized.\n", 1);
+	if (!env->map)
+		handle_error("Error: env->map is NULL\n", 1);
 	values = ft_split(line, ' ');
 	if (!values)
-		handle_error("Error allocation in fill_matrix.\n", 1);		
-	i = 0;
-	while (values[i] && i < width)
+		handle_error("Error: invalid format.\n", 1);
+	x = 0;
+	while (x < env->map->width)
 	{
-		row[i] = malloc(sizeof(int) * 2);
-		if (!row[i])
-			handle_error("Error allocation in fill_matrix.\n", 1);
-		row[i][0] = ft_atoi(values[i]);
-		free(values[i]);
-		i++;
+		env->map->matrix[y][x].x = x * env->cam->zoom;
+		env->map->matrix[y][x].y = y * env->cam->zoom;
+		env->map->matrix[y][x].z = ft_atoi(values[x]);
+		if (env->map->matrix[y][x].z < env->map->z_min)
+			env->map->z_min = env->map->matrix[y][x].z;
+		if (env->map->matrix[y][x].z > env->map->z_max)
+			env->map->z_max = env->map->matrix[y][x].z;
+		x++;
 	}
-	if (i != width || values[i])
-		handle_error("Error: map format is not valid.\n", 1);
-	free(values);
+	free_values(values);
 }
 
-void	check_map(char *filename, t_map *map)
+void	check_map(char *filename, t_env *env)
 {
 	int		fd;
 	char	*line;
 	int		i;
 
-	map->width = get_width(filename);
-	map->height = get_height(filename);
-	check_open_file(fd, filename);
-	map->matrix = malloc(sizeof(int **) * map->height);
-	if (!map->matrix)
-		handle_error("Error allocation in check_map.\n", 1);
-	i = -1;
-	while (++i < map->height)
+	if (env->map->width <= 0 || env->map->height <= 0)
+		handle_error("Invalid map dimensions\n", 1);
+	printf("Map width: %d, height: %d\n", env->map->width, env->map->height);
+	allocate_matrix(env->map);
+	fd = open(filename, O_RDONLY);
+	if (fd == -1)
+		handle_error("Open error\n", 1);
+	i = 0;
+	line = get_next_line(fd);
+	while (line != NULL && *line != '\0')
 	{
-		line = get_next_line(fd);
-		if (!line)
-			handle_error("Error: line is empty.\n", 1);
-		map->matrix[i] = malloc(sizeof(int *) * map->width);
-		if (!map->matrix[i])
-			handle_error("Error allocation in check_map.\n", 1);
-		fill_matrix(map->matrix[i], line, map->width);
+		fill_matrix(env, line, i);
 		free(line);
+		line = get_next_line(fd);
+		i++;
 	}
-	get_z_min_max(filename, map);
-	close(fd);
+	if (close(fd) == -1)
+		handle_error("Close error\n", 1);
+}
+
+void allocate_matrix(t_map *map)
+{
+	int	i;
+	int	j;
+
+	map->matrix = (t_point **)malloc(sizeof(t_point *) * map->height);
+	if (!map->matrix)
+		handle_error("Failed to allocate memory for matrix rows.\n", 1);
+	i = 0;
+	while (i < map->height)
+	{
+		j = 0;
+		map->matrix[i] = (t_point *)malloc(sizeof(t_point) * map->width);
+		if (!map->matrix[i])
+			handle_error("Failed to allocate memory for matrix columns.\n", 1);
+		while (j < map->width)
+		{
+			map->matrix[i][j].z = 0;
+			j++;
+		}
+		i++;
+	}
+	printf("Matrix allocated with dimensions: %d x %d.\n", map->width, map->height);
 }

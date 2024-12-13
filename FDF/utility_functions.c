@@ -1,3 +1,15 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   utility_functions.c                                :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2024/12/12 22:57:16 by maximegdfr        #+#    #+#             */
+/*   Updated: 2024/12/13 01:48:09 by maximegdfr       ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "fdf.h"
 
 int	check_file_format(char *filename)
@@ -12,12 +24,6 @@ int	check_file_format(char *filename)
 	}
 	return (TRUE);
 }
-void	check_open_file(int fd, char *filename)
-{
-	fd = open(filename, O_RDONLY);
-	if (fd < 0)
-		handle_error("Error opening file.\n", 1);
-}
 
 int	get_sign(int value)
 {
@@ -30,4 +36,33 @@ int	get_sign(int value)
 int	get_position(t_menu *menu, int line_num)
 {
 	return (menu->pad_y + (line_num * LINE_HEIGHT));
+}
+
+int	ft_min(int a, int b)
+{
+	if (a < b)
+		return (a);
+	return (b);
+}
+
+int	ft_abs(int value)
+{
+	if (value < 0)
+		return (-value);
+	return (value);
+}
+
+void	free_values(char **values)
+{
+	int	i;
+
+	i = 0;
+	if (!values)
+		return ;
+	while (values[i])
+	{
+		free(values[i]);
+		i++;
+	}
+	free(values);
 }

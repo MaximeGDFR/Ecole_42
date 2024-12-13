@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_menu.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 11:33:25 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/12 13:43:40 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/12 19:53:00 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ void	init_menu(t_menu *menu)
 	if (!menu->img)
 		handle_error("Error initializing image for menu.\n", 1);
 	menu->data_addr = mlx_get_data_addr(menu->img, &menu->bpp, &menu->line_len,
-		&menu->endian);
+			&menu->endian);
 	menu->pad_x = WIDTH * 0.075;
 	menu->pad_y = HEIGHT * 0.1;
 	menu->x_center = menu->pad_x + (menu->width / 2);
@@ -32,7 +32,7 @@ void	init_menu(t_menu *menu)
 	while (i < menu->width * menu->height)
 	{
 		*(unsigned int *)(menu->data_addr + i *
-			(menu->bpp / 8)) = menu->color_background;
+				(menu->bpp / 8)) = menu->color_background;
 		i++;
 	}
 	write_menu(menu);
@@ -49,4 +49,3 @@ void	write_menu(t_menu *menu)
 	display_fdf_keyboards(menu, &current_line);
 	display_fdf_mouse(menu, &current_line);
 }
-
