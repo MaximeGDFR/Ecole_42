@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:16 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/12 20:11:54 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/14 14:38:47 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,8 +73,8 @@ int	keyboards_controls(int keycode, t_env *env)
 	}
 	else if (keycode == ENTER)
 		reset(env);
-	else if (keycode == ESC)
-		quit_program(env);
+/*	else if (keycode == ESC)
+		quit_program(env);*/
 	return (0);
 }
 
@@ -82,5 +82,5 @@ void	hook_controls(t_env *env)
 {
 	mlx_hook(env->win, 2, 0, keyboards_controls, env);
 	mlx_hook(env->win, 3, 0, handle_mouse, env);
-	mlx_hook(env->win, 17, 0, quit_program, env);
+//	mlx_hook(env->win, 17, 0, quit_program, env);
 }

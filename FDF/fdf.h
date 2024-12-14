@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/13 17:02:49 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/14 17:31:43 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -126,7 +126,7 @@ typedef struct s_map
 {
 	int	height;
 	int	width;
-	int	**matrix;
+	t_point	**matrix;
 	int	z_min;
 	int	z_max;
 	int	x_max;
@@ -187,7 +187,7 @@ typedef struct s_env
 	t_map	*map;
 	t_cam	*cam;
 	t_mouse	*mouse;
-	t_point	**points;
+	t_point	*points;
 	t_menu	*menu;
 }	t_env;
 
@@ -204,8 +204,8 @@ void	free_projected_points(t_point **projected_points, int height);
 /* check_map.c */
 int		get_height(char *filename);
 int		get_width(char *filename);
-void	allocate_matrix(t_map *map);
-void	fill_matrix(t_env *env, char *line, int y);
+//void	allocate_matrix(t_map *map);
+//void	fill_matrix(t_env *env, char *line, int y);
 //void	get_z_min_max(t_map *map);
 void	check_map(char *filename, t_env *env);
 /* close.c */
@@ -230,14 +230,21 @@ void	draw_map(t_env *env);
 void	init_menu(t_menu *menu);
 void	write_menu(t_menu *menu);
 /* init_program.c */
-//t_env	*init_env(char *filename);
-//t_cam	*init_cam(t_env *env);
-//t_map	*init_map(void);
 
-t_env *init_env(char *filename);
-t_map *init_map(void);
-t_cam *init_cam(t_env *env, char *filename);
+
+t_env *init_environnement(char *filename);
+t_point	*init_point(void);
+t_map	*init_map(char *filename);
+t_cam *init_cam(t_map *map);
 t_mouse *init_mouse(void);
+void allocate_map_matrix(t_map *map);
+int	get_height(char *filename);
+int	count_values(char *line);
+int	get_width(char *filename);
+int	compare_line(int first_line_width, int current_width);
+char	**read_file_to_matrix(t_map *map, char *filename, int *line_count);
+void	fill_matrix(t_map *map, char **lines);
+t_map	*get_values_map(t_map *map);
 
 
 /* menu_infos.c */

@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:06:30 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/13 16:39:41 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/14 12:24:26 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-int	quit_program(t_env *env)
+/*int	quit_program(t_env *env)
 {
 	int	x;
 	int	y;
@@ -35,7 +35,7 @@ int	quit_program(t_env *env)
 	free(env);
 	exit(1);
 	return (0);
-}
+}*/
 
 void	handle_error(char *msg_err, int syst_funct)
 {

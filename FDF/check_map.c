@@ -6,12 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 00:06:09 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/13 17:14:53 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/14 12:12:35 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
+/*
 int	get_height(char *filename)
 {
 	int		fd;
@@ -140,3 +141,4 @@ void allocate_matrix(t_map *map)
 	}
 	printf("Matrix allocated with dimensions: %d x %d.\n", map->width, map->height);
 }
+*/
