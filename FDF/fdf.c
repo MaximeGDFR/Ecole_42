@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/14 12:25:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/15 13:27:01 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,58 @@ int	main(int argc, char *argv[])
 	if (argc != 2)
 		handle_error("Error: argument number invalid.\n", 1);
 	env = init_environnement(argv[1]);
-	printf("_____ MAP _____\n");
+
+	env->mlx = mlx_init();
+	env->win = mlx_new_window(env->mlx, WIDTH, HEIGHT, "FDF Project - 42 School - mgodefro");
+	if (!env->win)
+		handle_error("In main: allocation error for env->win.\n", 1);
+	env->img = mlx_new_image(env->mlx, WIDTH, HEIGHT);
+	if (!env->img)
+		handle_error("In main: allocation error for env->img.\n", 1);
+	env->data_addr = mlx_get_data_addr(env->img, &env->bpp, &env->line_len, &env->endian);
+	if (!env->data_addr)
+		handle_error("In main: allocation error for env->data_addr.\n", 1);
+		
+	draw_map(env);
+
+	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	
+	mlx_loop(env->mlx);
+	return (0);
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+/*	printf("_____ MAP _____\n");
 	printf("Map height : %d\n", env->map->height);
 	printf("Map width : %d\n", env->map->width);
 	printf("Map z_min : %d\n", env->map->z_min);
@@ -50,6 +101,4 @@ int	main(int argc, char *argv[])
 	printf("Mouse x : %d\n", env->mouse->x);
 	printf("Mouse y : %d\n", env->mouse->y);
 	printf("Mouse prev_x : %d\n", env->mouse->prev_x);
-	printf("Mouse prev_y : %d\n", env->mouse->prev_y);
-	return (0);
-}
+	printf("Mouse prev_y : %d\n", env->mouse->prev_y);*/

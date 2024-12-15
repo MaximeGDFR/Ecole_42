@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   change_projection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:40:43 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/12 20:01:20 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/15 13:51:13 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,9 @@ t_point	**allocate_projected_points(t_env *env)
 	int		y;
 	t_point	**projected_points;
 
+	if (env->map->height <= 0 || env->map->width <= 0)
+		handle_error("Invalid map dimensions in allocate_projected_points.\n", 1);
+
 	projected_points = malloc(env->map->height * sizeof(t_point *));
 	if (!projected_points)
 		handle_error("Error allocation in apply_projection.\n", 1);
@@ -62,6 +65,8 @@ t_point	**apply_projection(t_env *env)
 	t_point	**projected_points;
 
 	projected_points = allocate_projected_points(env);
+	if (!projected_points)
+		handle_error("In apply_projection: error allocation for projected_points.\n", 1);
 	y = -1;
 	while (++y < env->map->height)
 	{
@@ -78,10 +83,13 @@ void	free_projected_points(t_point **projected_points, int height)
 {
 	int	y;
 
+	if (!projected_points)
+		return ;
 	y = 0;
 	while (y < height)
 	{
-		free(projected_points[y]);
+		if (projected_points[y])
+			free(projected_points[y]);
 		y++;
 	}
 	free(projected_points);

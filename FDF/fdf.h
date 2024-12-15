@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/14 17:31:43 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/15 14:12:29 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -226,6 +226,7 @@ void	update_coordinates(t_algorithm *bresenham, int *x, int *y);
 void	draw_line_bresenham(t_env *env, t_point p1, t_point p2);
 void	draw_lines(int x1, int x2, int y1, int y2, t_env *env);
 void	draw_map(t_env *env);
+int		next_index(int current, int reverse, int max);
 /* draw_menu.c */
 void	init_menu(t_menu *menu);
 void	write_menu(t_menu *menu);

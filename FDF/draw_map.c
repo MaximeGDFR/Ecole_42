@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw_map.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:19:44 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/12 20:16:14 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/15 15:17:34 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -82,29 +82,61 @@ void	draw_map(t_env *env)
 {
 	int		y;
 	int		x;
+	int		reverse_x;
 	t_point	**projected_points;
 
 	ft_bzero(env->data_addr, WIDTH * HEIGHT * (env->bpp / 8));
 	projected_points = apply_projection(env);
-	y = 0;
+	if (!projected_points)
+    	handle_error("Error: apply_projection failed to allocate memory.\n", 1);
+		
+	reverse_x = 0;
 	if (env->cam->x_angle > 0)
 		y = env->map->height - 1;
-	while (y < env->map->height && y >= 0)
+	else
+		y = 0;
+	while (y >= 0 && y < env->map->height)
 	{
-		x = 0;
 		if (env->cam->y_angle > 0)
 			x = env->map->width - 1;
-		while (x < env->map->width && x >= 0)
+		else
+			x = 0;
+		printf("Start y: %d, x: %d\n", y, x);
+		printf("Reverse for y: %d, Reverse for x: %d\n", env->cam->x_angle > 0, env->cam->y_angle > 0);
+		while ((reverse_x && x > 0) || (!reverse_x && x < env->map->width))
 		{
-			if (x + 1 < env->map->width)
-				draw_lines(x, y, x + 1, y, env);
-			if (y + 1 < env->map->height - 1)
+			printf("Before update x: %d\n", x);
+			if (reverse_x && x > 0)
+				draw_lines(x, y, x - 1, y, env);
+			else if (!reverse_x && x + 1 < env->map->height)
 				draw_lines(x, y, x, y + 1, env);
-			x += -2 * (env->cam->y_angle > 0) + 1;
+
+
+    		x = next_index(x, reverse_x, env->map->width);
+    		printf("After update x: %d\n", x);
+
+			if (x == 0 || x == env->map->width - 1)
+				reverse_x = !reverse_x;
 		}
-		y += -2 * (env->cam->x_angle > 0) + 1;
+		y = next_index(y, env->cam->x_angle > 0, env->map->height);
 	}
 	free_projected_points(projected_points, env->map->height);
-	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 	init_menu(env->menu);
+	if (!env->menu)
+	    handle_error("Error: env->menu is NULL.\n", 1);
+}
+
+int next_index(int current, int reverse, int max)
+{
+	printf("current: %d, reverse: %d\n", current, reverse);
+    if (reverse)
+		current--;
+	else
+		current++;
+	if (current < 0)
+		current = 0;
+	if (current >= max)
+		current = max - 1;
+	printf("current: %d, reverse: %d\n", current, reverse);
+	return (current);
 }
