@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/15 13:27:01 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/17 16:32:26 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,11 +30,12 @@ int	main(int argc, char *argv[])
 	env->data_addr = mlx_get_data_addr(env->img, &env->bpp, &env->line_len, &env->endian);
 	if (!env->data_addr)
 		handle_error("In main: allocation error for env->data_addr.\n", 1);
-		
+
 	draw_map(env);
 
-	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
-	
+
+	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
+	mlx_hook(env->win, 17, 0, quit_program, env);
 	mlx_loop(env->mlx);
 	return (0);
 }

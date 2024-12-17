@@ -6,12 +6,12 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/11 22:51:07 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/13 16:00:04 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/15 19:00:40 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
-
+/*
 void	rotate_x(int *y, int *z, double x_angle)
 {
 	int	prev_y;
@@ -53,22 +53,24 @@ t_point	projection(int x, int y, t_env *env)
 
 	if (!env->map->matrix)
 		handle_error("Matrix is NULL in projection.\n", 1);
+	
+	printf("Projecting point: (x, y) = (%d, %d)\n", x, y);
+	
 	point.z = env->map->matrix[y][x].z;
 	point.x = x * env->cam->zoom;
 	point.y = y * env->cam->zoom;
 	//point.z = env->cam->zoom / env->cam->z_height;
-	// Centrage de la carte
 	point.x -= (env->map->width * env->cam->zoom) / 2;
 	point.y -= (env->map->height * env->cam->zoom) / 2;
-	// Gestion des projections
 	change_projection(&point, env);
-	// Gestion rotations
 	apply_camera_transformation(&point, env);
-	// Ajustements finaux
 	point.x += WIDTH / 2 + env->cam->x_offset;
 	point.y += (HEIGHT + env->map->height / 2 * env->cam->zoom) / 2
 		+ env->cam->y_offset;
 	point.reverse = 0;
 	apply_color_mode(&point, env);
+
+	printf("Projected point: (x, y, z) = (%d, %d, %d)\n", point.x, point.y, point.z);
+	
 	return (point);
-}
+}*/

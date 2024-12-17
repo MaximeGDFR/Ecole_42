@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/15 14:12:29 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/17 23:38:56 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -42,7 +42,8 @@
 # define P_KEY 112 // Zoom in
 # define M_KEY 109 // Zoom out
 # define G_KEY 103 // Gradients
-# define H_KEY 104 // Menu help
+# define V_KEY 118 // Less relief
+# define W_KEY 119 // More relief
 # define MINUS_KEY 15 // Zoom out
 # define C_KEY 99 // Colors
 # define MOUSE_CLICK_LEFT 1
@@ -124,15 +125,17 @@ typedef struct s_algorithm
 
 typedef struct s_map
 {
-	int	height;
-	int	width;
+	int		height;
+	int		width;
 	t_point	**matrix;
-	int	z_min;
-	int	z_max;
-	int	x_max;
-	int	y_max;
-	int	color_mode;
-	int	current_view;
+	int		z_min;
+	int		z_max;
+	int		x_max;
+	int		y_max;
+	int		centered;
+	float	depth;
+	int		color_mode;
+	int		current_view;
 }	t_map;
 
 typedef struct s_cam
@@ -202,11 +205,7 @@ t_point	**allocate_projected_points(t_env *env);
 t_point	**apply_projection(t_env *env);
 void	free_projected_points(t_point **projected_points, int height);
 /* check_map.c */
-int		get_height(char *filename);
-int		get_width(char *filename);
-//void	allocate_matrix(t_map *map);
-//void	fill_matrix(t_env *env, char *line, int y);
-//void	get_z_min_max(t_map *map);
+
 void	check_map(char *filename, t_env *env);
 /* close.c */
 int		quit_program(t_env *env);
@@ -221,33 +220,42 @@ void	handle_keyboards(int keycode, t_env *env);
 int		keyboards_controls(int keycode, t_env *env);
 void	hook_controls(t_env *env);
 /* draw_map.c */
-void	draw_pixel(t_point point, t_env *env);
+//void	ft_rotate_x(int *y, int *z, double x_angle, int *x);
+//void	ft_rotate_y(int *x, int *z, double y_angle, int *y);
+//void	ft_rotate_z(int *x, int *y, double z_angle);
+t_point	project(int x, int y, t_env *env);
+
 void	update_coordinates(t_algorithm *bresenham, int *x, int *y);
+void	put_pixel(t_point points, t_env *env);
 void	draw_line_bresenham(t_env *env, t_point p1, t_point p2);
-void	draw_lines(int x1, int x2, int y1, int y2, t_env *env);
+void	draw_lines(t_env *env, int x, int y);
 void	draw_map(t_env *env);
-int		next_index(int current, int reverse, int max);
+void	free_projected_points(t_point **projected_points, int height);
+void	change_projection(t_point *point, t_env *env);
+void	center_map(t_env *env);
+t_point	**allocate_projected_points(t_env *env);
+t_point	**apply_projection(t_env *env);
+void	calculate_depth(t_env *env);
+void	apply_centered(t_env *env, t_point **projected_points);
+void	projection_isometric(t_point *point, t_env *env);
+
 /* draw_menu.c */
 void	init_menu(t_menu *menu);
 void	write_menu(t_menu *menu);
 /* init_program.c */
-
-
-t_env *init_environnement(char *filename);
+t_env	*init_environnement(char *filename);
 t_point	*init_point(void);
 t_map	*init_map(char *filename);
-t_cam *init_cam(t_map *map);
-t_mouse *init_mouse(void);
-void allocate_map_matrix(t_map *map);
-int	get_height(char *filename);
-int	count_values(char *line);
-int	get_width(char *filename);
-int	compare_line(int first_line_width, int current_width);
+t_cam	*init_cam(t_map *map);
+t_mouse	*init_mouse(void);
+void	allocate_map_matrix(t_map *map);
+int		get_height(char *filename);
+int		count_values(char *line);
+int		get_width(char *filename);
+int		compare_line(int first_line_width, int current_width);
 char	**read_file_to_matrix(t_map *map, char *filename, int *line_count);
 void	fill_matrix(t_map *map, char **lines);
 t_map	*get_values_map(t_map *map);
-
-
 /* menu_infos.c */
 void	display_projection_infos(t_menu *menu, int *current_line);
 void	display_map_infos(t_menu *menu, int *current_line);
@@ -266,14 +274,15 @@ void	projection_right(t_point *point, t_env *env);
 void	projection_left(t_point *point, t_env *env);
 /* projection_3d.c */
 void	projection_iso(t_point *point, t_env *env);
-void	projection_perspective(t_point *point, float d);
-void	projection_oblique(t_point *point, float angle, float reduction);
+void	projection_perspective(t_env *env, t_point *point, float d);
+void	projection_oblique(t_env *env, t_point *point, float angle,
+			float reduction);
 /* rotation_cam.c */
-void	rotate_x(int *y, int *z, double x_angle);
-void	rotate_y(int *x, int *z, double y_angle);
-void	rotate_z(int *x, int *y, double z_angle);
-void	apply_camera_transformation(t_point *point, t_env *env);
-t_point	projection(int x, int y, t_env *env);
+//void	rotate_x(int *y, int *z, double x_angle);
+//void	rotate_y(int *x, int *z, double y_angle);
+//void	rotate_z(int *x, int *y, double z_angle);
+//void	apply_camera_transformation(t_point *point, t_env *env);
+//t_point	projection(int x, int y, t_env *env);
 /* utility_functions.c */
 int		check_file_format(char *filename);
 int		get_sign(int value);

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/15 12:17:33 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/17 22:55:34 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -58,8 +58,10 @@ t_map	*init_map(char *filename)
 	lines = read_file_to_matrix(map, filename, &map->height);
 	fill_matrix(map, lines);
 	get_values_map(map);
-	map->color_mode = 1,
-	map->current_view = 1;
+	map->centered = 1;
+	map->depth = 1.0;
+	map->color_mode = 1;
+	map->current_view = 5;
 	return (map);
 }
 
@@ -77,8 +79,8 @@ t_cam *init_cam(t_map *map)
 	if (map->width == 0 || map->height == 0)
 		handle_error("Error: map width or height is zero.\n", 1);
 
-	cam->zoom = ft_min(WIDTH / map->width / 2,
-			HEIGHT / map->height / 2);
+	cam->zoom = ft_min(WIDTH / map->width / 2.5,
+			HEIGHT / map->height / 2.5);
 	cam->x_angle = -0.615472907;
 	cam->y_angle = -0.523599;
 	cam->z_angle = 0.615472907;

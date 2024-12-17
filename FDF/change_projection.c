@@ -3,16 +3,16 @@
 /*                                                        :::      ::::::::   */
 /*   change_projection.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:40:43 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/15 13:51:13 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/16 21:41:28 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	change_projection(t_point *point, t_env *env)
+/*void	change_projection(t_point *point, t_env *env)
 {
 	if (env->map->current_view < 1 || env->map->current_view > 7)
 		env->map->current_view = 1;
@@ -52,6 +52,7 @@ t_point	**allocate_projected_points(t_env *env)
 			while (--y >= 0)
 				free(projected_points[y]);
 			free(projected_points);
+			handle_error("In allocate_projected_points: error allocation for row.\n", 1);
 			return (NULL);
 		}
 	}
@@ -67,14 +68,24 @@ t_point	**apply_projection(t_env *env)
 	projected_points = allocate_projected_points(env);
 	if (!projected_points)
 		handle_error("In apply_projection: error allocation for projected_points.\n", 1);
-	y = -1;
-	while (++y < env->map->height)
+	
+	printf("Allocating projected points for map of size: %dx%d\n", env->map->width, env->map->height);
+
+	y = 0;
+	while (y < env->map->height)
 	{
-		x = -1;
+		x = 0;
 		while (++x < env->map->width)
 		{
-			projected_points[y][x] = projection(x, y, env);
+			printf("Applying projection to point: (x, y) = (%d, %d)\n", x, y);
+			if (y < env->map->height && x < env->map->width)
+			{
+				projected_points[y][x] = projection(x, y, env);
+				printf("Projected point: (x, y, z) = (%d, %d, %d)\n", projected_points[y][x].x, projected_points[y][x].y, projected_points[y][x].z);
+			}
+			x++;
 		}
+		y++;
 	}
 	return (projected_points);
 }
@@ -95,3 +106,4 @@ void	free_projected_points(t_point **projected_points, int height)
 	free(projected_points);
 	projected_points = NULL;
 }
+*/
