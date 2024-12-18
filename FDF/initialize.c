@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 12:47:30 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:56:24 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,7 @@ t_env *init_environnement(char *filename)
 	env->map = init_map(filename);
 	env->mouse = init_mouse();
 	env->cam = init_cam(env->map);
+	env->menu = init_menu(env);
 	return(env);
 }
 

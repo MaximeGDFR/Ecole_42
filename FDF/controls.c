@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:16 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/18 16:27:51 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:36:42 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ int	keyboards_controls(int keycode, t_env *env)
 		handle_zoom(keycode, env);
 	else if (keycode == ENTER)
 		reset(env);
-	else if (keycode == C_KEY)
+/*	else if (keycode == C_KEY)
 	{
 		printf("Keycode : %d\n", keycode);
 		printf("Current color mode: %d\n", env->map->color_mode);
@@ -72,7 +72,7 @@ int	keyboards_controls(int keycode, t_env *env)
 		apply_color_mode(env);
 		draw_map(env);
 		draw_menu(env);
-	}
+	}*/
 	else if (keycode == SPACE)
 	{
 		env->map->current_view++;
@@ -84,10 +84,6 @@ int	keyboards_controls(int keycode, t_env *env)
 	}
 	else if (keycode == ESC)
 		quit_program(env);
+	draw_menu(env);
 	return (0);
 }
-
-/*void	hook_controls(t_env *env)
-{
-	mlx_hook(env->win, 3, 0, handle_mouse, env);
-}*/

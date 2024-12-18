@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 16:40:30 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:56:16 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,10 +196,10 @@ typedef struct s_env
 
 /* Functions */
 /* change_color.c*/
-void	apply_color_mode(t_env *env);
+void	apply_color_mode(t_map *map);
 void	apply_uni_color(t_env *env);
 void	apply_specific_color(t_env *env);
-void	update_colors(t_env *env);
+void	update_colors(t_map *map);
 /* change_projection.c */
 void	change_projection(t_point *point, t_env *env);
 t_point	**allocate_projected_points(t_env *env);
@@ -246,7 +246,7 @@ void	apply_centered(t_env *env, t_point **projected_points);
 void	projection_isometric(t_point *point, t_env *env);
 
 /* draw_menu.c */
-t_menu	*init_menu(void);
+t_menu	*init_menu(t_env *env);
 void	draw_menu(t_env *env);
 void	write_menu(t_menu *menu);
 /* init_program.c */

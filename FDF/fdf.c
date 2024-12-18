@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 15:28:09 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 17:42:40 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,6 @@ int	main(int argc, char *argv[])
 	if (argc != 2)
 		handle_error("Error: argument number invalid.\n", 1);
 	env = init_environnement(argv[1]);
-
 	env->mlx = mlx_init();
 	env->win = mlx_new_window(env->mlx, WIDTH, HEIGHT, "FDF Project - 42 School - mgodefro");
 	if (!env->win)
@@ -31,13 +30,15 @@ int	main(int argc, char *argv[])
 	if (!env->data_addr)
 		handle_error("In main: allocation error for env->data_addr.\n", 1);
 
+		
 	draw_map(env);
 	draw_menu(env);
+	
+
 	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
 	mlx_hook(env->win, 4, 0, mouse_down, env);
 	mlx_hook(env->win, 5, 0, mouse_move, env);
 	mlx_hook(env->win, 6, 0, mouse_up, env);
-
 	mlx_hook(env->win, 17, 0, quit_program, env);
 	mlx_loop(env->mlx);
 	return (0);
