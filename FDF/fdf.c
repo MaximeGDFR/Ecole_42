@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 12:49:12 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 15:28:09 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,10 +33,11 @@ int	main(int argc, char *argv[])
 
 	draw_map(env);
 	draw_menu(env);
+	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
+	mlx_hook(env->win, 4, 0, mouse_down, env);
+	mlx_hook(env->win, 5, 0, mouse_move, env);
+	mlx_hook(env->win, 6, 0, mouse_up, env);
 
-	
-
-	mlx_hook(env->win, 2, 1L << 0, hook_controls, env);
 	mlx_hook(env->win, 17, 0, quit_program, env);
 	mlx_loop(env->mlx);
 	return (0);

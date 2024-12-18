@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 12:44:56 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:40:30 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,9 +196,10 @@ typedef struct s_env
 
 /* Functions */
 /* change_color.c*/
-void	apply_color_mode(t_point *point, t_env *env);
-void	apply_uni_color(t_point *point, t_env *env);
-void	apply_specific_color(t_point *point, t_env *env);
+void	apply_color_mode(t_env *env);
+void	apply_uni_color(t_env *env);
+void	apply_specific_color(t_env *env);
+void	update_colors(t_env *env);
 /* change_projection.c */
 void	change_projection(t_point *point, t_env *env);
 t_point	**allocate_projected_points(t_env *env);
@@ -211,7 +212,7 @@ void	check_map(char *filename, t_env *env);
 int		quit_program(t_env *env);
 void	handle_error(char *msg_err, int syst_funct);
 /* colors_specifics.c */
-void	earth_mode_color(t_point *point, t_env *env);
+void	earth_mode_color(t_env *env);
 /* controls.c */
 void	reset(t_env *env);
 void	handle_zoom(int keycode, t_env *env);
@@ -219,10 +220,15 @@ void	handle_moves(int keycode, t_env *env);
 void	handle_keyboards(int keycode, t_env *env);
 int		keyboards_controls(int keycode, t_env *env);
 void	hook_controls(t_env *env);
+void	refresh_display(t_env *env, int keycode);
 /* draw_map.c */
+
+
 //void	ft_rotate_x(int *y, int *z, double x_angle, int *x);
 //void	ft_rotate_y(int *x, int *z, double y_angle, int *y);
 //void	ft_rotate_z(int *x, int *y, double z_angle);
+
+
 t_point	project(int x, int y, t_env *env);
 
 void	update_coordinates(t_algorithm *bresenham, int *x, int *y);

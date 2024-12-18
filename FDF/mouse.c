@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   mouse.c                                            :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 13:54:51 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/16 21:58:20 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 15:32:12 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,6 +17,7 @@ int	mouse_down(int x, int y, void *param)
 	t_env	*env;
 
 	env = (t_env *)param;
+	printf("Mouse down: button %d at (%d, %d)\n", env->mouse->button, x, y);
 	if (env->mouse->button == MOUSE_WHEEL_UP
 		|| env->mouse->button == MOUSE_WHEEL_DOWN)
 		mouse_zoom(env);
@@ -53,6 +54,7 @@ int	mouse_move(int x, int y, void *param)
 		env->mouse->prev_y = y;
 		draw_map(env);
 	}
+	printf("Mouse moved to (%d, %d)\n", x, y);
 	return (0);
 }
 
@@ -63,6 +65,7 @@ int	mouse_up(int x, int y, void *param)
 	env = (t_env *)param;
 	(void)x;
 	(void)y;
+	printf("Mouse up: button %d at (%d, %d)\n", env->mouse->button, x, y);
 	if (env->mouse->button == MOUSE_WHEEL_UP
 		|| env->mouse->button == MOUSE_WHEEL_DOWN)
 		mouse_zoom(env);
@@ -79,12 +82,4 @@ void	mouse_zoom(t_env *env)
 	if (env->mouse->button == MOUSE_WHEEL_DOWN)
 		env->cam->zoom -= 2;
 	draw_map(env);
-}
-
-int	handle_mouse(t_env *env)
-{
-	mlx_hook(env->win, 4, 0, mouse_down, env);
-	mlx_hook(env->win, 5, 0, mouse_move, env);
-	mlx_hook(env->win, 6, 0, mouse_up, env);
-	return (0);
 }

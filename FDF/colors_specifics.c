@@ -3,30 +3,32 @@
 /*                                                        :::      ::::::::   */
 /*   colors_specifics.c                                 :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 19:51:58 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/12 19:52:21 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 15:56:06 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	earth_mode_color(t_point *point, t_env *env)
+void	earth_mode_color(t_env *env)
 {
 	int		color_steps;
 	int		z_delta;
 
 	z_delta = env->map->z_max - env->map->z_min;
+	if (z_delta <= 0)
+		env->points->color = 0xFF;
 	color_steps = z_delta / 5;
-	if (point->z < env->map->z_min + color_steps)
-		point->color = 0x000080;
-	else if (point->z < env->map->z_min + (color_steps * 2))
-		point->color = 0x4169E1;
-	else if (point->z < env->map->z_min + (color_steps * 3))
-		point->color = 0x87CEEB;
-	else if (point->z < env->map->z_min + (color_steps * 4))
-		point->color = 0x228B22;
+	if (env->points->z < env->map->z_min + color_steps)
+		env->points->color = 0x000080;
+	else if (env->points->z < env->map->z_min + (color_steps * 2))
+		env->points->color = 0x4169E1;
+	else if (env->points->z < env->map->z_min + (color_steps * 3))
+		env->points->color = 0x87CEEB;
+	else if (env->points->z < env->map->z_min + (color_steps * 4))
+		env->points->color = 0x228B22;
 	else
-		point->color = 0x90EE90;
+		env->points->color = 0x90EE90;
 }

@@ -6,7 +6,7 @@
 /*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:16 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/18 12:49:24 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/18 16:27:51 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@ void	reset(t_env *env)
 	env->cam->zoom = ft_min(WIDTH / env->map->width / 2,
 			HEIGHT / env->map->height / 2);
 	draw_map(env);
+	draw_menu(env);
 }
 
 void	handle_zoom(int keycode, t_env *env)
@@ -36,6 +37,7 @@ void	handle_zoom(int keycode, t_env *env)
 	else if (keycode == PLUS_KEY || keycode == P_KEY)
 		env->cam->zoom += 2;
 	draw_map(env);
+	draw_menu(env);
 }
 
 void	handle_moves(int keycode, t_env *env)
@@ -50,12 +52,11 @@ void	handle_moves(int keycode, t_env *env)
 		env->cam->x_offset += 10;
 	env->map->centered = 0;
 	draw_map(env);
+	draw_menu(env);
 }
 
 int	keyboards_controls(int keycode, t_env *env)
 {
-	t_point	point;
-
 	if (keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT)
 		handle_moves(keycode, env);
 	else if (keycode == PLUS_KEY || keycode == MINUS_KEY || keycode == P_KEY
@@ -65,8 +66,12 @@ int	keyboards_controls(int keycode, t_env *env)
 		reset(env);
 	else if (keycode == C_KEY)
 	{
+		printf("Keycode : %d\n", keycode);
+		printf("Current color mode: %d\n", env->map->color_mode);
 		env->map->color_mode++;
-		apply_color_mode(&point, env);
+		apply_color_mode(env);
+		draw_map(env);
+		draw_menu(env);
 	}
 	else if (keycode == SPACE)
 	{
@@ -82,9 +87,7 @@ int	keyboards_controls(int keycode, t_env *env)
 	return (0);
 }
 
-void	hook_controls(t_env *env)
+/*void	hook_controls(t_env *env)
 {
-	mlx_hook(env->win, 2, 0, keyboards_controls, env);
 	mlx_hook(env->win, 3, 0, handle_mouse, env);
-	mlx_hook(env->win, 17, 0, quit_program, env);
-}
+}*/
