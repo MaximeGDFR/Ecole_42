@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.c                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/17 16:32:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:49:12 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,11 @@ int	main(int argc, char *argv[])
 		handle_error("In main: allocation error for env->data_addr.\n", 1);
 
 	draw_map(env);
+	draw_menu(env);
 
+	
 
-	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
+	mlx_hook(env->win, 2, 1L << 0, hook_controls, env);
 	mlx_hook(env->win, 17, 0, quit_program, env);
 	mlx_loop(env->mlx);
 	return (0);

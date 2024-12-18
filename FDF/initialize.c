@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/17 22:55:34 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:47:30 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,8 @@ t_env *init_environnement(char *filename)
 	if (!env)
 		handle_error("In init_env: error allocation env.\n", 1);
 	env->points = init_point();
-//	printf("Verify map BEFORE init_map: %p\n", env->map);
 	env->map = init_map(filename);
-//	printf("Verify map AFTER init_map: %p\n", env->map);
 	env->mouse = init_mouse();
-//	printf("Verify map BEFORE init_cam: %p\n", env->map);
 	env->cam = init_cam(env->map);
 	return(env);
 }
@@ -61,7 +58,7 @@ t_map	*init_map(char *filename)
 	map->centered = 1;
 	map->depth = 1.0;
 	map->color_mode = 1;
-	map->current_view = 5;
+	map->current_view = 4;
 	return (map);
 }
 
@@ -72,10 +69,6 @@ t_cam *init_cam(t_map *map)
 	cam = (t_cam *)malloc(sizeof(t_cam));
 	if (!cam)
 		handle_error("In init_cam: error allocation cam.\n", 1);
-//	printf("At beginning of init_cam.\n");
-//	printf("WIDTH : %d / HEIGHT : %d\n", WIDTH, HEIGHT);
-//	printf("map: %p\n", map);
-//	printf("map->width : %d / map->height : %d\n", map->width, map->height);
 	if (map->width == 0 || map->height == 0)
 		handle_error("Error: map width or height is zero.\n", 1);
 
@@ -103,7 +96,6 @@ t_mouse *init_mouse(void)
 	mouse->y = 0;
 	mouse->prev_x = 0;
 	mouse->prev_y = 0;
-//	printf("mouse pointer: %p\n", (void *)mouse);
 	return (mouse);
 }
 
@@ -124,8 +116,6 @@ void allocate_map_matrix(t_map *map)
 	int	y;
 	int	x;
 
-//	printf("At the beginning of allocate_map_matrix :\n");
-//	printf("height : %d / width : %d\n", map->height, map->width);
 	map->matrix = (t_point **)malloc(sizeof(t_point *) * map->height);
 	if (!map->matrix)
 		handle_error("In allocate_matrix: error allocation map->matrix.\n", 1);
@@ -143,7 +133,6 @@ void allocate_map_matrix(t_map *map)
 		}
 		while (x < map->width)
 		{
-//			printf("Current y : %d / Current x : %d\n", y, x);
 			if (y >= map->height || x >= map->width)
 				handle_error("In allocate_map_matrix: index out of bounds while initializing map_matrix.\n", 1);
 			init_point_values(&map->matrix[y][x]);
@@ -251,7 +240,6 @@ char	**read_file_to_matrix(t_map *map, char *filename, int *line_count)
 	fd = open(filename, O_RDONLY);
 	if (fd < 0)
 		handle_error("In read_file_to_matrix: error open file.\n", 1);
-//	printf("Map height : %d\n", map->height);
 	lines = malloc(sizeof(char *) * map->height);
 	if (!lines)
 		handle_error("In read_file_to_matrix: error allocation.\n", 1);
@@ -260,26 +248,12 @@ char	**read_file_to_matrix(t_map *map, char *filename, int *line_count)
 	{
 		line = get_next_line(fd);
 		if (!line)
-		{
-//			printf("EOF reached.\n");
 			break ;
-		}
-//		printf("Read line %d: %s", count, line);
 		if (line)
 			lines[count++] = line;
 	}
 	close(fd);
 	*line_count = count;
-//	printf("Matrix read:\n");
-//	for (int i = 0; i < *line_count; i++)
-//	{
-//		if (lines[i] == NULL)
-//		{
-//			printf("Error : Line %d is NULL.\n", i);
-//			exit(1);
-//		}
-//		printf("Line %d: %s", i, lines[i]);
-//	}
 	return (lines);
 }
 
@@ -292,7 +266,6 @@ void	fill_matrix(t_map *map, char **lines)
 	y = 0;
 	while (y < map->height)
 	{
-//		printf("Proccessing line %d : %s\n", y, lines[y]);
 		values = ft_split(lines[y], ' ');
 		if (!values)
 			handle_error("In fill_matrix: error split line.\n", 1);
@@ -301,10 +274,9 @@ void	fill_matrix(t_map *map, char **lines)
 		{
 			if (values[x] == NULL)
 				handle_error("In fill_matrix: error parsing values in line.\n", 1);
-//			printf("Assigning matrix[%d][%d] -> x: %d, y: %d, z: %s\n", y, x, x, y, values[x]);
 			map->matrix[y][x].x = x;
 			map->matrix[y][x].y = y;
-			map->matrix[y][x].z = ft_atoi(values[x]);
+			map->matrix[y][x].z = ft_atoi(values[x]) / 2;
 			free(values[x]);
 			x++;
 		}
@@ -318,9 +290,6 @@ t_map	*get_values_map(t_map *map)
 	int	y;
 	int	x;
 
-//	printf("At beginning of get_map_values.\n");
-//	printf("x_max : %d, y_max: %d\n", map->width, map->height);
-//	printf("z_min : %d, z_max: %d\n", map->z_min, map->z_max);
 	y = 0;
 	while (y < map->height)
 	{
@@ -339,8 +308,5 @@ t_map	*get_values_map(t_map *map)
 		}
 		y++;
 	}
-//	printf("At the end of get_map_values.\n");
-//	printf("x_max : %d, y_max: %d\n", map->width, map->height);
-//	printf("z_min : %d, z_max: %d\n", map->z_min, map->z_max);
 	return(map);
 }

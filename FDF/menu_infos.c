@@ -3,19 +3,19 @@
 /*                                                        :::      ::::::::   */
 /*   menu_infos.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:55:24 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/12 20:48:04 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:04:04 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-void	display_projection_infos(t_menu *menu, int *current_line)
+int	display_projection_infos(t_menu *menu, int *current_line)
 {
 	mlx_string_put(menu->mlx, menu->win, menu->x_center,
-		get_position(menu, *current_line), WHITE, "PROJECTION INFORMATIONS");
+		get_position(menu, *current_line), 0xFF, "PROJECTION INFORMATIONS");
 	(*current_line)++;
 	mlx_string_put(menu->mlx, menu->win, menu->x_center,
 		get_position(menu, *current_line), WHITE, "X, Y, Z : [ ] [ ] [ ]");
@@ -30,6 +30,7 @@ void	display_projection_infos(t_menu *menu, int *current_line)
 		get_position(menu, *current_line), WHITE, "Color_mode : ");
 	(*current_line)++;
 	(*current_line) += 1;
+	return (*current_line);
 }
 
 void	display_map_infos(t_menu *menu, int *current_line)

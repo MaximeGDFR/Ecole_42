@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utility_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 22:57:16 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/13 01:48:09 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:00:05 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 

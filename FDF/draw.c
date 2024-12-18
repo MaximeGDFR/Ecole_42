@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 21:35:30 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/17 23:38:26 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:11:15 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,6 @@ void	draw_map(t_env *env)
 		y++;
 	}
 	free_projected_points(projected_points, env->map->height);
-//	init_menu(env->menu);
-//	if (!env->menu)
-//	    handle_error("Error: env->menu is NULL.\n", 1);
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
 }
 

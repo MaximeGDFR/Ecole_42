@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
+/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/17 23:38:56 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/18 12:44:56 by mgodefro         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,13 +38,13 @@
 # define ENTER 65293 // Center map
 # define BACKSPACE 65288 // Reset
 # define I_KEY 105 // Infos
-# define PLUS_KEY 21 // Zoom in
+# define PLUS_KEY 65453 // Zoom in
 # define P_KEY 112 // Zoom in
 # define M_KEY 109 // Zoom out
 # define G_KEY 103 // Gradients
 # define V_KEY 118 // Less relief
 # define W_KEY 119 // More relief
-# define MINUS_KEY 15 // Zoom out
+# define MINUS_KEY 65451 // Zoom out
 # define C_KEY 99 // Colors
 # define MOUSE_CLICK_LEFT 1
 # define MOUSE_CLICK_RIGHT 2
@@ -240,7 +240,8 @@ void	apply_centered(t_env *env, t_point **projected_points);
 void	projection_isometric(t_point *point, t_env *env);
 
 /* draw_menu.c */
-void	init_menu(t_menu *menu);
+t_menu	*init_menu(void);
+void	draw_menu(t_env *env);
 void	write_menu(t_menu *menu);
 /* init_program.c */
 t_env	*init_environnement(char *filename);
@@ -257,7 +258,7 @@ char	**read_file_to_matrix(t_map *map, char *filename, int *line_count);
 void	fill_matrix(t_map *map, char **lines);
 t_map	*get_values_map(t_map *map);
 /* menu_infos.c */
-void	display_projection_infos(t_menu *menu, int *current_line);
+int		display_projection_infos(t_menu *menu, int *current_line);
 void	display_map_infos(t_menu *menu, int *current_line);
 void	display_fdf_keyboards(t_menu *menu, int *current_line);
 void	display_fdf_mouse(t_menu *menu, int *current_line);
