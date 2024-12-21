@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 15:00:39 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/21 16:55:58 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -196,10 +196,10 @@ typedef struct s_env
 
 /* Functions */
 /* change_color.c*/
-void	apply_color_mode(t_map *map);
-void	apply_uni_color(t_env *env);
-void	apply_specific_color(t_env *env);
-void	update_colors(t_map *map);
+void	apply_color_mode(t_env *env, t_point *point);
+void	apply_uni_color(t_env *env, t_point *point);
+void	apply_specific_color(t_env *env, t_point *point);
+void	update_colors(t_env *env);
 /* change_projection.c */
 void	change_projection(t_point *point, t_env *env);
 t_point	**allocate_projected_points(t_env *env);
@@ -212,13 +212,16 @@ void	check_map(char *filename, t_env *env);
 int		quit_program(t_env *env);
 void	handle_error(char *msg_err, int syst_funct);
 /* colors_specifics.c */
-void	earth_mode_color(t_env *env);
+void	earth_mode_color(t_env *env, t_point *point);
+void	neon_mode_color(t_env *env, t_point *point);
+void	jinx_mode_color(t_env *env, t_point *point);
+void	charizard_mode_color(t_env *env, t_point *point);
 /* controls.c */
 void	reset(t_env *env);
 void	handle_zoom(int keycode, t_env *env);
 void	handle_moves(int keycode, t_env *env);
 void	handle_keyboards(int keycode, t_env *env);
-int		keyboards_controls(int keycode, t_env *env);
+int		keyboards_controls(int keycode, t_env *env, t_point *point);
 void	hook_controls(t_env *env);
 void	refresh_display(t_env *env, int keycode);
 /* draw_map.c */
@@ -232,7 +235,7 @@ void	refresh_display(t_env *env, int keycode);
 t_point	project(int x, int y, t_env *env);
 
 void	update_coordinates(t_algorithm *bresenham, int *x, int *y);
-void	put_pixel(t_point points, t_env *env);
+void	put_pixel(t_point *point, t_env *env);
 void	draw_line_bresenham(t_env *env, t_point p1, t_point p2);
 void	draw_lines(t_env *env, int x, int y);
 void	draw_map(t_env *env);

@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 21:35:30 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 14:26:57 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/21 17:04:23 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,14 @@ void	update_coordinates(t_algorithm *bresenham, int *x, int *y)
 	}
 }
 
-void	put_pixel(t_point points, t_env *env)
+void	put_pixel(t_point *point, t_env *env)
 {
 	int	index;
 
-	if (points.color == 0x00000000)
-		return ;
-	if (points.x >= 0 && points.x < WIDTH && points.y >= 0 && points.y < HEIGHT)
+	if (point->x >= 0 && point->x < WIDTH && point->y >= 0 && point->y < HEIGHT)
 	{
-		index = (points.y * env->line_len + points.x * (env->bpp / 8));
-		*((int *)(env->data_addr + index)) = points.color;
+		index = (point->y * env->line_len + point->x * (env->bpp / 8));
+		*((int *)(env->data_addr + index)) = point->color;
 	}
 	else
 		handle_error("In put_pixel: coordinates out of bounds.\n", 1);
@@ -59,8 +57,9 @@ void	draw_line_bresenham(t_env *env, t_point p1, t_point p2)
 		current_point.x = p1.x;
 		current_point.y = p1.y;
 		current_point.z = p1.z;
+		current_point.color = p1.color;
 		if (p1.x >= 0 && p1.x < WIDTH && p1.y >= 0 && p1.y < HEIGHT)
-			put_pixel(current_point, env);
+			put_pixel(&current_point, env);
 		if (p1.x == p2.x && p1.y == p2.y)
 			break ;
 		update_coordinates(&bresenham, &p1.x, &p1.y);

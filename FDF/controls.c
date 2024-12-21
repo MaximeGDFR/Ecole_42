@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:16 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/21 12:17:56 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/21 16:05:22 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ void	handle_moves(int keycode, t_env *env)
 	draw_map(env);
 }
 
-int	keyboards_controls(int keycode, t_env *env)
+int	keyboards_controls(int keycode, t_env *env, t_point *point)
 {
 	if (keycode == UP || keycode == DOWN || keycode == LEFT || keycode == RIGHT)
 		handle_moves(keycode, env);
@@ -61,15 +61,14 @@ int	keyboards_controls(int keycode, t_env *env)
 		handle_zoom(keycode, env);
 	else if (keycode == ENTER)
 		reset(env);
-/*	else if (keycode == C_KEY)
+	else if (keycode == C_KEY)
 	{
 		printf("Keycode : %d\n", keycode);
 		printf("Current color mode: %d\n", env->map->color_mode);
 		env->map->color_mode++;
-		apply_color_mode(env);
-		draw_map(env);
-		draw_menu(env);
-	}*/
+		apply_color_mode(env, point);
+		update_colors(env);
+	}
 	else if (keycode == SPACE)
 	{
 		env->map->current_view++;

@@ -6,13 +6,13 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 13:58:11 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/21 17:01:29 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "fdf.h"
 
-t_env *init_environnement(char *filename)
+t_env	*init_environnement(char *filename)
 {
 	t_env	*env;
 
@@ -36,7 +36,7 @@ t_point	*init_point(void)
 	point->x = 0;
 	point->y = 0;
 	point->z = 0;
-	point->color = 0;
+	point->color = WHITE;
 	point->reverse = 0;
 	return (point);
 }
@@ -106,7 +106,7 @@ void	init_point_values(t_point *point)
 		point->x = 0;
 		point->y = 0;
 		point->z = 0;
-		point->color = 0;
+		point->color = WHITE;
 		point->reverse = 0;
 	}
 }
@@ -141,8 +141,6 @@ void allocate_map_matrix(t_map *map)
 		y++;
 	}
 }
-
-
 
 int	get_height(char *filename)
 {
@@ -277,6 +275,7 @@ void	fill_matrix(t_map *map, char **lines)
 			map->matrix[y][x].x = x;
 			map->matrix[y][x].y = y;
 			map->matrix[y][x].z = ft_atoi(values[x]);
+			map->matrix[y][x].color = WHITE;
 			free(values[x]);
 			x++;
 		}
