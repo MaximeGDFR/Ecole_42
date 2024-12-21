@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   initialize.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 17:56:24 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/21 13:58:11 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,8 +23,7 @@ t_env *init_environnement(char *filename)
 	env->map = init_map(filename);
 	env->mouse = init_mouse();
 	env->cam = init_cam(env->map);
-	env->menu = init_menu(env);
-	return(env);
+	return (env);
 }
 
 t_point	*init_point(void)
@@ -277,7 +276,7 @@ void	fill_matrix(t_map *map, char **lines)
 				handle_error("In fill_matrix: error parsing values in line.\n", 1);
 			map->matrix[y][x].x = x;
 			map->matrix[y][x].y = y;
-			map->matrix[y][x].z = ft_atoi(values[x]) / 2;
+			map->matrix[y][x].z = ft_atoi(values[x]);
 			free(values[x]);
 			x++;
 		}
@@ -309,5 +308,14 @@ t_map	*get_values_map(t_map *map)
 		}
 		y++;
 	}
-	return(map);
+	return (map);
+}
+
+void	setup_hooks(t_env *env)
+{
+	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
+	mlx_hook(env->win, 4, 0, mouse_down, env);
+	mlx_hook(env->win, 5, 0, mouse_move, env);
+	mlx_hook(env->win, 6, 0, mouse_up, env);
+	mlx_hook(env->win, 17, 0, quit_program, env);
 }

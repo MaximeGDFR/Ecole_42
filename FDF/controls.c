@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   controls.c                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 15:34:16 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/18 17:36:42 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/21 12:17:56 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,7 +27,6 @@ void	reset(t_env *env)
 	env->cam->zoom = ft_min(WIDTH / env->map->width / 2,
 			HEIGHT / env->map->height / 2);
 	draw_map(env);
-	draw_menu(env);
 }
 
 void	handle_zoom(int keycode, t_env *env)
@@ -37,7 +36,6 @@ void	handle_zoom(int keycode, t_env *env)
 	else if (keycode == PLUS_KEY || keycode == P_KEY)
 		env->cam->zoom += 2;
 	draw_map(env);
-	draw_menu(env);
 }
 
 void	handle_moves(int keycode, t_env *env)
@@ -52,7 +50,6 @@ void	handle_moves(int keycode, t_env *env)
 		env->cam->x_offset += 10;
 	env->map->centered = 0;
 	draw_map(env);
-	draw_menu(env);
 }
 
 int	keyboards_controls(int keycode, t_env *env)
@@ -84,6 +81,5 @@ int	keyboards_controls(int keycode, t_env *env)
 	}
 	else if (keycode == ESC)
 		quit_program(env);
-	draw_menu(env);
 	return (0);
 }

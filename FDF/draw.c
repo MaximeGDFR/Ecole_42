@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   draw.c                                             :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/16 21:35:30 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 17:39:51 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/21 14:26:57 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,14 +33,15 @@ void	put_pixel(t_point points, t_env *env)
 {
 	int	index;
 
+	if (points.color == 0x00000000)
+		return ;
 	if (points.x >= 0 && points.x < WIDTH && points.y >= 0 && points.y < HEIGHT)
 	{
 		index = (points.y * env->line_len + points.x * (env->bpp / 8));
 		*((int *)(env->data_addr + index)) = points.color;
 	}
 	else
-		printf("Warning: Coordinates out of bounds for put_pixel: (%d, %d)\n",
-			points.x, points.y);
+		handle_error("In put_pixel: coordinates out of bounds.\n", 1);
 }
 
 void	draw_line_bresenham(t_env *env, t_point p1, t_point p2)
@@ -113,7 +114,9 @@ void	draw_map(t_env *env)
 	}
 	free_projected_points(projected_points, env->map->height);
 	mlx_put_image_to_window(env->mlx, env->win, env->img, 0, 0);
+	draw_menu(env);
 }
+
 
 void	free_projected_points(t_point **projected_points, int height)
 {

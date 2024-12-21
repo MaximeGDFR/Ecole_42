@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   fdf.h                                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 17:56:16 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/21 15:00:39 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -248,7 +248,7 @@ void	projection_isometric(t_point *point, t_env *env);
 /* draw_menu.c */
 t_menu	*init_menu(t_env *env);
 void	draw_menu(t_env *env);
-void	write_menu(t_menu *menu);
+//void	write_menu(t_menu *menu);
 /* init_program.c */
 t_env	*init_environnement(char *filename);
 t_point	*init_point(void);
@@ -263,11 +263,13 @@ int		compare_line(int first_line_width, int current_width);
 char	**read_file_to_matrix(t_map *map, char *filename, int *line_count);
 void	fill_matrix(t_map *map, char **lines);
 t_map	*get_values_map(t_map *map);
+void	setup_hooks(t_env *env);
+
 /* menu_infos.c */
-int		display_projection_infos(t_menu *menu, int *current_line);
-void	display_map_infos(t_menu *menu, int *current_line);
-void	display_fdf_keyboards(t_menu *menu, int *current_line);
-void	display_fdf_mouse(t_menu *menu, int *current_line);
+int		display_projection_infos(t_env *env, int *current_line);
+void	display_map_infos(t_env *env, int *current_line);
+void	display_fdf_keyboards(t_env *env, int *current_line);
+void	display_fdf_mouse(t_env *env, int *current_line);
 /* mouse.c */
 int		mouse_down(int x, int y, void *param);
 int		mouse_move(int x, int y, void *param);
