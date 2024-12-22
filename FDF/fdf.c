@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/10 16:19:48 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 15:16:10 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/22 17:22:51 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,6 +33,7 @@ int	main(int argc, char *argv[])
 		handle_error("In main: allocation error for env->data_addr.\n", 1);
 	init_menu(env);
 	draw_map(env);
+	save_map(env);
 	setup_hooks(env);
 	mlx_loop(env->mlx);
 	return (0);

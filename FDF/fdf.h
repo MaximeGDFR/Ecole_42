@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/11/29 16:06:08 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 16:55:58 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/22 17:22:22 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,21 +35,14 @@
 # define RIGHT 65363 // Mouve right
 # define ESC 65307 // Close
 # define SPACE 32 // Change view
-# define ENTER 65293 // Center map
 # define BACKSPACE 65288 // Reset
-# define I_KEY 105 // Infos
-# define PLUS_KEY 65453 // Zoom in
-# define P_KEY 112 // Zoom in
-# define M_KEY 109 // Zoom out
-# define G_KEY 103 // Gradients
-# define V_KEY 118 // Less relief
-# define W_KEY 119 // More relief
-# define MINUS_KEY 65451 // Zoom out
-# define C_KEY 99 // Colors
-# define MOUSE_CLICK_LEFT 1
-# define MOUSE_CLICK_RIGHT 2
-# define MOUSE_WHEEL_UP 3
-# define MOUSE_WHEEL_DOWN 4
+# define PLUS 65453 // Zoom in
+# define P 112 // Zoom in
+# define M 109 // Zoom out
+# define MINUS 65451 // Zoom out
+# define C 99 // Colors
+# define Z 122 // Z axis
+# define CTRL 65507 // Rotations
 
 /* Views */
 # define DIMETRIC_ANGLE_X 45.0
@@ -93,8 +86,8 @@ typedef enum e_uni_colors
 	YELLOW = 0xFFFF00,
 	GREEN = 0x008000,
 	BLUE = 0x0000FF,
-	INDIGO = 0x4B0082,
-	PURPLE = 0x8A2BE2
+	PURPLE = 0x8A2BE2,
+	GREY = 0x808080,
 }	t_uni_colors;
 
 typedef enum e_colors // Inutile maintenant ?
@@ -150,15 +143,6 @@ typedef struct s_cam
 	int		iso;
 }	t_cam;
 
-typedef struct s_mouse
-{
-	int	button;
-	int	x;
-	int	y;
-	int	prev_x;
-	int	prev_y;
-}	t_mouse;
-
 typedef struct s_menu
 {
 	void	*mlx;
@@ -187,9 +171,10 @@ typedef struct s_env
 	int		line_len;
 	int		endian;
 	int		steep;
+	int		ctrl_pressed;
 	t_map	*map;
+	t_map	*original_map;
 	t_cam	*cam;
-	t_mouse	*mouse;
 	t_point	*points;
 	t_menu	*menu;
 }	t_env;
@@ -200,40 +185,30 @@ void	apply_color_mode(t_env *env, t_point *point);
 void	apply_uni_color(t_env *env, t_point *point);
 void	apply_specific_color(t_env *env, t_point *point);
 void	update_colors(t_env *env);
-/* change_projection.c */
-void	change_projection(t_point *point, t_env *env);
-t_point	**allocate_projected_points(t_env *env);
-t_point	**apply_projection(t_env *env);
-void	free_projected_points(t_point **projected_points, int height);
-/* check_map.c */
 
-void	check_map(char *filename, t_env *env);
 /* close.c */
 int		quit_program(t_env *env);
 void	handle_error(char *msg_err, int syst_funct);
+
 /* colors_specifics.c */
 void	earth_mode_color(t_env *env, t_point *point);
 void	neon_mode_color(t_env *env, t_point *point);
 void	jinx_mode_color(t_env *env, t_point *point);
 void	charizard_mode_color(t_env *env, t_point *point);
+
 /* controls.c */
-void	reset(t_env *env);
 void	handle_zoom(int keycode, t_env *env);
 void	handle_moves(int keycode, t_env *env);
 void	handle_keyboards(int keycode, t_env *env);
 int		keyboards_controls(int keycode, t_env *env, t_point *point);
-void	hook_controls(t_env *env);
-void	refresh_display(t_env *env, int keycode);
+void	handle_rotations(int keycode, t_env *env);
+int		key_release(int keycode, t_env *env);
+void	handle_colors(int keycode, t_env *env, t_point *point);
+void	handle_views(int keycode, t_env *env);
+void	reset(t_env *env);
+void	reset_values(t_env *env);
+
 /* draw_map.c */
-
-
-//void	ft_rotate_x(int *y, int *z, double x_angle, int *x);
-//void	ft_rotate_y(int *x, int *z, double y_angle, int *y);
-//void	ft_rotate_z(int *x, int *y, double z_angle);
-
-
-t_point	project(int x, int y, t_env *env);
-
 void	update_coordinates(t_algorithm *bresenham, int *x, int *y);
 void	put_pixel(t_point *point, t_env *env);
 void	draw_line_bresenham(t_env *env, t_point p1, t_point p2);
@@ -251,13 +226,12 @@ void	projection_isometric(t_point *point, t_env *env);
 /* draw_menu.c */
 t_menu	*init_menu(t_env *env);
 void	draw_menu(t_env *env);
-//void	write_menu(t_menu *menu);
+
 /* init_program.c */
 t_env	*init_environnement(char *filename);
 t_point	*init_point(void);
 t_map	*init_map(char *filename);
 t_cam	*init_cam(t_map *map);
-t_mouse	*init_mouse(void);
 void	allocate_map_matrix(t_map *map);
 int		get_height(char *filename);
 int		count_values(char *line);
@@ -272,29 +246,33 @@ void	setup_hooks(t_env *env);
 int		display_projection_infos(t_env *env, int *current_line);
 void	display_map_infos(t_env *env, int *current_line);
 void	display_fdf_keyboards(t_env *env, int *current_line);
-void	display_fdf_mouse(t_env *env, int *current_line);
-/* mouse.c */
-int		mouse_down(int x, int y, void *param);
-int		mouse_move(int x, int y, void *param);
-int		mouse_up(int x, int y, void *param);
-void	mouse_zoom(t_env *env);
-int		handle_mouse(t_env *env);
+
 /* projection_2d.c */
 void	projection_front(t_point *point, t_env *env);
 void	projection_top(t_point *point, t_env *env);
 void	projection_right(t_point *point, t_env *env);
 void	projection_left(t_point *point, t_env *env);
+
 /* projection_3d.c */
 void	projection_iso(t_point *point, t_env *env);
 void	projection_perspective(t_env *env, t_point *point, float d);
 void	projection_oblique(t_env *env, t_point *point, float angle,
 			float reduction);
+
+/* reset.c */
+void	save_map(t_env *env);
+void	save_values_map(t_env *env);
+void	reset_values(t_env *env);
+void	reset(t_env *env);
+
 /* rotation_cam.c */
-//void	rotate_x(int *y, int *z, double x_angle);
-//void	rotate_y(int *x, int *z, double y_angle);
-//void	rotate_z(int *x, int *y, double z_angle);
-//void	apply_camera_transformation(t_point *point, t_env *env);
-//t_point	projection(int x, int y, t_env *env);
+void	rotate_right(t_env *env);
+void	rotate_left(t_env *env);
+void	rotate_up(t_env *env);
+void	rotate_down(t_env *env);
+void	rotate_reverse_z(t_env *env);
+void	rotate_z(t_env *env);
+
 /* utility_functions.c */
 int		check_file_format(char *filename);
 int		get_sign(int value);
@@ -302,5 +280,6 @@ int		get_position(t_menu *menu, int line_num);
 int		ft_min(int a, int b);
 int		ft_abs(int value);
 void	free_values(char **values);
+void	free_map(t_env *env);
 
 #endif

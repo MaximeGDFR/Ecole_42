@@ -1,5 +1,6 @@
 {
 	"files.associations": {
-		"COLORS.C": "cpp"
+		"COLORS.C": "cpp",
+		"fdf.h": "c"
 	}
 }

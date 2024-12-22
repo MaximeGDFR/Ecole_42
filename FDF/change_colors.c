@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 09:47:43 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/21 17:05:40 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/21 18:56:14 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,9 +37,9 @@ void	apply_uni_color(t_env *env, t_point *point)
 	else if (env->map->color_mode == 6)
 		point->color = BLUE;
 	else if (env->map->color_mode == 7)
-		point->color = INDIGO;
-	else if (env->map->color_mode == 8)
 		point->color = PURPLE;
+	else if (env->map->color_mode == 8)
+		point->color = GREY;
 }
 
 void	apply_specific_color(t_env *env, t_point *point)

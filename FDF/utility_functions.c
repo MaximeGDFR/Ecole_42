@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   utility_functions.c                                :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 22:57:16 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 12:00:05 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/22 17:19:40 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,4 +65,32 @@ void	free_values(char **values)
 		i++;
 	}
 	free(values);
+}
+
+void	free_map(t_env *env)
+{
+	int	i;
+
+	if (env->map)
+	{
+		i = 0;
+		while (i < env->map->height)
+		{
+			free(env->map->matrix[i]);
+			i++;
+		}
+		free(env->map->matrix);
+		free(env->map);
+	}
+	if (env->original_map)
+	{
+		i = 0;
+		while (i < env->original_map->height)
+		{
+			free(env->original_map->matrix[i]);
+			i++;
+		}
+		free(env->original_map->matrix);
+		free(env->original_map);
+	}
 }

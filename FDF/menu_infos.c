@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 12:55:24 by mgodefro          #+#    #+#             */
-/*   Updated: 2024/12/21 15:16:13 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/22 15:45:05 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,21 +73,4 @@ void	display_fdf_keyboards(t_env *env, int *current_line)
 		get_position(env->menu, *current_line), WHITE, "Esc : Quit program");
 	(*current_line)++;
 	(*current_line) += 1;
-}
-
-void	display_fdf_mouse(t_env *env, int *current_line)
-{
-	mlx_string_put(env->menu->mlx, env->menu->win, env->menu->x_left,
-		get_position(env->menu, *current_line), WHITE, "FDF MOUSE");
-	(*current_line)++;
-	mlx_string_put(env->menu->mlx, env->menu->win, env->menu->x_left,
-		get_position(env->menu, *current_line), WHITE, "Scroll : Zoom in/out");
-	(*current_line)++;
-	mlx_string_put(env->menu->mlx, env->menu->win, env->menu->x_left,
-		get_position(env->menu, *current_line), WHITE,
-		"Left : Rotate x/y axis");
-	(*current_line)++;
-	mlx_string_put(env->menu->mlx, env->menu->win, env->menu->x_left,
-		get_position(env->menu, *current_line), WHITE, "Right : Move x/y axis");
-	(*current_line)++;
 }

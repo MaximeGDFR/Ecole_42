@@ -6,7 +6,7 @@
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/14 12:09:34 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 17:01:29 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/22 17:21:27 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,8 +21,8 @@ t_env	*init_environnement(char *filename)
 		handle_error("In init_env: error allocation env.\n", 1);
 	env->points = init_point();
 	env->map = init_map(filename);
-	env->mouse = init_mouse();
 	env->cam = init_cam(env->map);
+	env->ctrl_pressed = 0;
 	return (env);
 }
 
@@ -58,11 +58,11 @@ t_map	*init_map(char *filename)
 	map->centered = 1;
 	map->depth = 1.0;
 	map->color_mode = 1;
-	map->current_view = 4;
+	map->current_view = 5;
 	return (map);
 }
 
-t_cam *init_cam(t_map *map)
+t_cam	*init_cam(t_map *map)
 {
 	t_cam	*cam;
 
@@ -71,7 +71,6 @@ t_cam *init_cam(t_map *map)
 		handle_error("In init_cam: error allocation cam.\n", 1);
 	if (map->width == 0 || map->height == 0)
 		handle_error("Error: map width or height is zero.\n", 1);
-
 	cam->zoom = ft_min(WIDTH / map->width / 2.5,
 			HEIGHT / map->height / 2.5);
 	cam->x_angle = -0.615472907;
@@ -82,21 +81,6 @@ t_cam *init_cam(t_map *map)
 	cam->y_offset = 0;
 	cam->iso = 1;
 	return (cam);
-}
-
-t_mouse *init_mouse(void)
-{
-	t_mouse	*mouse;
-
-	mouse = (t_mouse *)malloc(sizeof(t_mouse));
-	if (!mouse)
-		handle_error("In init_mouse: error allocation mouse.\n", 1);
-	mouse->button = 0;
-	mouse->x = 0;
-	mouse->y = 0;
-	mouse->prev_x = 0;
-	mouse->prev_y = 0;
-	return (mouse);
 }
 
 void	init_point_values(t_point *point)
@@ -313,8 +297,6 @@ t_map	*get_values_map(t_map *map)
 void	setup_hooks(t_env *env)
 {
 	mlx_hook(env->win, 2, 1L << 0, keyboards_controls, env);
-	mlx_hook(env->win, 4, 0, mouse_down, env);
-	mlx_hook(env->win, 5, 0, mouse_move, env);
-	mlx_hook(env->win, 6, 0, mouse_up, env);
+	mlx_hook(env->win, 3, 1L << 1, key_release, env);
 	mlx_hook(env->win, 17, 0, quit_program, env);
 }

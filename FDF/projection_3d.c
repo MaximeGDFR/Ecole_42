@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   projection_3d.c                                    :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: mgodefro <mgodefro@student.42.fr>          +#+  +:+       +#+        */
+/*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/12 18:40:09 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/18 10:07:19 by mgodefro         ###   ########.fr       */
+/*   Updated: 2024/12/22 15:35:34 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,11 +28,6 @@ void	projection_isometric(t_point *point, t_env *env)
 	point->y *= env->cam->zoom;
 	point->x += env->cam->x_offset;
 	point->y += env->cam->y_offset;
-//	printf("Current view : %d\n", env->map->current_view);
-//	printf("z_height : %f\n", env->cam->z_height);
-//	printf("z_max : %d\nz_min : %d\n", env->map->z_max, env->map->z_min);
-//	printf("depth : %f\n", env->map->depth);
-//	printf("zoom : %d\n", env->cam->zoom);
 }
 
 void	projection_perspective(t_env *env, t_point *point, float d)

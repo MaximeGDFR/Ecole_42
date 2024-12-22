@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   menu.c                                             :+:      :+:    :+:   */
+/*   draw_menu.c                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: maximegdfr <maximegdfr@student.42.fr>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2024/12/21 10:21:31 by maximegdfr        #+#    #+#             */
-/*   Updated: 2024/12/21 15:15:44 by maximegdfr       ###   ########.fr       */
+/*   Updated: 2024/12/22 15:44:15 by maximegdfr       ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,7 +20,6 @@ void	draw_menu(t_env *env)
 	display_projection_infos(env, &current_line);
 	display_map_infos(env, &current_line);
 	display_fdf_keyboards(env, &current_line);
-	display_fdf_mouse(env, &current_line);
 	mlx_put_image_to_window(env->menu->mlx, env->menu->win,
 		env->menu->img, 0, 0);
 }
